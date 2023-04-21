@@ -19,28 +19,24 @@ class ConexionDatabase {
         this.crearConexion();
     }
     crearConexion() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const objDbs = yield promise_1.default.createPool({
-                    host: 'localhost',
-                    database: 'hospital',
-                    user: 'root',
-                    password: 'dante569',
-                });
-                this.poolConexion = objDbs;
-            }
-            catch (err) {
-                console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
-            }
-        });
+        try {
+            const pool = promise_1.default.createPool({
+                host: 'localhost',
+                database: 'DB_SEGUIMIENTO_DE_TRANSITION',
+                user: 'root',
+                password: 'dante569',
+            });
+            this.poolConexion = pool;
+        }
+        catch (err) {
+            console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
+        }
     }
     getConnection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.poolConexion) {
-                throw new Error('LA CONEXION AUN NO SE HA ESTABLECIDO');
-            }
-            return this.poolConexion;
-        });
+        if (!this.poolConexion) {
+            throw new Error('LA CONEXION AUN NO SE HA ESTABLECIDO');
+        }
+        return this.poolConexion;
     }
     closeConnection() {
         return __awaiter(this, void 0, void 0, function* () {

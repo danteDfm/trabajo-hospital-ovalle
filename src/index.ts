@@ -3,6 +3,7 @@ import express, {Application} from "express";
 import cors from 'cors';
 import morgan from 'morgan';
 import { endPoints } from './routes';
+
 class Server{
 
     private app:Application;
@@ -44,9 +45,8 @@ class Server{
    }
 }
 
+
+
 const objServidor = new Server();
 objServidor.iniciarServidor();
-
-
-
 

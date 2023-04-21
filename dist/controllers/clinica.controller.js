@@ -10,15 +10,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crearEnfermedades = void 0;
-;
-const model_paciente_1 = require("../models/model.paciente");
+const model_consultas_1 = require("../models/model.consultas");
+const devolucion_Id_1 = require("../consultas/devolucion.Id");
+const generaConsultas_1 = require("../consultas/generaConsultas");
 const crearEnfermedades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const obj = new model_paciente_1.FormularioRegistro();
-        obj.crearFichaTecnica();
+        const { body } = req;
+        const objDetallesDisforia = {
+            detallesDisforia: body.detallesDisforia,
+            disforia: body.disforia,
+            prenda: body.prenda,
+            usoPrenda: body.usoPrenda,
+        };
+        const obj = new model_consultas_1.Consultas(objDetallesDisforia);
+        obj.crearFichaTecnica(devolucion_Id_1.devolucionId, generaConsultas_1.generadoConsultas);
         res.send("hola mundo");
     }
     catch (err) {
+        console.log(err);
     }
 });
 exports.crearEnfermedades = crearEnfermedades;

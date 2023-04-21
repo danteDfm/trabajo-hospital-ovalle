@@ -11,25 +11,25 @@ class ConexionDatabase {
 
   }
 
-  async crearConexion(): Promise<void>{
+    crearConexion(){
     try {
-      const objDbs = await mysql.createPool({
+      const pool= mysql.createPool({
 
         host: 'localhost',
-        database: 'hospital',
+        database: 'DB_SEGUIMIENTO_DE_TRANSITION',
         user: 'root',
         password: 'dante569',
 
       });
 
-      this.poolConexion =  objDbs;
+      this.poolConexion =  pool;
 
     } catch (err) {
       console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
     }
   }
 
-  async getConnection(): Promise<Pool>{
+   getConnection(){
 
     if (!this.poolConexion) {
       throw new Error('LA CONEXION AUN NO SE HA ESTABLECIDO');
@@ -37,10 +37,11 @@ class ConexionDatabase {
     return this.poolConexion;
   }
 
-  async closeConnection(): Promise<void> {
+   async closeConnection(): Promise<void>{
     if (this.poolConexion) {
       await this.poolConexion.end();
       this.poolConexion = null;
+
     }
   }
 }
