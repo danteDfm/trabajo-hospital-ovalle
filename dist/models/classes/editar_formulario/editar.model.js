@@ -9,25 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devolucionId = void 0;
-const __1 = require("..");
-function devolucionId(query, formato, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const objConexion = yield __1.mysqlConnexion;
-            if (data) {
-                let [resultadoConsulta] = yield objConexion.query(query, formato);
-                const idConsultas = resultadoConsulta.insertId;
-                return idConsultas;
-            }
-            else {
-                return null;
-            }
-        }
-        catch (err) {
-            console.log(`ERROR EN GENERADOR DE CONSULTAS ${err}`);
-            throw (err);
-        }
-    });
+exports.EditarUsuario = void 0;
+const consultasSelect_1 = require("../../../consultas/consultasSelect");
+class EditarUsuario {
+    constructor() {
+    }
+    dataPaciente() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = "SELECT rut_paciente, nombre_paciente, apellido_paterno_paciente, appellido_materno_paciente  FROM PACIENTES";
+            const dataPaciente = yield (0, consultasSelect_1.select)(query);
+            return dataPaciente;
+        });
+    }
 }
-exports.devolucionId = devolucionId;
+exports.EditarUsuario = EditarUsuario;

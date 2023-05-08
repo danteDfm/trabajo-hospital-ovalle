@@ -1,21 +1,32 @@
-import ConexionDatabase from "../database/conexion.database";
-import {OkPacket} from 'mysql2/promise';
+import { OkPacket } from "mysql2/promise";
+import { mysqlConnexion } from "..";
 
-const obj = new ConexionDatabase();
-const poolConexion = obj.getConnection();
 
-export async function devolucionId(data: boolean, query:string, formato:string){
+export async function devolucionId(
+  
+  query: string,
+  formato: any[],
+  data?: boolean
 
-   if(data){
-     
-      let  [resultadoConsulta] =  await poolConexion.execute(query, formato.split(","));
-      const idDetallesDisforia = (resultadoConsulta as OkPacket).insertId;
+): Promise<number | null> {
 
-      return idDetallesDisforia;
-   }
-   else{
+  try { 
 
-    return null;
+    const objConexion = await mysqlConnexion;
+  
+    if (data) {
 
-   }
+      let [resultadoConsulta] = await objConexion!.query(query, formato);
+      const idConsultas = (resultadoConsulta as OkPacket).insertId;
+
+
+      return idConsultas as number;
+    } else {
+      return null;
+    }
+  } catch (err) {
+
+    console.log(`ERROR EN GENERADOR DE CONSULTAS ${err}`);
+    throw (err);
+  }
 }

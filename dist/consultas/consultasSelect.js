@@ -9,25 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devolucionId = void 0;
+exports.select = void 0;
 const __1 = require("..");
-function devolucionId(query, formato, data) {
+function select(query) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const objConexion = yield __1.mysqlConnexion;
-            if (data) {
-                let [resultadoConsulta] = yield objConexion.query(query, formato);
-                const idConsultas = resultadoConsulta.insertId;
-                return idConsultas;
-            }
-            else {
-                return null;
-            }
+            const conexion = yield __1.mysqlConnexion;
+            const dataDbs = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query));
+            return dataDbs === null || dataDbs === void 0 ? void 0 : dataDbs[0];
         }
         catch (err) {
-            console.log(`ERROR EN GENERADOR DE CONSULTAS ${err}`);
-            throw (err);
+            throw new Error("ERROR EN LA CONSULTA consultaSelect");
         }
     });
 }
-exports.devolucionId = devolucionId;
+exports.select = select;

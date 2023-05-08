@@ -8,26 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devolucionId = void 0;
-const __1 = require("..");
-function devolucionId(query, formato, data) {
+exports.compararContrasena = exports.hashContrasena = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
+function hashContrasena(contrasena) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const objConexion = yield __1.mysqlConnexion;
-            if (data) {
-                let [resultadoConsulta] = yield objConexion.query(query, formato);
-                const idConsultas = resultadoConsulta.insertId;
-                return idConsultas;
-            }
-            else {
-                return null;
-            }
-        }
-        catch (err) {
-            console.log(`ERROR EN GENERADOR DE CONSULTAS ${err}`);
-            throw (err);
-        }
+        let salt = yield bcrypt_1.default.genSalt(10);
+        let hash = yield bcrypt_1.default.hash(contrasena, salt);
+        return hash;
     });
 }
-exports.devolucionId = devolucionId;
+exports.hashContrasena = hashContrasena;
+function compararContrasena(contrasenaDbs, contrasenaRecibida) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let comparacion = yield bcrypt_1.default.compare(contrasenaDbs, contrasenaRecibida);
+        return comparacion;
+    });
+}
+exports.compararContrasena = compararContrasena;

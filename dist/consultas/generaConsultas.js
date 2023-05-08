@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generadoConsultas = void 0;
+exports.generadorConsultas = void 0;
 const repetir_cadena_1 = require("../utils/repetir.cadena");
-function generadoConsultas(tabla, veces, cadena) {
+function generadorConsultas(tabla, veces, cadena) {
     let resultadoCadena = "";
     let queryFormateada = "";
     try {
@@ -19,4 +19,4 @@ function generadoConsultas(tabla, veces, cadena) {
     }
     return "";
 }
-exports.generadoConsultas = generadoConsultas;
+exports.generadorConsultas = generadorConsultas;

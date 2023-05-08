@@ -3,8 +3,6 @@
 //   try{
 //     if(!veces || !cadena) throw new Error("LOS PARAMETROS NO DEBEN ESTAR VACIOS");
 //     if(veces <= 0) throw new Error("DEBE SER UN NUMERO MAYOR A CERO");
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.repetirCadena = void 0;
 //     let resultado: string = "";
 //     for (let i: number = 0; i < veces; i++) {
 //       resultado += cadena;
@@ -24,4 +22,3 @@ function repetirCadena(veces, cadena) {
         return cadena + repetirCadena(veces - 1, cadena);
     }
 }
-exports.repetirCadena = repetirCadena;
