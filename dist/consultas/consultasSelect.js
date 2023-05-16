@@ -9,18 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.select = void 0;
+exports.consultarDatos = void 0;
 const __1 = require("..");
-function select(query) {
+function consultarDatos(query, formato) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const conexion = yield __1.mysqlConnexion;
-            const dataDbs = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query));
-            return dataDbs === null || dataDbs === void 0 ? void 0 : dataDbs[0];
+            const [dataDbs] = yield conexion.query(query, formato);
+            return dataDbs;
         }
         catch (err) {
-            throw new Error("ERROR EN LA CONSULTA consultaSelect");
+            console.log(err);
+            throw new Error();
         }
     });
 }
-exports.select = select;
+exports.consultarDatos = consultarDatos;

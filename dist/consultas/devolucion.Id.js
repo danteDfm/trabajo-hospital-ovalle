@@ -25,8 +25,8 @@ function devolucionId(query, formato, data) {
             }
         }
         catch (err) {
-            console.log(`ERROR EN GENERADOR DE CONSULTAS ${err}`);
-            throw (err);
+            console.log(err);
+            throw new Error();
         }
     });
 }

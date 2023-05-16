@@ -15,38 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const promise_1 = __importDefault(require("mysql2/promise"));
 class ConexionDatabase {
     constructor() {
-        this.sqlConexion = null;
         this.crearConexion();
+        this.sqlConexion = this.crearConexion();
     }
     crearConexion() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sql = promise_1.default.createPool({
-                    host: "localhost",
-                    database: "DB_SEGUIMIENTO_DE_TRANSITION",
-                    user: "root",
-                    password: "dante569",
-                });
-                this.sqlConexion = sql;
-            }
-            catch (err) {
-                console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
-                throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
-            }
-        });
+        try {
+            const objSql = promise_1.default.createConnection({
+                host: "localhost",
+                database: "proyecto_transicion",
+                user: "root",
+                password: "dante569",
+            });
+            return objSql;
+        }
+        catch (err) {
+            console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
+            throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
+        }
     }
     getConnection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.sqlConexion) {
-                throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
-            }
-            return this.sqlConexion;
-        });
+        if (!this.sqlConexion) {
+            throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
+        }
+        return this.sqlConexion;
     }
     closeConnection() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.sqlConexion) {
-                yield this.sqlConexion.end();
+                (yield this.sqlConexion).end();
             }
         });
     }

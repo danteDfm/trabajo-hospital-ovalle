@@ -1,60 +1,83 @@
 import { Request, Response } from "express";
-import { FormularioRegistro } from "../models/classes/crear_ficha/model.formulario";
+import { Paciente } from "../models/classes/entidades_database/model.paciente";
+import { IdentidadGenero } from "../models/classes/entidades_database/model.i.genero";
+import { Ficha } from "../models/classes/entidades_database/model.ficha";
+
+export class FichaController {
+  static async crearFicha(req: Request, res: Response) {
+    try {
+      const { body } = req;
+      const { idPaciente } = req.params;
+
+      
 
 
-const dataPaciente = new FormularioRegistro;
-export class CrearFichaTecnica{
+      const objGenero = new IdentidadGenero({ ...body.identidadGenero });
+      const objPaciente = new Paciente();
+      const idDisforia = await objGenero.crearDisforia(body.disforia);
+      const idGenero = await objGenero.crearIdentidadGenero(idDisforia);
+      await objGenero.seleccinarPrenda(idGenero, body.prenda);
 
-    constructor(){}
+      await objPaciente.crearDetallesPaciente({...body.detallesPaciente}, parseInt(idPaciente));
 
-    static async crearFicha(req:Request,res:Response){
+    
 
-        const {body} = req;
-
-
-        dataPaciente.informacionPaciente.dataPaciente={...body.dataPaciente};
-        dataPaciente.informacionPaciente.dataInvolucrados.dataInvolucrado={...body.dataInvolucrados};
-        dataPaciente.informacionPaciente.dataInvolucrados.dataAcompanante={...body.dataAcompanante};
-        dataPaciente.indentidadGenero.historiaIdentidadGenero.historiaGenero = {...body.historiaIdentidadGenero.historiaGenero};
-        dataPaciente.indentidadGenero.historiaIdentidadGenero.prendasDisconformidadGenero = {...body.historiaIdentidadGenero.prendasDisconformidadGenero};
-        dataPaciente.entornoPaciente.entornoPaciente.escolaridad = {...body.entornoPaciente.escolaridad};
-        dataPaciente.entornoPaciente.entornoPaciente.antecedentesFamiliares = {...body.entornoPaciente.antecedentesFamiliares};
-        dataPaciente.areaPsiquica.datosPsiquicos.datosPsiquicos={...body.areaPsiquica.datosPsiquicos};
-        dataPaciente.areaPsiquica.datosPsiquicos.usofarmacos={...body.areaPsiquica.usoFarmaco};
-        dataPaciente.areaPsiquica.datosPsiquicos.disforia={...body.areaPsiquica.disforia};
-        dataPaciente.areaPsiquica.datosPsiquicos.habitos={...body.areaPsiquica.habitos};
-        dataPaciente.antecedentesClinicosPaciente.antecedentesClinicos={...body.antecedentesClinicos};
+      const idDetalleFicha = await Ficha.detallesFicha(
+        body.detalleApoyo,
+        body.funcionalidadGenital,
+        body.detalleJuicio,
+        body.detalleFarmaco
+      );
 
 
-       const idDataTablasTerciarias= await dataPaciente.crearTablasTerciarias();
+      const idAreaPsiquica =await  Ficha.areasPsiquicas(
+        { ...body.psique },
+        idDetalleFicha.idFarmacos
+      );
 
-         const idTablasSecundarias = await  dataPaciente.crearTablasSecundarias(
 
-                idDataTablasTerciarias.idUsoPrenda,
-                idDataTablasTerciarias.idPresenciaDisforia,
-                idDataTablasTerciarias.idPresenciaAntecedentesFamiliares,
-                idDataTablasTerciarias.idUsoDrogas,
-                idDataTablasTerciarias.idUsoFarmaco,
-                idDataTablasTerciarias.idHabitosAlimenticios,
-            );
-            dataPaciente.crearTablaPrimaria(
-                body.fechaIngreso,
-                body.borradoLogico,
-                1,
-                idTablasSecundarias.idPaciente,
-                idTablasSecundarias.idApoyoEscolaridad,
-                idTablasSecundarias.idAreaPsiquica,
-                idTablasSecundarias.idFuncionalidadGenital,
-                idTablasSecundarias.idHistoriasClinicas,
-                idTablasSecundarias.idPersonaAcompanante,
-                idTablasSecundarias.idPersonaInvolucrada
-            );
+      const idEncargada = await  Ficha.personaEncargadas({ ...body.encargada });
 
-       res.status(201).send(dataPaciente);
+        
+      const idHistorialClinico = await Ficha.historiasClinicas({
+        ...body.antecedentes,
+      });
+
+
+      const objFicha = new Ficha(
+
+        body.apoyoEscolar,
+        body.judicializacion,
+        
+        1,
+        parseInt(idPaciente),
+
+        idDetalleFicha.idDetalleApoyo,
+        idDetalleFicha.idDetalleJuicio,
+
+        idAreaPsiquica,
+        idDetalleFicha.idIndGenital,
+        idHistorialClinico,
+        idEncargada,
+        idEncargada,
+
+        body.date,
+        body.borrado
+      );
+
+      const idFicha = await objFicha.crearFicha();
+      
+      res.status(201).json({
+
+        msj: "Ficha tecnica creada",
+        idFicha: idFicha
+
+      });
+    } catch (err) {
+      res.status(201).json({
+        err,
+        msj: "Error interno del servidor",
+      });
     }
-
-
-
+  }
 }
-
-

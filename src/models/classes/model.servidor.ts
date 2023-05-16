@@ -36,7 +36,8 @@ export class Server {
   async conexionDatabase() {
     try {
 
-      return this.objConexion.getConnection();
+
+      return await this.objConexion.getConnection();
 
     } catch (err) {
       console.log(err);

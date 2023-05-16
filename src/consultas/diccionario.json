@@ -1,0 +1,9 @@
+{
+
+    "crear": "INSERT INTO PACIENTES VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, null, null, null)",
+     "consulta": "SELECT  id_ficha_tecnica, rut_paciente, nombre_paciente, apellido_paterno_paciente, apellido_materno_paciente  FROM FICHAS_TECNICAS AS ft JOIN PACIENTES AS pa ON  ft.fk_paciente = pa.id_paciente",
+
+     "update": "UPDATE PACIENTES SET fk_antecedentes_familiares = ?,fk_detalles_drogas = ?, fk_habitos_alimenticios=? WHERE id_paciente = ?"
+  
+  
+}

@@ -8,8 +8,8 @@ class InformacionPaciente {
             nombrePaciente: "",
             apellidoPaternoPaciente: "",
             apellidoMaternoPaciente: "",
-            pronombre: "",
-            nombreSocial: "",
+            pronombre: undefined,
+            nombreSocial: undefined,
             fechaNacimiento: new Date(),
             domicilioPaciente: "",
         };
@@ -20,14 +20,14 @@ class InformacionPaciente {
                 apellidoPaternoInvolucrado: "",
                 apellidoMaternoInvolucrado: "",
                 parentescoPersonaInvolucrada: "",
-                telefonoPersonaInvolucrada: 0,
+                telefonoPersonaInvolucrada: "",
                 domicilioPersonaInvolucrada: "",
             },
             dataAcompanante: {
                 rutAcompanante: "",
                 nombreCompletoAcompanante: "",
                 parentescoAcompanante: "",
-                telefonoAcompanante: 0,
+                telefonoAcompanante: "",
             },
         };
     }
@@ -40,8 +40,8 @@ class IdentidadGenero {
                 identidadGenero: "",
                 orientacionSexual: "",
                 inicioTransicion: new Date(),
-                tiempoLtencia: new Date(),
-                apoyoNucleoFamiliar: "",
+                tiempoLatencia: new Date(),
+                apoyoNucleoFamiliar: false,
             },
             prendasDisconformidadGenero: {
                 usoPrenda: false,
@@ -55,15 +55,17 @@ class EntornoPaciente {
     constructor() {
         this.entornoPaciente = {
             escolaridad: {
-                gradoEscolar: "",
-                gradoDeApoyo: "",
-                actorInvolucrado: "",
-                detallesApoyo: "",
+                apoyoEscolar: false,
+                detallesApoyo: ""
             },
             antecedentesFamiliares: {
                 presenciaAntecedentes: false,
                 detallesAntecedentes: "",
             },
+            judicializaciones: {
+                juicio: false,
+                dataTribunal: ""
+            }
         };
     }
 }
@@ -75,9 +77,9 @@ class AreaPsiquica {
                 controlEquipoSaludMental: false,
                 psicoterapia: false,
                 evaluacionPsiquica: false,
-                diagnosicoPsiquiatrico: false,
+                diagnosticoPsiquiatrico: false,
             },
-            usofarmacos: {
+            usoFarmacos: {
                 usoFarmaco: false,
                 tipoFarmaco: "",
             },

@@ -9,31 +9,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CrearFichaTecnica = void 0;
-const model_formulario_1 = require("../models/classes/crear_ficha/model.formulario");
-const dataPaciente = new model_formulario_1.FormularioRegistro;
-class CrearFichaTecnica {
-    constructor() { }
+exports.FichaController = void 0;
+const model_paciente_1 = require("../models/classes/entidades_database/model.paciente");
+const model_i_genero_1 = require("../models/classes/entidades_database/model.i.genero");
+const model_ficha_1 = require("../models/classes/entidades_database/model.ficha");
+class FichaController {
     static crearFicha(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { body } = req;
-            dataPaciente.informacionPaciente.dataPaciente = Object.assign({}, body.dataPaciente);
-            dataPaciente.informacionPaciente.dataInvolucrados.dataInvolucrado = Object.assign({}, body.dataInvolucrados);
-            dataPaciente.informacionPaciente.dataInvolucrados.dataAcompanante = Object.assign({}, body.dataAcompanante);
-            dataPaciente.indentidadGenero.historiaIdentidadGenero.historiaGenero = Object.assign({}, body.historiaIdentidadGenero.historiaGenero);
-            dataPaciente.indentidadGenero.historiaIdentidadGenero.prendasDisconformidadGenero = Object.assign({}, body.historiaIdentidadGenero.prendasDisconformidadGenero);
-            dataPaciente.entornoPaciente.entornoPaciente.escolaridad = Object.assign({}, body.entornoPaciente.escolaridad);
-            dataPaciente.entornoPaciente.entornoPaciente.antecedentesFamiliares = Object.assign({}, body.entornoPaciente.antecedentesFamiliares);
-            dataPaciente.areaPsiquica.datosPsiquicos.datosPsiquicos = Object.assign({}, body.areaPsiquica.datosPsiquicos);
-            dataPaciente.areaPsiquica.datosPsiquicos.usofarmacos = Object.assign({}, body.areaPsiquica.usoFarmaco);
-            dataPaciente.areaPsiquica.datosPsiquicos.disforia = Object.assign({}, body.areaPsiquica.disforia);
-            dataPaciente.areaPsiquica.datosPsiquicos.habitos = Object.assign({}, body.areaPsiquica.habitos);
-            dataPaciente.antecedentesClinicosPaciente.antecedentesClinicos = Object.assign({}, body.antecedentesClinicos);
-            const idDataTablasTerciarias = yield dataPaciente.crearTablasTerciarias();
-            const idTablasSecundarias = yield dataPaciente.crearTablasSecundarias(idDataTablasTerciarias.idUsoPrenda, idDataTablasTerciarias.idPresenciaDisforia, idDataTablasTerciarias.idPresenciaAntecedentesFamiliares, idDataTablasTerciarias.idUsoDrogas, idDataTablasTerciarias.idUsoFarmaco, idDataTablasTerciarias.idHabitosAlimenticios);
-            dataPaciente.crearTablaPrimaria(body.fechaIngreso, body.borradoLogico, 1, idTablasSecundarias.idPaciente, idTablasSecundarias.idApoyoEscolaridad, idTablasSecundarias.idAreaPsiquica, idTablasSecundarias.idFuncionalidadGenital, idTablasSecundarias.idHistoriasClinicas, idTablasSecundarias.idPersonaAcompanante, idTablasSecundarias.idPersonaInvolucrada);
-            res.status(201).send(dataPaciente);
+            try {
+                const { body } = req;
+                const { idPaciente } = req.params;
+                const objGenero = new model_i_genero_1.IdentidadGenero(Object.assign({}, body.identidadGenero));
+                const objPaciente = new model_paciente_1.Paciente();
+                const idDisforia = yield objGenero.crearDisforia(body.disforia);
+                const idGenero = yield objGenero.crearIdentidadGenero(idDisforia);
+                yield objGenero.seleccinarPrenda(idGenero, body.prenda);
+                yield objPaciente.crearDetallesPaciente(Object.assign({}, body.detallesPaciente), parseInt(idPaciente));
+                const idDetalleFicha = yield model_ficha_1.Ficha.detallesFicha(body.detalleApoyo, body.funcionalidadGenital, body.detalleJuicio, body.detalleFarmaco);
+                const idAreaPsiquica = yield model_ficha_1.Ficha.areasPsiquicas(Object.assign({}, body.psique), idDetalleFicha.idFarmacos);
+                const idEncargada = yield model_ficha_1.Ficha.personaEncargadas(Object.assign({}, body.encargada));
+                const idHistorialClinico = yield model_ficha_1.Ficha.historiasClinicas(Object.assign({}, body.antecedentes));
+                const objFicha = new model_ficha_1.Ficha(body.apoyoEscolar, body.judicializacion, 1, parseInt(idPaciente), idDetalleFicha.idDetalleApoyo, idDetalleFicha.idDetalleJuicio, idAreaPsiquica, idDetalleFicha.idIndGenital, idHistorialClinico, idEncargada, idEncargada, body.date, body.borrado);
+                const idFicha = yield objFicha.crearFicha();
+                res.status(201).json({
+                    msj: "Ficha tecnica creada",
+                    idFicha: idFicha
+                });
+            }
+            catch (err) {
+                res.status(201).json({
+                    err,
+                    msj: "Error interno del servidor",
+                });
+            }
         });
     }
 }
-exports.CrearFichaTecnica = CrearFichaTecnica;
+exports.FichaController = FichaController;

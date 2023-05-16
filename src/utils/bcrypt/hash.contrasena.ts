@@ -1,9 +1,9 @@
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export async function hashContrasena(contrasena: string): Promise<string>{
 
-    let salt= await bcrypt.genSalt(10);
-    let hash: string= await bcrypt.hash(contrasena, salt);
+    let salt = await bcrypt.genSalt(10);
+    let hash: string = await bcrypt.hash(contrasena, salt);
     return hash;
 }
 

@@ -42,7 +42,7 @@ class Server {
     conexionDatabase() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return this.objConexion.getConnection();
+                return yield this.objConexion.getConnection();
             }
             catch (err) {
                 console.log(err);

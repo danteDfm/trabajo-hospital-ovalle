@@ -1,13 +1,12 @@
 import { Application, Router }  from "express";
-import routerEditarVista from './vista.data.paciente.routes';
-import routerFicha from './ficha.tecnica.routes';
+import routerPaciente from './paciente.routes';
+import routerFicha from './ficha.routes';
 const router = Router();
 
 export function endPoints(app: Application){
 
     app.use('/api', router);
-    router.use('/enfermedades', routerFicha);
-    router.use('/vista-editar', routerEditarVista);
-
+    router.use('/paciente', routerPaciente);
+    router.use('/ficha', routerFicha);
 }
 

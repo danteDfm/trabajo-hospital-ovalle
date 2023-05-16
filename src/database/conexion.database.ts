@@ -1,48 +1,55 @@
-import mysql, { Pool } from "mysql2/promise";
+import mysql, {Connection} from "mysql2/promise";
+
 
 
 class ConexionDatabase {
 
-  sqlConexion: Pool | null = null;
+  sqlConexion:Promise<Connection>;
 
   constructor() {
 
       this.crearConexion();
+      this.sqlConexion = this.crearConexion();
   }
 
-  async crearConexion(){
+  crearConexion(){
     try {
 
-      const sql =  mysql.createPool({
+      const objSql =mysql.createConnection({
 
         host: "localhost",
-        database: "DB_SEGUIMIENTO_DE_TRANSITION",
+        database: "proyecto_transicion",
         user: "root",
         password: "dante569",
+
       });
 
-      this.sqlConexion = sql;
+      return objSql;
       
-
     } catch (err) {
+
       console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
       throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
+
     }
   }
 
-  async getConnection(){
+  getConnection(){
 
     if (!this.sqlConexion) {
       throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
     } 
+  
     return this.sqlConexion;
   }
 
 
   async closeConnection() {
+    
     if (this.sqlConexion) {
 
-      await this.sqlConexion.end();
+      (await this.sqlConexion).end();
+
     }
   }
 }

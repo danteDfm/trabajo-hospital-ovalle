@@ -6,10 +6,10 @@ export interface InformacionPersonalPaciente {
   nombrePaciente: string;
   apellidoPaternoPaciente: string;
   apellidoMaternoPaciente: string;
-  pronombre?: string;
-  nombreSocial?: string;
+  pronombre?: string | null;
+  nombreSocial?: string | null;
   fechaNacimiento: Date;
-  domicilioPaciente?: string;
+  domicilioPaciente?: string | null;
 }
 
 
@@ -18,21 +18,21 @@ export interface InformacionDatosInvolucrados {
 
     dataInvolucrado:{
 
-        rutPersonaInvolucrada:string;
-        nombresPersonaInvolucrada:string;
-        apellidoPaternoInvolucrado:string;
-        apellidoMaternoInvolucrado:string;
-        parentescoPersonaInvolucrada?:string;
-        telefonoPersonaInvolucrada?:number;
-        domicilioPersonaInvolucrada?:string;    
+        rutPersonaInvolucrada?:string | null;
+        nombresPersonaInvolucrada?:string | null;
+        apellidoPaternoInvolucrado?:string | null;
+        apellidoMaternoInvolucrado?:string | null;
+        parentescoPersonaInvolucrada?:string | null;
+        telefonoPersonaInvolucrada:string | null;
+        domicilioPersonaInvolucrada?:string | null;    
 
     },
     dataAcompanante:{
 
-        rutAcompanante:string;
-        nombreCompletoAcompanante:string;
-        parentescoAcompanante?:string;
-        telefonoAcompanante?:number;    
+        rutAcompanante?:string | null;
+        nombreCompletoAcompanante?:string | null;
+        parentescoAcompanante?:string | null;
+        telefonoAcompanante?:string | null;    
 
     }
     
@@ -46,11 +46,11 @@ export interface HistoriaIdentidadGenero{
 
     historiaGenero:{
 
-      identidadGenero?:string;
-      orientacionSexual?:string;
+      identidadGenero?:string | null;
+      orientacionSexual?:string | null;
       inicioTransicion: Date;
-      tiempoLtencia:Date;
-      apoyoNucleoFamiliar?:string;
+      tiempoLatencia:Date;
+      apoyoNucleoFamiliar?: boolean;
 
     },
     prendasDisconformidadGenero:{
@@ -67,10 +67,8 @@ export interface Entorno{
 
     escolaridad:{
 
-        gradoEscolar:string;
-        gradoDeApoyo:string;
-        actorInvolucrado?:string;
-        detallesApoyo?:string;
+        apoyoEscolar: boolean,
+        detallesApoyo?: string | null;
 
 
     },
@@ -79,6 +77,12 @@ export interface Entorno{
         presenciaAntecedentes:boolean;
         detallesAntecedentes:string;
 
+
+    },
+    judicializaciones:{
+
+        juicio:boolean,
+        dataTribunal:string
 
     }
 
@@ -92,13 +96,13 @@ export interface AreasPsiquica{
         controlEquipoSaludMental:boolean;
         psicoterapia:boolean;
         evaluacionPsiquica:boolean;
-        diagnosicoPsiquiatrico:boolean;
+        diagnosticoPsiquiatrico:boolean;
         
     },
-    usofarmacos:{
+    usoFarmacos:{
 
         usoFarmaco:boolean;
-        tipoFarmaco?:string;
+        tipoFarmaco?:string | null;
 
     },
     disforia:{
@@ -111,7 +115,7 @@ export interface AreasPsiquica{
     
         alimenticios:string;
         usoDrogas:boolean;
-        drogas?:string;
+        drogas?:string | null;
         
     }
 
@@ -122,11 +126,11 @@ export interface AreasPsiquica{
 
 export interface AntecedentesClinicos{
 
-    detallesAntecedentesPerinatales:string;
-    detallesAntecedentesHospitalizaciones:string;
-    detallesAntecedentesQuirurgicos:string;
-    detallesAntecedentesAlergicos:string;
-    detallesAntecedentesPni:string;
-    detallesAntecedentesGenitales:string;
+    detallesAntecedentesPerinatales?:string | null | undefined;
+    detallesAntecedentesHospitalizaciones?:string | null | undefined;
+    detallesAntecedentesQuirurgicos?:string | null | undefined;
+    detallesAntecedentesAlergicos?:string | null | undefined;
+    detallesAntecedentesPni?:string | null | undefined;
+    detallesAntecedentesGenitales?:string | null | undefined;
 
 }

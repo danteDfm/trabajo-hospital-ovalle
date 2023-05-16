@@ -22,134 +22,170 @@ class FormularioRegistro {
         this.antecedentesClinicosPaciente = new ficha_pasos_1.AntecedentesClinicosPaciente();
     }
     crearTablasTerciarias() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            const idPresenciaDisforia = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PRESENCIA_DISFORIA`, 1), [this.areaPsiquica.datosPsiquicos.disforia.presenciaDisforia], true);
-            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DETALLES_DISFORIA`, 2), [
-                this.areaPsiquica.datosPsiquicos.disforia.detallesDisforia,
-                idPresenciaDisforia,
-            ], this.areaPsiquica.datosPsiquicos.disforia.presenciaDisforia);
-            const idUsoPrenda = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_PRENDAS`, 1), [
-                this.indentidadGenero.historiaIdentidadGenero
-                    .prendasDisconformidadGenero.usoPrenda,
-            ], true);
-            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`SELECCION_PRENDA`, 1), [
-                idUsoPrenda,
-                this.indentidadGenero.historiaIdentidadGenero
-                    .prendasDisconformidadGenero,
-            ], this.indentidadGenero.historiaIdentidadGenero.prendasDisconformidadGenero
-                .usoPrenda);
-            const idPresenciaAntecedentesFamiliares = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PRESENCIA_ANTECEDENTES`, 1), [
-                this.entornoPaciente.entornoPaciente.antecedentesFamiliares
-                    .presenciaAntecedentes,
-            ], true);
-            const idUsoDrogas = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_DROGAS`, 1), [this.areaPsiquica.datosPsiquicos.habitos.usoDrogas], true);
-            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DROGAS`, 2), [this.areaPsiquica.datosPsiquicos.habitos.drogas, idUsoDrogas], this.areaPsiquica.datosPsiquicos.habitos.usoDrogas);
-            const idUsoFarmaco = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_FARMACO`, 1), [this.areaPsiquica.datosPsiquicos.habitos.alimenticios], true);
-            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`TIPOS_FARMACOS`, 2), [this.areaPsiquica.datosPsiquicos.usofarmacos.tipoFarmaco, idUsoFarmaco], this.areaPsiquica.datosPsiquicos.usofarmacos.usoFarmaco);
-            const idHabitosAlimenticios = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HABITOS_ALIMENTICIOS`, 1), [this.areaPsiquica.datosPsiquicos.habitos.alimenticios], true);
-            return {
-                idUsoPrenda,
-                idPresenciaDisforia,
-                idPresenciaAntecedentesFamiliares,
-                idUsoDrogas,
-                idUsoFarmaco,
-                idHabitosAlimenticios,
-            };
+            try {
+                const idDetallesDisforia = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DETALLES_DISFORIA`, 1), [this.areaPsiquica.datosPsiquicos.disforia.detallesDisforia], this.areaPsiquica.datosPsiquicos.disforia.presenciaDisforia);
+                const idPresenciaDisforia = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PRESENCIA_DISFORIA`, 2), [
+                    this.areaPsiquica.datosPsiquicos.disforia.presenciaDisforia,
+                    idDetallesDisforia,
+                ], true);
+                const idUsoPrenda = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_PRENDAS`, 1), [
+                    this.indentidadGenero.historiaIdentidadGenero
+                        .prendasDisconformidadGenero.usoPrenda,
+                ], true);
+                (_a = this.indentidadGenero.historiaIdentidadGenero.prendasDisconformidadGenero.prendas) === null || _a === void 0 ? void 0 : _a.map((prendas) => __awaiter(this, void 0, void 0, function* () {
+                    (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`SELECCION_PRENDA`, 2), [idUsoPrenda, prendas], this.indentidadGenero.historiaIdentidadGenero
+                        .prendasDisconformidadGenero.usoPrenda);
+                }));
+                const idAntecedentesFamilia = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`ANTECEDENTES_FAMILIARES`, 1), [
+                    this.entornoPaciente.entornoPaciente.antecedentesFamiliares
+                        .detallesAntecedentes,
+                ], this.entornoPaciente.entornoPaciente.antecedentesFamiliares
+                    .presenciaAntecedentes);
+                const idPresenciaAntecedentesFamiliares = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PRESENCIA_ANTECEDENTES`, 2), [
+                    this.entornoPaciente.entornoPaciente.antecedentesFamiliares
+                        .presenciaAntecedentes,
+                    idAntecedentesFamilia,
+                ], true);
+                const idDrogas = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DROGAS`, 1), [this.areaPsiquica.datosPsiquicos.habitos.drogas], this.areaPsiquica.datosPsiquicos.habitos.usoDrogas);
+                const idUsoDrogas = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_DROGAS`, 2), [this.areaPsiquica.datosPsiquicos.habitos.usoDrogas, idDrogas], true);
+                const idDetallesFarmaco = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`TIPOS_FARMACOS`, 1), [this.areaPsiquica.datosPsiquicos.usoFarmacos.tipoFarmaco], this.areaPsiquica.datosPsiquicos.usoFarmacos.usoFarmaco);
+                const idUsoFarmaco = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`USO_FARMACOS`, 2), [
+                    this.areaPsiquica.datosPsiquicos.usoFarmacos.usoFarmaco,
+                    idDetallesFarmaco,
+                ], true);
+                const idHabitosAlimenticios = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HABITOS_ALIMENTICIOS`, 1), [this.areaPsiquica.datosPsiquicos.habitos.alimenticios], true);
+                const idDetallesJuicio = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DETALLES_JUICIO`, 1), [this.entornoPaciente.entornoPaciente.judicializaciones.dataTribunal], this.entornoPaciente.entornoPaciente.judicializaciones.juicio);
+                const idJudicializaciones = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`JUDICIALIZACIONES`, 2), [
+                    this.entornoPaciente.entornoPaciente.judicializaciones.juicio,
+                    idDetallesJuicio,
+                ], true);
+                return {
+                    idUsoPrenda,
+                    idPresenciaDisforia,
+                    idPresenciaAntecedentesFamiliares,
+                    idUsoDrogas,
+                    idUsoFarmaco,
+                    idHabitosAlimenticios,
+                    idJudicializaciones,
+                };
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error();
+            }
         });
     }
     crearTablasSecundarias(idUsoPrenda, idPresenciaDisforia, idPresenciaAntecedentesFamiliares, idUsoDrogas, idUsoFarmaco, idHabitosAlimenticios) {
         return __awaiter(this, void 0, void 0, function* () {
-            const idHistoriaIdentidadGenero = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HISTORIAS_IDENTIDADES_GENEROS`, 7), [
-                this.indentidadGenero.historiaIdentidadGenero.historiaGenero
-                    .identidadGenero,
-                this.indentidadGenero.historiaIdentidadGenero.historiaGenero
-                    .orientacionSexual,
-                this.indentidadGenero.historiaIdentidadGenero.historiaGenero
-                    .inicioTransicion,
-                this.indentidadGenero.historiaIdentidadGenero.historiaGenero
-                    .tiempoLtencia,
-                this.indentidadGenero.historiaIdentidadGenero.historiaGenero
-                    .apoyoNucleoFamiliar,
-                idPresenciaDisforia,
-                idUsoPrenda,
-            ], true);
-            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`ANTECEDENTES_FAMILIARES`, 2), [
-                this.entornoPaciente.entornoPaciente.antecedentesFamiliares
-                    .detallesAntecedentes,
-                idPresenciaAntecedentesFamiliares,
-            ], this.entornoPaciente.entornoPaciente.antecedentesFamiliares
-                .presenciaAntecedentes);
-            const idPaciente = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PACIENTES`, 11), [
-                this.informacionPaciente.dataPaciente.rutPaciente,
-                this.informacionPaciente.dataPaciente.nombrePaciente,
-                this.informacionPaciente.dataPaciente.apellidoPaternoPaciente,
-                this.informacionPaciente.dataPaciente.apellidoMaternoPaciente,
-                this.informacionPaciente.dataPaciente.pronombre,
-                this.informacionPaciente.dataPaciente.nombreSocial,
-                this.informacionPaciente.dataPaciente.fechaNacimiento,
-                this.informacionPaciente.dataPaciente.domicilioPaciente,
-                idHabitosAlimenticios,
-                idUsoDrogas,
-                idPresenciaAntecedentesFamiliares,
-                idHistoriaIdentidadGenero,
-            ], true);
-            const idAreaPsiquica = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`AREAS_PSIQUICAS`, 2), [
-                this.areaPsiquica.datosPsiquicos.datosPsiquicos
-                    .controlEquipoSaludMental,
-                this.areaPsiquica.datosPsiquicos.datosPsiquicos.psicoterapia,
-                this.areaPsiquica.datosPsiquicos.datosPsiquicos.evaluacionPsiquica,
-                this.areaPsiquica.datosPsiquicos.datosPsiquicos.diagnosicoPsiquiatrico,
-                idUsoFarmaco,
-            ], true);
-            const idApoyoEscolaridad = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`APOYO_ESCOLARIDADES`, 4), [
-                this.entornoPaciente.entornoPaciente.escolaridad.gradoEscolar,
-                this.entornoPaciente.entornoPaciente.escolaridad.gradoDeApoyo,
-                this.entornoPaciente.entornoPaciente.escolaridad.actorInvolucrado,
-                this.entornoPaciente.entornoPaciente.escolaridad.detallesApoyo,
-            ], true);
-            const idFuncionalidadGenital = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`ANTECEDENTES_FUNCIONALIDADES_GENITAL`, 1), [
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesGenitales,
-            ], true);
-            const idPersonaAcompanante = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PERSONAS_ACOMPANANTES`, 4), [
-                this.informacionPaciente.dataInvolucrados.dataAcompanante
-                    .nombreCompletoAcompanante,
-                this.informacionPaciente.dataInvolucrados.dataAcompanante
-                    .rutAcompanante,
-                this.informacionPaciente.dataInvolucrados.dataAcompanante
-                    .parentescoAcompanante,
-                this.informacionPaciente.dataInvolucrados.dataAcompanante
-                    .telefonoAcompanante,
-            ], true);
-            const idPersonaInvolucrada = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PERSONAS_INVOLUCRADAS_TRANSICION`, 7), [
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .rutPersonaInvolucrada,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .nombresPersonaInvolucrada,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .apellidoPaternoInvolucrado,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .apellidoMaternoInvolucrado,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .parentescoPersonaInvolucrada,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .telefonoPersonaInvolucrada,
-                this.informacionPaciente.dataInvolucrados.dataInvolucrado
-                    .domicilioPersonaInvolucrada,
-            ], true);
-            const idHistoriasClinicas = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HISTORIAS_CLINICAS`, 5), [
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesPerinatales,
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesHospitalizaciones,
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesQuirurgicos,
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesAlergicos,
-                this.antecedentesClinicosPaciente.antecedentesClinicos
-                    .detallesAntecedentesPni,
-            ], true);
-            return {
+            try {
+                const idHistoriaIdentidadGenero = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HISTORIAS_IDENTIDADES_GENEROS`, 7), [
+                    this.indentidadGenero.historiaIdentidadGenero.historiaGenero
+                        .identidadGenero,
+                    this.indentidadGenero.historiaIdentidadGenero.historiaGenero
+                        .orientacionSexual,
+                    this.indentidadGenero.historiaIdentidadGenero.historiaGenero
+                        .inicioTransicion,
+                    this.indentidadGenero.historiaIdentidadGenero.historiaGenero
+                        .tiempoLatencia,
+                    this.indentidadGenero.historiaIdentidadGenero.historiaGenero
+                        .apoyoNucleoFamiliar,
+                    idPresenciaDisforia,
+                    idUsoPrenda,
+                ], true);
+                const idPaciente = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PACIENTES`, 12), [
+                    this.informacionPaciente.dataPaciente.rutPaciente,
+                    this.informacionPaciente.dataPaciente.nombrePaciente,
+                    this.informacionPaciente.dataPaciente.apellidoPaternoPaciente,
+                    this.informacionPaciente.dataPaciente.apellidoMaternoPaciente,
+                    this.informacionPaciente.dataPaciente.pronombre,
+                    this.informacionPaciente.dataPaciente.nombreSocial,
+                    this.informacionPaciente.dataPaciente.fechaNacimiento,
+                    this.informacionPaciente.dataPaciente.domicilioPaciente,
+                    idHabitosAlimenticios,
+                    idUsoDrogas,
+                    idPresenciaAntecedentesFamiliares,
+                    idHistoriaIdentidadGenero,
+                ], true);
+                const idAreaPsiquica = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`AREAS_PSIQUICAS`, 5), [
+                    this.areaPsiquica.datosPsiquicos.datosPsiquicos
+                        .controlEquipoSaludMental,
+                    this.areaPsiquica.datosPsiquicos.datosPsiquicos.psicoterapia,
+                    this.areaPsiquica.datosPsiquicos.datosPsiquicos.evaluacionPsiquica,
+                    this.areaPsiquica.datosPsiquicos.datosPsiquicos
+                        .diagnosticoPsiquiatrico,
+                    idUsoFarmaco,
+                ], true);
+                const idDetallesApoyoEscolar = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`DETALLES_APOYO`, 1), [this.entornoPaciente.entornoPaciente.escolaridad.detallesApoyo], this.entornoPaciente.entornoPaciente.escolaridad.apoyoEscolar);
+                const idApoyoEscolaridad = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`APOYO_ESCOLARIDADES`, 2), [
+                    this.entornoPaciente.entornoPaciente.escolaridad.apoyoEscolar,
+                    idDetallesApoyoEscolar,
+                ], true);
+                const idFuncionalidadGenital = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`ANTECEDENTES_FUNCIONALIDADES_GENITAL`, 1), [
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesGenitales,
+                ], true);
+                const idPersonaAcompanante = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PERSONAS_ACOMPANANTE`, 4), [
+                    this.informacionPaciente.dataInvolucrados.dataAcompanante
+                        .nombreCompletoAcompanante,
+                    this.informacionPaciente.dataInvolucrados.dataAcompanante
+                        .rutAcompanante,
+                    this.informacionPaciente.dataInvolucrados.dataAcompanante
+                        .parentescoAcompanante,
+                    this.informacionPaciente.dataInvolucrados.dataAcompanante
+                        .telefonoAcompanante,
+                ], true);
+                const idPersonaInvolucrada = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`PERSONAS_INVOLUCRADAS_TRANSICION`, 7), [
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .rutPersonaInvolucrada,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .nombresPersonaInvolucrada,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .apellidoPaternoInvolucrado,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .apellidoMaternoInvolucrado,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .parentescoPersonaInvolucrada,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .telefonoPersonaInvolucrada,
+                    this.informacionPaciente.dataInvolucrados.dataInvolucrado
+                        .domicilioPersonaInvolucrada,
+                ], true);
+                const idHistoriasClinicas = yield (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`HISTORIAS_CLINICAS`, 5), [
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesPerinatales,
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesHospitalizaciones,
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesQuirurgicos,
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesAlergicos,
+                    this.antecedentesClinicosPaciente.antecedentesClinicos
+                        .detallesAntecedentesPni,
+                ], true);
+                return {
+                    idPaciente,
+                    idApoyoEscolaridad,
+                    idAreaPsiquica,
+                    idFuncionalidadGenital,
+                    idHistoriasClinicas,
+                    idPersonaAcompanante,
+                    idPersonaInvolucrada,
+                };
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error();
+            }
+        });
+    }
+    crearTablaPrimaria(idUsuarioProfesional, fechaIngreso, borradoLogico, idPaciente, idApoyoEscolaridad, idAreaPsiquica, idFuncionalidadGenital, idHistoriasClinicas, idPersonaAcompanante, idPersonaInvolucrada, idJudicializaciones) {
+        try {
+            (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`FICHAS_TECNICAS`, 11), [
+                fechaIngreso,
+                borradoLogico,
+                idUsuarioProfesional,
                 idPaciente,
                 idApoyoEscolaridad,
                 idAreaPsiquica,
@@ -157,22 +193,13 @@ class FormularioRegistro {
                 idHistoriasClinicas,
                 idPersonaAcompanante,
                 idPersonaInvolucrada,
-            };
-        });
-    }
-    crearTablaPrimaria(fechaIngreso, borradoLogico, idUser, idPaciente, idApoyoEscolaridad, idAreaPsiquica, idFuncionalidadGenital, idHistoriasClinicas, idPersonaAcompanante, idPersonaInvolucrada) {
-        (0, devolucion_Id_1.devolucionId)((0, generaConsultas_1.generadorConsultas)(`FICHAS_TECNICAS`, 10), [
-            fechaIngreso,
-            borradoLogico,
-            idUser,
-            idPaciente,
-            idApoyoEscolaridad,
-            idAreaPsiquica,
-            idFuncionalidadGenital,
-            idHistoriasClinicas,
-            idPersonaAcompanante,
-            idPersonaInvolucrada,
-        ], true);
+                idJudicializaciones,
+            ], true);
+        }
+        catch (err) {
+            console.log(err);
+            throw new Error();
+        }
     }
 }
 exports.FormularioRegistro = FormularioRegistro;
