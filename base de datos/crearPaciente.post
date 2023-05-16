@@ -1,0 +1,83 @@
+{
+
+    "paciente":{
+     "rutPaciente": "19.667.429-2",
+     "nombrePaciente": "Dante",
+     "apellidoPaternoPaciente": "Flores",
+     "apellidoMaternoPaciente": "diaz",
+     "fechaNacimientoPaciente": "1997/09/22",
+     "antecedenteFamiliares": "3",
+     "usoDroga": "3",
+     "pronombre": "el",
+     "nombreSocial": "caracter",
+     "domicilioPaciente": "ave circunvalacion"
+    }
+    
+
+}
+
+{
+
+"identidadGenero":{
+
+    "identidadGenero":"identidad genero", 
+    "orientacionSexual":"string",
+    "inicioTransicion":"1997/09/22", 
+    "tiempoLatencia":"2022/02/21", 
+    "apoyoFamilia": true, 
+    "usoPrenda":2,
+    "presenciaDisforia":2
+
+   },
+"disforia": "mucha disforia",
+"prenda": [1],
+
+"detallesPaciente":{
+    "detallesDrogas": "usa drogas",
+    "detallesAlimenticios": "vegano",
+    "detallesAntecedentes": "la familia es delincuente"
+
+   },
+
+    "detalleApoyo": "nuevos detalles de apoyo",
+    "funcionalidadGenital": "detalles funcionalidad genital",
+    "detalleJuicio": "fue a juicio",
+    "detalleFarmaco": "farmacos para todos",
+
+"psique": {
+
+    "controlEquipo": 1,
+    "psicoterapia":1,
+    "evolucionPsiquica": 1,
+    "diagnosticoPsiquiatrico": 1,
+    "utilizacionFarmaco": 1
+
+   },
+"encargada": {
+
+    "rutInvolucrada": "19.667.429-2",
+    "nombresInvolucrada": "Kahory",
+    "apellidoPInvolucrada": "Flores",
+    "apellidoMInvolucrada": "Miranda",
+    "parentescoInvolucrada": "Hermana",
+    "responsabilidadInvolucrada": "cuidadora",
+    "telefonoInvolucrada": "93213123",
+    "domicilioInvolucrada": "av circunvalacion"
+
+   },
+"antecedentes": {
+
+    "perinatales": "string",
+    "hospitalizaciones": "string",
+    "quirurgicos": "string",
+    "alergicos": "string",
+    "pni": "string"
+
+   },
+    "date":"2022/09/22",
+    "borrado":false,
+    "apoyoEscolar": 1,
+    "judicializacion": 1
+
+
+}
