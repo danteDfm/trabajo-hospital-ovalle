@@ -43,12 +43,12 @@ class Paciente {
     static traerDataPaciente() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(`SELECT  id_ficha_tecnica,
-     rut_paciente, nombre_paciente, 
-     apellido_paterno_paciente,
-     apellido_materno_paciente  FROM 
-     FICHAS_TECNICAS AS ft JOIN PACIENTES AS pa ON  ft.fk_paciente = pa.id_paciente`);
-                console.log(dataPaciente);
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(`    
+      SELECT  id_paciente ,pa.rut_paciente,
+      pa.nombre_paciente, pa.apellido_paterno_paciente,
+      pa.apellido_materno_paciente
+      FROM pacientes AS pa
+      `);
                 return dataPaciente;
             }
             catch (err) {
@@ -82,7 +82,7 @@ class Paciente {
                 return {
                     idDrogas: idDrogas,
                     idAlimenticio,
-                    idAFamilia
+                    idAFamilia,
                 };
             }
             catch (err) {

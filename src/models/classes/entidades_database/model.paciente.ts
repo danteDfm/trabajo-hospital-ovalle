@@ -1,6 +1,8 @@
-import { consultasGenerales, returnNull } from "../../../consultas/consultasGenerales";
+import {
+  consultasGenerales,
+  returnNull,
+} from "../../../consultas/consultasGenerales";
 import { repetir } from "../../../utils/generaConsultas";
-
 
 export class Paciente {
   constructor(
@@ -45,16 +47,16 @@ export class Paciente {
     }
   }
 
- static async traerDataPaciente() {
+  static async traerDataPaciente() {
     try {
+      const dataPaciente = await consultasGenerales(`    
+      SELECT  id_paciente ,pa.rut_paciente,
+      pa.nombre_paciente, pa.apellido_paterno_paciente,
+      pa.apellido_materno_paciente
+      FROM pacientes AS pa
+      `);
 
-      const dataPaciente = await consultasGenerales(`SELECT  id_ficha_tecnica,
-     rut_paciente, nombre_paciente, 
-     apellido_paterno_paciente,
-     apellido_materno_paciente  FROM 
-     FICHAS_TECNICAS AS ft JOIN PACIENTES AS pa ON  ft.fk_paciente = pa.id_paciente`);
-
-      console.log(dataPaciente);
+    
       return dataPaciente;
     } catch (err) {
       console.log(err);
@@ -62,7 +64,7 @@ export class Paciente {
     }
   }
 
-   actualiarLlavesForaneas(
+  actualiarLlavesForaneas(
     fkAFamilia: number,
     fkDDrogas: number,
     fkHAlimenticios: number,
@@ -71,7 +73,8 @@ export class Paciente {
     try {
       consultasGenerales(
         `UPDATE PACIENTES SET fk_antecedentes_familiares = ?, fk_detalles_drogas = ?, fk_habitos_alimenticios=? 
-         WHERE id_paciente = ?`, [fkAFamilia, fkDDrogas, fkHAlimenticios, idFicha]
+         WHERE id_paciente = ?`,
+        [fkAFamilia, fkDDrogas, fkHAlimenticios, idFicha]
       );
     } catch (err) {
       console.log(err);
@@ -79,38 +82,48 @@ export class Paciente {
     }
   }
 
-   async crearDetallesPaciente(detallesPaciente: {
-    detallesDrogas?: string;
-    detallesAlimenticios?: string;
-    detallesAntecedentes?: string;
-    
-  }, idPaciente:number) {
+  async crearDetallesPaciente(
+    detallesPaciente: {
+      detallesDrogas?: string;
+      detallesAlimenticios?: string;
+      detallesAntecedentes?: string;
+    },
+    idPaciente: number
+  ) {
     try {
-
       const consultas = {
-
         drogas: "INSERT INTO DETALLES_DROGAS VALUES (NULL, ?)",
         alimenticio: "INSERT INTO HABITOS_ALIMENTICIOS VALUES (NULL, ?)",
-        antecedentesFamilia: "INSERT INTO ANTECEDENTES_FAMILIARES VALUES (NULL, ?)",
-
+        antecedentesFamilia:
+          "INSERT INTO ANTECEDENTES_FAMILIARES VALUES (NULL, ?)",
       };
 
-      const {insertId: idDrogas} = await returnNull(consultas.drogas, detallesPaciente.detallesDrogas);
+      const { insertId: idDrogas } = await returnNull(
+        consultas.drogas,
+        detallesPaciente.detallesDrogas
+      );
 
       const { insertId: idAlimenticio } = await returnNull(
-        consultas.alimenticio, detallesPaciente.detallesAlimenticios);
+        consultas.alimenticio,
+        detallesPaciente.detallesAlimenticios
+      );
 
-       const { insertId: idAFamilia } = await returnNull(
-        consultas.antecedentesFamilia,detallesPaciente.detallesAntecedentes);
+      const { insertId: idAFamilia } = await returnNull(
+        consultas.antecedentesFamilia,
+        detallesPaciente.detallesAntecedentes
+      );
 
-        this.actualiarLlavesForaneas(idAFamilia, idDrogas, idAFamilia, idPaciente);
+      this.actualiarLlavesForaneas(
+        idAFamilia,
+        idDrogas,
+        idAFamilia,
+        idPaciente
+      );
 
       return {
-
         idDrogas: idDrogas,
         idAlimenticio,
-        idAFamilia
-        
+        idAFamilia,
       };
     } catch (err) {
       console.log(err);
