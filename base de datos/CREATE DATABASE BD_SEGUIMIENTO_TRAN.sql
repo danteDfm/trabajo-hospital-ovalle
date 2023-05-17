@@ -30,11 +30,9 @@ estado:paciente NOT NULL
 
 --FICHA TECNICA
 create table fichas_tecnicas(
-
 id_ficha_tecnica int not null auto_increment primary KEY, 
 fecha_ingreso date not NULL,
 borrado_logico BOOLEAN NOT NULL,
-
 apoyo_escolar ENUM('1','2','3') NOT NULL,
 judicializacion ENUM('1','2','3') NOT NULL,
 fk_profesional_usuario INT NOT NULL,
@@ -58,9 +56,6 @@ FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADA
 )
 
 
-
-
-
 --historia clinca
 
 create table HISTORIAS_CLINICAS(
@@ -78,22 +73,22 @@ detalles_antecedentes_pni VARCHAR(255)
 CREATE TABLE PERSONAS_INVOLUCRADAS_TRANSICION(
 id_persona_involucrada_transicion INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 rut_persona_involucrada VARCHAR(13), 
+pasaporte VARCHAR(13),
 nombres_persona_involucrada VARCHAR (30), 
 apellido_paterno_persona_involucrada VARCHAR (15),   	
 apellido_materno_persona_involucrada VARCHAR (15), 
 parentesco_persona_involucrada VARCHAR (15),
-responsabilidad_persona_involucrada VARCHAR (14),
 telefono_persona_involucrada VARCHAR (15),
 domicilio_persona_involucrada VARCHAR (30)
 )
 
 
-
+ALTER TABLE personas_involucradas_transicion ADD COLUMN pasaporte varchar(13)
 
 --antecedentes funcionalidad genital
 create table ANTECEDENTES_FUNCIONALIDADES_GENITAL(
 id_funcionalidad_genital int not null auto_increment primary key,
-detalle_funcionalidad_genital varchar (255) NOT NULL
+detalle_funcionalidad_genital varchar (255) 
 )
 
 
@@ -135,7 +130,8 @@ detalles_farmaco VARCHAR (255)
 
 CREATE TABLE PACIENTES(
 id_paciente int NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-rut_paciente varchar(12) NOT NULL,
+rut_paciente VARCHAR(12),
+pasaporte VARCHAR(13),
 nombre_paciente varchar(40) NOT NULL, 
 apellido_paterno_paciente varchar(20), 
 apellido_materno_paciente varchar(20), 
@@ -143,11 +139,9 @@ pronombre varchar(6),
 nombre_social varchar(25),
 fecha_nacimiento_paciente date NOT NULL, 
 domicilio_paciente varchar(50),
-
 telefono_paciente VARCHAR (20),
 uso_droga ENUM('1','2','3') NOT NULL, 
 antecedente_familires ENUM('1','2','3') NOT NULL,
-
 fk_historia_genero INT UNIQUE,
 fk_antecedentes_familiares INT UNIQUE, 
 fk_detalles_drogas INT UNIQUE, 
@@ -164,7 +158,7 @@ SELECT * FROM PACIENTES
 
 CREATE TABLE DETALLES_DROGAS(
 id_droga INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-detalles_drogas VARCHAR(255) NOT NULL 
+detalles_drogas VARCHAR(255) 
 )
 
 --habitos alimenticios 
@@ -174,14 +168,14 @@ id_habito_alimenticio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 detalle_habito_alimenticio VARCHAR (20) NOT NULL
 );
 
-SELECT * FROM HABITOS_ALIMENTICIOS
+
 
 --antecedentes clinicos familia
 
 
 CREATE TABLE ANTECEDENTES_FAMILIARES(
 id_antecedentes_familia INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-detalles_antecedente VARCHAR (255) NOT NULL
+detalles_antecedente VARCHAR (255) 
 )
 
 
@@ -200,7 +194,8 @@ fk_detalles_disforia INT UNIQUE,
 FOREIGN KEY (fk_detalles_disforia) REFERENCES detalles_disforia (id_elemento_disforia)
 )
  
- SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
+
+
 
 CREATE TABLE SELECCION_PRENDA(
 id_prenda_n_n INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -210,22 +205,18 @@ FOREIGN KEY(fk_historia_genero) REFERENCES  HISTORIAS_IDENTIDADES_GENEROS (id_hi
 FOREIGN KEY(fk_prenda_disconformidad) REFERENCES PRENDAS_DISCONFORMIDAD(id_prenda_disconformidad)
 )
 
-SELECT * FROM seleccion_prenda
-
 create table PRENDAS_DISCONFORMIDAD(
 id_prenda_disconformidad int not null auto_increment primary key, 
 nombre_prenda varchar(20) NOT NULL
 )
 
-SELECT * FROM PRENDAS_DISCONFORMIDAD
-INSERT INTO prendas_disconformidad VALUES (NULL, "otras"), (NULL, "packet"), (NULL, "socket"), (NULL, "rocket")
+
 --presencia de disforia 
 
 create table DETALLES_DISFORIA(
 id_elemento_disforia int not null auto_increment primary key, 
-detalles_elemento varchar(255) NOT NULL 
+detalles_elemento varchar(255) 
 )
 
 
-SELECT * FROM DETALLES_DISFORIA
 
