@@ -12,27 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Paciente = void 0;
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 const generaConsultas_1 = require("../../../utils/generaConsultas");
+const dic_query_1 = require("../../../consultas/dic.query");
 class Paciente {
-    constructor(paciente) {
-        this.paciente = paciente;
-    }
-    crearPaciente() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    constructor() { }
+    crearPaciente(fkHistoriaGenero, fkAntecedentesFamilia, fkDetallesDrogas, fkHabitosAlimenticios, paciente) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, consultasGenerales_1.consultasGenerales)(`INSERT INTO PACIENTES VALUES (null, ${(0, generaConsultas_1.repetir)(10)} , null, null, null)`, [
-                    (_a = this.paciente) === null || _a === void 0 ? void 0 : _a.rutPaciente,
-                    (_b = this.paciente) === null || _b === void 0 ? void 0 : _b.nombrePaciente,
-                    (_c = this.paciente) === null || _c === void 0 ? void 0 : _c.apellidoPaternoPaciente,
-                    (_d = this.paciente) === null || _d === void 0 ? void 0 : _d.apellidoMaternoPaciente,
-                    (_e = this.paciente) === null || _e === void 0 ? void 0 : _e.pronombre,
-                    (_f = this.paciente) === null || _f === void 0 ? void 0 : _f.nombreSocial,
-                    (_g = this.paciente) === null || _g === void 0 ? void 0 : _g.fechaNacimientoPaciente,
-                    (_h = this.paciente) === null || _h === void 0 ? void 0 : _h.domicilioPaciente,
-                    (_j = this.paciente) === null || _j === void 0 ? void 0 : _j.usoDroga,
-                    (_k = this.paciente) === null || _k === void 0 ? void 0 : _k.antecedenteFamiliares,
-                ]);
-                return result;
+                const { insertId: idPaciente } = yield (0, consultasGenerales_1.consultasGenerales)(`INSERT INTO PACIENTES VALUES (null, ${(0, generaConsultas_1.repetir)(16)})`, [paciente.rutPaciente,
+                    paciente.pasaportePaciente,
+                    paciente.nombrePaciente, paciente === null || paciente === void 0 ? void 0 : paciente.apellidoPaternoPaciente, paciente === null || paciente === void 0 ? void 0 : paciente.apellidoMaternoPaciente, paciente === null || paciente === void 0 ? void 0 : paciente.pronombre, paciente === null || paciente === void 0 ? void 0 : paciente.nombreSocial, paciente === null || paciente === void 0 ? void 0 : paciente.fechaNacimientoPaciente, paciente === null || paciente === void 0 ? void 0 : paciente.domicilioPaciente, paciente.telefono, paciente === null || paciente === void 0 ? void 0 : paciente.usoDroga, paciente === null || paciente === void 0 ? void 0 : paciente.antecedenteFamiliares, fkHistoriaGenero,
+                    fkAntecedentesFamilia,
+                    fkDetallesDrogas,
+                    fkHabitosAlimenticios]);
+                return idPaciente;
             }
             catch (err) {
                 console.log(err);
@@ -40,15 +32,15 @@ class Paciente {
             }
         });
     }
-    static traerDataPaciente() {
+    traerDataPaciente() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(`    
-      SELECT  id_paciente ,pa.rut_paciente,
-      pa.nombre_paciente, pa.apellido_paterno_paciente,
-      pa.apellido_materno_paciente
-      FROM pacientes AS pa
-      `);
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(` 
+        SELECT  id_paciente, pa.rut_paciente,
+        pa.nombre_paciente, pa.apellido_paterno_paciente,
+        pa.apellido_materno_paciente
+        FROM PACIENTES AS pa
+        `);
                 return dataPaciente;
             }
             catch (err) {
@@ -57,17 +49,17 @@ class Paciente {
             }
         });
     }
-    actualiarLlavesForaneas(fkAFamilia, fkDDrogas, fkHAlimenticios, idFicha) {
-        try {
-            (0, consultasGenerales_1.consultasGenerales)(`UPDATE PACIENTES SET fk_antecedentes_familiares = ?, fk_detalles_drogas = ?, fk_habitos_alimenticios=? 
-         WHERE id_paciente = ?`, [fkAFamilia, fkDDrogas, fkHAlimenticios, idFicha]);
-        }
-        catch (err) {
-            console.log(err);
-            throw new Error("Error de consulta");
-        }
+    traerXRut(rut) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (rut.length < 10 || rut.length > 10) {
+                return 0;
+            }
+            const query = `SELECT * FROM pacientes AS pa WHERE pa.rut_paciente LIKE "%${rut}%"`;
+            const dataXRut = yield (0, consultasGenerales_1.consultasGenerales)(query);
+            return dataXRut;
+        });
     }
-    crearDetallesPaciente(detallesPaciente, idPaciente) {
+    crearDetallesPaciente(detallesPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const consultas = {
@@ -78,7 +70,6 @@ class Paciente {
                 const { insertId: idDrogas } = yield (0, consultasGenerales_1.returnNull)(consultas.drogas, detallesPaciente.detallesDrogas);
                 const { insertId: idAlimenticio } = yield (0, consultasGenerales_1.returnNull)(consultas.alimenticio, detallesPaciente.detallesAlimenticios);
                 const { insertId: idAFamilia } = yield (0, consultasGenerales_1.returnNull)(consultas.antecedentesFamilia, detallesPaciente.detallesAntecedentes);
-                this.actualiarLlavesForaneas(idAFamilia, idDrogas, idAFamilia, idPaciente);
                 return {
                     idDrogas: idDrogas,
                     idAlimenticio,
@@ -88,6 +79,59 @@ class Paciente {
             catch (err) {
                 console.log(err);
                 throw err;
+            }
+        });
+    }
+    mostrarPacienteFicha(rutPaciente) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!rutPaciente || rutPaciente.length < 9 || rutPaciente.length > 9) {
+                    return "sin resultdos";
+                }
+                const paciente = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.paciente, [
+                    parseInt(rutPaciente),
+                ]);
+                const idPaciente = paciente[0].id_paciente;
+                const detalles = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.detallesPaciente, [
+                    idPaciente,
+                ]);
+                const hClinicas = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.historiasClinicas, [
+                    idPaciente,
+                ]);
+                const aFamilia = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.apoyoFamilia, [
+                    idPaciente,
+                ]);
+                const fGenital = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.funcionalidadGenital, [
+                    idPaciente,
+                ]);
+                const juicio = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.detallesJuicio, [
+                    idPaciente,
+                ]);
+                const encargado = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.encargado, [
+                    idPaciente,
+                ]);
+                const acompanante = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.acompanante, [
+                    idPaciente,
+                ]);
+                const areaPsique = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.areaPsicologica, [
+                    idPaciente,
+                ]);
+                const ficha = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.ficha, [idPaciente]);
+                return {
+                    paciente: paciente[0],
+                    detalles: detalles[0],
+                    hClinicas: hClinicas[0],
+                    aFamilia: aFamilia[0],
+                    fGenital: fGenital[0],
+                    juicio: juicio[0],
+                    encargado: encargado[0],
+                    acompanante: acompanante[0],
+                    areaPsique: areaPsique[0],
+                    ficha: ficha[0],
+                };
+            }
+            catch (err) {
+                throw (err);
             }
         });
     }

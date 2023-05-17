@@ -11,17 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PacienteController = void 0;
 const model_paciente_1 = require("../models/classes/entidades_database/model.paciente");
+const objPaciente = new model_paciente_1.Paciente();
 class PacienteController {
     constructor() { }
-    static crearPaciente(req, res) {
+    static dataPaciente(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { body } = req;
-                const objPaciente = new model_paciente_1.Paciente(body.paciente);
-                yield objPaciente.crearPaciente();
-                res.status(201).json({
-                    msj: "Usuario creado correctamente",
-                });
+                const dataPaciente = yield objPaciente.traerDataPaciente();
+                res.status(201).json(dataPaciente);
             }
             catch (err) {
                 res.status(500).json({
@@ -31,13 +28,14 @@ class PacienteController {
             }
         });
     }
-    static dataPaciente(req, res) {
+    static traerXRutController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const dataPaciente = yield model_paciente_1.Paciente.traerDataPaciente();
-                res.status(201).json(dataPaciente);
+                const dataXrut = yield objPaciente.traerXRut(req.body.rut);
+                res.status(201).json(dataXrut);
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({
                     err,
                     msj: "Error interno del servidor"

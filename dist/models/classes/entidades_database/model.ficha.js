@@ -12,40 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ficha = void 0;
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class Ficha {
-    constructor(apoyoEscolar, judicializacion, fkUsuario, fkPaciente, fkApoyo, fkJuicio, fkAreaPsiquica, fkFuncionalidadG, fkHistoriasClinicas, fkPersonaEncargada, fkPersonaAcompanante, fechaIngreso, borrado) {
-        this.apoyoEscolar = apoyoEscolar;
-        this.judicializacion = judicializacion;
-        this.fkUsuario = fkUsuario;
-        this.fkPaciente = fkPaciente;
-        this.fkApoyo = fkApoyo;
-        this.fkJuicio = fkJuicio;
-        this.fkAreaPsiquica = fkAreaPsiquica;
-        this.fkFuncionalidadG = fkFuncionalidadG;
-        this.fkHistoriasClinicas = fkHistoriasClinicas;
-        this.fkPersonaEncargada = fkPersonaEncargada;
-        this.fkPersonaAcompanante = fkPersonaAcompanante;
-        this.fechaIngreso = fechaIngreso;
-        this.borrado = borrado;
-    }
-    crearFicha() {
+    crearFicha(apoyoEscolar, judicializacion, fkUsuario, fkPaciente, fkApoyo, fkJuicio, fkAreaPsiquica, fkFuncionalidadG, fkHistoriasClinicas, fkPersonaEncargada, fkPersonaAcompanante, fechaIngreso, borrado) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("?,".repeat(13).slice(0, -1));
-                const query = `INSERT INTO FICHAS_TECNICAS VALUES (null, ${"?,".repeat(13).slice(0, -1)})`;
+                const query = `INSERT INTO FICHAS_TECNICAS VALUES (null, ${"?,"
+                    .repeat(13)
+                    .slice(0, -1)})`;
                 const { insertId: idFicha } = yield (0, consultasGenerales_1.consultasGenerales)(query, [
-                    this.fechaIngreso,
-                    this.borrado,
-                    this.apoyoEscolar,
-                    this.judicializacion,
-                    this.fkUsuario,
-                    this.fkPaciente,
-                    this.fkApoyo,
-                    this.fkJuicio,
-                    this.fkAreaPsiquica,
-                    this.fkFuncionalidadG,
-                    this.fkHistoriasClinicas,
-                    this.fkPersonaEncargada,
-                    this.fkPersonaAcompanante,
+                    fechaIngreso,
+                    borrado,
+                    apoyoEscolar,
+                    judicializacion,
+                    fkUsuario,
+                    fkPaciente,
+                    fkApoyo,
+                    fkJuicio,
+                    fkAreaPsiquica,
+                    fkFuncionalidadG,
+                    fkHistoriasClinicas,
+                    fkPersonaEncargada,
+                    fkPersonaAcompanante,
                 ]);
                 return idFicha;
             }
@@ -80,11 +66,11 @@ class Ficha {
                 const query = "INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?,?)";
                 const { insertId: idInvolucrado } = yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     encargada.rutInvolucrada,
+                    encargada.pasaportEncargado,
                     encargada.nombresInvolucrada,
                     encargada.apellidoPInvolucrada,
                     encargada.apellidoMInvolucrada,
                     encargada.parentescoInvolucrada,
-                    encargada.responsabilidadInvolucrada,
                     encargada.telefonoInvolucrada,
                     encargada.domicilioInvolucrada,
                 ]);
@@ -103,7 +89,9 @@ class Ficha {
                 const queryA = "INSERT INTO DETALLES_APOYO VALUES (NULL, ?)";
                 const queryJ = "INSERT INTO  DETALLES_JUICIO VALUES (NULL, ?)";
                 const queryF = "INSERT INTO  TIPOS_FARMACOS VALUES (NULL, ?)";
-                const { insertId: idIndGenital } = yield (0, consultasGenerales_1.consultasGenerales)(query, [aGenital]);
+                const { insertId: idIndGenital } = yield (0, consultasGenerales_1.consultasGenerales)(query, [
+                    aGenital,
+                ]);
                 const { insertId: idDetalleApoyo } = yield (0, consultasGenerales_1.returnNull)(queryA, detalleApoyo);
                 const { insertId: idDetalleJuicio } = yield (0, consultasGenerales_1.returnNull)(queryJ, detalleJuicio);
                 const { insertId: idFarmacos } = yield (0, consultasGenerales_1.returnNull)(queryF, detallesFarmacos);
@@ -116,7 +104,7 @@ class Ficha {
             }
             catch (err) {
                 console.log(err);
-                throw (err);
+                throw err;
             }
         });
     }
@@ -139,6 +127,8 @@ class Ficha {
                 throw err;
             }
         });
+    }
+    crearPacinte() {
     }
 }
 exports.Ficha = Ficha;

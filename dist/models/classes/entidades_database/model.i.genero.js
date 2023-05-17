@@ -12,28 +12,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentidadGenero = void 0;
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class IdentidadGenero {
-    constructor(IdenGenero) {
-        this.IdenGenero = IdenGenero;
-    }
-    crearIdentidadGenero(fkDetallesDisforia) {
+    crearIdentidadGenero(IdenGenero, fkDetallesDisforia) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const query = "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES (NULL, ?,?,?,?,?,?,?,?)";
                 const { insertId: idGenero } = yield (0, consultasGenerales_1.consultasGenerales)(query, [
-                    this.IdenGenero.identidadGenero,
-                    this.IdenGenero.orientacionSexual,
-                    this.IdenGenero.inicioTransicion,
-                    this.IdenGenero.tiempoLatencia,
-                    this.IdenGenero.apoyoFamilia,
-                    this.IdenGenero.usoPrenda,
-                    this.IdenGenero.presenciaDisforia,
-                    fkDetallesDisforia
+                    IdenGenero.identidadGenero,
+                    IdenGenero.orientacionSexual,
+                    IdenGenero.inicioTransicion,
+                    IdenGenero.tiempoLatencia,
+                    IdenGenero.apoyoFamilia,
+                    IdenGenero.usoPrenda,
+                    IdenGenero.presenciaDisforia,
+                    fkDetallesDisforia,
                 ]);
                 return idGenero;
             }
             catch (err) {
                 console.log(err);
-                throw (err);
+                throw err;
             }
         });
     }
@@ -46,7 +43,7 @@ class IdentidadGenero {
             }
             catch (err) {
                 console.log(err);
-                throw (err);
+                throw err;
             }
         });
     }
@@ -61,7 +58,7 @@ class IdentidadGenero {
             }
             catch (err) {
                 console.log(err);
-                throw (err);
+                throw err;
             }
         });
     }

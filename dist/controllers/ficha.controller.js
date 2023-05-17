@@ -13,27 +13,82 @@ exports.FichaController = void 0;
 const model_paciente_1 = require("../models/classes/entidades_database/model.paciente");
 const model_i_genero_1 = require("../models/classes/entidades_database/model.i.genero");
 const model_ficha_1 = require("../models/classes/entidades_database/model.ficha");
+const objFicha = new model_ficha_1.Ficha();
+const objGenero = new model_i_genero_1.IdentidadGenero();
+const objPaciente = new model_paciente_1.Paciente();
 class FichaController {
+    static fichaPaciente(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dataFicha = yield objPaciente.mostrarPacienteFicha(req.params.rutPaciente);
+                res.status(200).json(dataFicha);
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
+            }
+        });
+    }
+    static crearDetallesPaciente(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { body } = req;
+                const idDisforia = yield objGenero.crearDisforia(body.disforia);
+                const idGenero = yield objGenero.crearIdentidadGenero(Object.assign({}, body.identidadGenero), idDisforia);
+                yield objGenero.seleccinarPrenda(idGenero, body.prenda);
+                const idDetPaciente = yield objPaciente.crearDetallesPaciente(Object.assign({}, body.detallesPaciente));
+                const idPaciente = yield objPaciente.crearPaciente(idGenero, idDetPaciente.idAFamilia, idDetPaciente.idDrogas, idDetPaciente.idAlimenticio, body.paciente);
+                req.idPaciente = idPaciente;
+                req.saludo = "hola mundo";
+                next();
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor",
+                });
+            }
+        });
+    }
+    static crearDetallesFicha(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { body } = req;
+                const idDetalleFicha = yield model_ficha_1.Ficha.detallesFicha(body.detalleApoyo, body.funcionalidadGenital, body.detalleJuicio, body.detalleFarmaco);
+                const idAreaPsiquica = yield model_ficha_1.Ficha.areasPsiquicas(Object.assign({}, body.psique), idDetalleFicha.idFarmacos);
+                const idEncargada = yield model_ficha_1.Ficha.personaEncargadas(Object.assign({}, body.encargada));
+                const idAcompanante = yield model_ficha_1.Ficha.personaEncargadas(Object.assign({}, body.acompanante));
+                const idHistorialClinico = yield model_ficha_1.Ficha.historiasClinicas(Object.assign({}, body.antecedentes));
+                req.idDetallesFicha = {
+                    idDetalleFicha,
+                    idAreaPsiquica,
+                    idEncargada,
+                    idHistorialClinico,
+                    idAcompanante
+                };
+                next();
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor",
+                });
+            }
+        });
+    }
     static crearFicha(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { body } = req;
-                const { idPaciente } = req.params;
-                const objGenero = new model_i_genero_1.IdentidadGenero(Object.assign({}, body.identidadGenero));
-                const objPaciente = new model_paciente_1.Paciente();
-                const idDisforia = yield objGenero.crearDisforia(body.disforia);
-                const idGenero = yield objGenero.crearIdentidadGenero(idDisforia);
-                yield objGenero.seleccinarPrenda(idGenero, body.prenda);
-                yield objPaciente.crearDetallesPaciente(Object.assign({}, body.detallesPaciente), parseInt(idPaciente));
-                const idDetalleFicha = yield model_ficha_1.Ficha.detallesFicha(body.detalleApoyo, body.funcionalidadGenital, body.detalleJuicio, body.detalleFarmaco);
-                const idAreaPsiquica = yield model_ficha_1.Ficha.areasPsiquicas(Object.assign({}, body.psique), idDetalleFicha.idFarmacos);
-                const idEncargada = yield model_ficha_1.Ficha.personaEncargadas(Object.assign({}, body.encargada));
-                const idHistorialClinico = yield model_ficha_1.Ficha.historiasClinicas(Object.assign({}, body.antecedentes));
-                const objFicha = new model_ficha_1.Ficha(body.apoyoEscolar, body.judicializacion, 1, parseInt(idPaciente), idDetalleFicha.idDetalleApoyo, idDetalleFicha.idDetalleJuicio, idAreaPsiquica, idDetalleFicha.idIndGenital, idHistorialClinico, idEncargada, idEncargada, body.date, body.borrado);
-                const idFicha = yield objFicha.crearFicha();
-                res.status(201).json({
+                const { idUsuario } = req.params;
+                const idPaciente = req.idPaciente;
+                const idDetallesFicha = req.idDetallesFicha;
+                const idFicha = yield objFicha.crearFicha(body.apoyoEscolar, body.judicializacion, parseInt(idUsuario), parseInt(idPaciente), idDetallesFicha.idDetalleFicha.idDetalleApoyo, idDetallesFicha.idDetalleFicha.idDetalleJuicio, idDetallesFicha.idAreaPsiquica, idDetallesFicha.idDetalleFicha.idIndGenital, idDetallesFicha.idHistorialClinico, idDetallesFicha.idEncargada, idDetallesFicha.idAcompanante, body.date, body.borrado);
+                res.status(201).send({
                     msj: "Ficha tecnica creada",
-                    idFicha: idFicha
+                    idFicha: idFicha,
                 });
             }
             catch (err) {

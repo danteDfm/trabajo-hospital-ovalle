@@ -1,6 +1,5 @@
 import { consultasGenerales } from "../../../consultas/consultasGenerales";
-import { mysqlConnexion} from "../../..";
-import { Connection } from "mysql2/promise";
+
 
 export class Usuario{
 

@@ -19,7 +19,7 @@ function consultasGenerales(query, formato) {
             return dataDbs;
         }
         catch (err) {
-            throw (err);
+            throw err;
         }
     });
 }
@@ -35,7 +35,7 @@ function returnNull(query, formato) {
             return dataDbs;
         }
         catch (err) {
-            throw (err);
+            throw err;
         }
     });
 }

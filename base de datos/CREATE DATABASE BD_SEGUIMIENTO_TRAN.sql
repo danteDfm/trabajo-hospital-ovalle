@@ -29,15 +29,14 @@ estado:paciente NOT NULL
 )
 
 --FICHA TECNICA
-create table FICHAS_TECNICAS(
-id_ficha_tecnica int not null auto_increment primary KEY, 
+create table fichas_tecnicas(
 
+id_ficha_tecnica int not null auto_increment primary KEY, 
 fecha_ingreso date not NULL,
 borrado_logico BOOLEAN NOT NULL,
 
 apoyo_escolar ENUM('1','2','3') NOT NULL,
 judicializacion ENUM('1','2','3') NOT NULL,
-
 fk_profesional_usuario INT NOT NULL,
 fk_paciente INT NOT NULL,
 fk_detalles_apoyo INT,
@@ -58,7 +57,9 @@ FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
 )
 
-SELECT * FROM FICHAS_TECNICAS
+
+
+
 
 --historia clinca
 
@@ -142,12 +143,16 @@ pronombre varchar(6),
 nombre_social varchar(25),
 fecha_nacimiento_paciente date NOT NULL, 
 domicilio_paciente varchar(50),
+
 telefono_paciente VARCHAR (20),
 uso_droga ENUM('1','2','3') NOT NULL, 
 antecedente_familires ENUM('1','2','3') NOT NULL,
+
+fk_historia_genero INT UNIQUE,
 fk_antecedentes_familiares INT UNIQUE, 
 fk_detalles_drogas INT UNIQUE, 
-fk_habitos_alimenticios INT UNIQUE ,
+fk_habitos_alimenticios INT UNIQUE,
+FOREIGN KEY (fk_historia_genero) REFERENCES historias_identidades_generos (id_historia_identidad_genero),
 FOREIGN KEY (fk_antecedentes_familiares) REFERENCES ANTECEDENTES_FAMILIARES (id_antecedentes_familia),
 FOREIGN KEY (fk_detalles_drogas) REFERENCES DETALLES_DROGAS (id_droga),
 FOREIGN KEY (fk_habitos_alimenticios) REFERENCES HABITOS_ALIMENTICIOS (id_habito_alimenticio)

@@ -2,56 +2,43 @@ import {
   consultasGenerales,
   returnNull,
 } from "../../../consultas/consultasGenerales";
-
-
 export class Ficha {
-
-
-  constructor(
-
-      private apoyoEscolar: number,
-      private judicializacion: number,
-      private fkUsuario: number,
-      private fkPaciente: number,
-      private fkApoyo: number,
-      private fkJuicio: number,
-      private fkAreaPsiquica: number,
-      private fkFuncionalidadG: number,
-      private fkHistoriasClinicas: number,
-      private fkPersonaEncargada: number,
-      private fkPersonaAcompanante: number,
-      private fechaIngreso: Date,
-      private borrado: boolean
-  ) {}
-
-  async crearFicha() {
+  async crearFicha(
+    apoyoEscolar: number,
+    judicializacion: number,
+    fkUsuario: number,
+    fkPaciente: number,
+    fkApoyo: number,
+    fkJuicio: number,
+    fkAreaPsiquica: number,
+    fkFuncionalidadG: number,
+    fkHistoriasClinicas: number,
+    fkPersonaEncargada: number,
+    fkPersonaAcompanante: number,
+    fechaIngreso: Date,
+    borrado: boolean
+  ) {
     try {
-
-      console.log("?,".repeat(13).slice(0,-1));
-
-      
-
-      const query: string = `INSERT INTO FICHAS_TECNICAS VALUES (null, ${"?,".repeat(13).slice(0, -1)})`;
+      const query: string = `INSERT INTO FICHAS_TECNICAS VALUES (null, ${"?,"
+        .repeat(13)
+        .slice(0, -1)})`;
       const { insertId: idFicha } = await consultasGenerales(query, [
-        this.fechaIngreso,
-        this.borrado,
-
-        this.apoyoEscolar,
-        this.judicializacion,
-
-        this.fkUsuario,
-        this.fkPaciente,
-        this.fkApoyo,
-        this.fkJuicio,
-        this.fkAreaPsiquica,
-        this.fkFuncionalidadG,
-        this.fkHistoriasClinicas,
-        this.fkPersonaEncargada,
-        this.fkPersonaAcompanante,
+        fechaIngreso,
+        borrado,
+        apoyoEscolar,
+        judicializacion,
+        fkUsuario,
+        fkPaciente,
+        fkApoyo,
+        fkJuicio,
+        fkAreaPsiquica,
+        fkFuncionalidadG,
+        fkHistoriasClinicas,
+        fkPersonaEncargada,
+        fkPersonaAcompanante,
       ]);
 
       return idFicha;
-
     } catch (err) {
       console.log(err);
       throw err;
@@ -90,22 +77,23 @@ export class Ficha {
     apellidoPInvolucrada: string;
     apellidoMInvolucrada: string;
     parentescoInvolucrada: string;
-    responsabilidadInvolucrada: string;
     telefonoInvolucrada: string;
     domicilioInvolucrada: string;
+    pasaportEncargado: string;
   }) {
     try {
       const query: string =
         "INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?,?)";
       const { insertId: idInvolucrado } = await consultasGenerales(query, [
-        encargada.rutInvolucrada,
+        encargada.rutInvolucrada, 
+        encargada.pasaportEncargado,
         encargada.nombresInvolucrada,
         encargada.apellidoPInvolucrada,
         encargada.apellidoMInvolucrada,
         encargada.parentescoInvolucrada,
-        encargada.responsabilidadInvolucrada,
         encargada.telefonoInvolucrada,
         encargada.domicilioInvolucrada,
+       
       ]);
 
       return idInvolucrado;
@@ -121,32 +109,38 @@ export class Ficha {
     detalleJuicio?: string,
     detallesFarmacos?: string
   ) {
-    try{
-
-      const query: string = "INSERT INTO ANTECEDENTES_FUNCIONALIDADES_GENITAL VALUES (null, ?)";
+    try {
+      const query: string =
+        "INSERT INTO ANTECEDENTES_FUNCIONALIDADES_GENITAL VALUES (null, ?)";
       const queryA: string = "INSERT INTO DETALLES_APOYO VALUES (NULL, ?)";
       const queryJ: string = "INSERT INTO  DETALLES_JUICIO VALUES (NULL, ?)";
       const queryF: string = "INSERT INTO  TIPOS_FARMACOS VALUES (NULL, ?)";
 
-    const { insertId: idIndGenital } = await consultasGenerales(query, [aGenital]);
-    const { insertId: idDetalleApoyo } = await returnNull(queryA, detalleApoyo);
-    const { insertId: idDetalleJuicio } = await returnNull(queryJ, detalleJuicio);
-    const { insertId: idFarmacos } = await returnNull(queryF, detallesFarmacos);
+      const { insertId: idIndGenital } = await consultasGenerales(query, [
+        aGenital,
+      ]);
+      const { insertId: idDetalleApoyo } = await returnNull(
+        queryA,
+        detalleApoyo
+      );
+      const { insertId: idDetalleJuicio } = await returnNull(
+        queryJ,
+        detalleJuicio
+      );
+      const { insertId: idFarmacos } = await returnNull(
+        queryF,
+        detallesFarmacos
+      );
 
-    
-
-    return {
-
-      idIndGenital,
-      idDetalleApoyo,
-      idDetalleJuicio,
-      idFarmacos,
-    };
-    }catch(err){
-
+      return {
+        idIndGenital,
+        idDetalleApoyo,
+        idDetalleJuicio,
+        idFarmacos,
+      };
+    } catch (err) {
       console.log(err);
-      throw(err);
-
+      throw err;
     }
   }
 
@@ -178,5 +172,12 @@ export class Ficha {
       console.log(err);
       throw err;
     }
+  }
+
+
+  crearPacinte(){
+
+
+
   }
 }
