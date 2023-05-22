@@ -17,7 +17,7 @@ export class Formulario {
   private areaPsiquica: AreaPsique;
   private encargada: Involucrados;
   private acompanante: Involucrados;
-  private antecedentes:AntecedentesCli
+  private antecedentes: AntecedentesCli;
 
   constructor(
     paciente: Paciente,
@@ -27,7 +27,7 @@ export class Formulario {
     areaPsiquica: AreaPsique,
     encargada: Involucrados,
     acompanante: Involucrados,
-    antecedentes:AntecedentesCli
+    antecedentes: AntecedentesCli
   ) {
     this.paciente = paciente;
     this.ficha = ficha;
@@ -39,7 +39,7 @@ export class Formulario {
     this.antecedentes = antecedentes;
   }
 
-  async crearFicha(idUsuario:number) {
+  async crearFicha(idUsuario: number) {
     const genero = Object.values(this.historiaGen);
     const prendaYdieta = Object.values(this.prenda);
     const areaPsiquica = Object.values(this.areaPsiquica);
@@ -82,31 +82,32 @@ export class Formulario {
         `INSERT INTO PACIENTES VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         paciente
       );
-     
 
       const [dataAreaPsiquica]: any = await conexion?.query(
         "INSERT INTO AREAS_PSIQUICAS VALUES (NULL, ?,?,?,?,?,?)",
         areaPsiquica
       );
-    
 
-      const [dataEncargada]:any=await conexion?.query(
+      const [dataEncargada]: any = await conexion?.query(
         "INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?,?)",
         encargada
       );
-      const [dataAcompanante]:any=await conexion?.query(
+      const [dataAcompanante]: any = await conexion?.query(
         "INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?,?)",
         acompanante
       );
 
-      const [dataAntecedentes]:any = await conexion?.query("INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?)", antecedentes);
+      const [dataAntecedentes]: any = await conexion?.query(
+        "INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?)",
+        antecedentes
+      );
 
       const idPaciente = (dataPaciente as OkPacket).insertId;
       const idPsique = (dataAreaPsiquica as OkPacket).insertId;
       const idAntecedente = (dataAntecedentes as OkPacket).insertId;
-      const idEncargada =(dataEncargada as OkPacket).insertId;
+      const idEncargada = (dataEncargada as OkPacket).insertId;
       const idAcompanante = (dataAcompanante as OkPacket).insertId;
-        
+
       ficha.push(idUsuario);
       ficha.push(idPaciente);
       ficha.push(idPsique);
@@ -114,15 +115,16 @@ export class Formulario {
       ficha.push(idEncargada);
       ficha.push(idAcompanante);
 
-    
+      const [dataForm]: any = await conexion?.query(
+        "INSERT INTO fichas_tecnicas VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",
+        ficha
+      );
+      const idFicha = (dataForm as OkPacket).insertId;
 
-    const [dataForm]:any=await conexion?.query("INSERT INTO fichas_tecnicas VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)", ficha);
-     const idFicha = (dataForm as OkPacket).insertId;
-
-     await conexion?.commit();
-      await conexion?.end();
-    return idFicha;
+      await conexion?.commit();
       
+
+      return idFicha;
     } catch (err) {
       conexion?.rollback();
       console.log(err);

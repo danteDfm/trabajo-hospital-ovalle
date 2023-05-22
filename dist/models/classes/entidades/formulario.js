@@ -65,7 +65,6 @@ class Formulario {
                 const [dataForm] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query("INSERT INTO fichas_tecnicas VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)", ficha));
                 const idFicha = dataForm.insertId;
                 yield (conexion === null || conexion === void 0 ? void 0 : conexion.commit());
-                yield (conexion === null || conexion === void 0 ? void 0 : conexion.end());
                 return idFicha;
             }
             catch (err) {
