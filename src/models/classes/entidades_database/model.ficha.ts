@@ -4,8 +4,8 @@ import {
 } from "../../../consultas/consultasGenerales";
 export class Ficha {
   async crearFicha(
-    apoyoEscolar: number,
-    judicializacion: number,
+    apoyoEscolar: boolean,
+    judicializacion: boolean,
     fkUsuario: number,
     fkPaciente: number,
     fkApoyo: number,
@@ -146,11 +146,11 @@ export class Ficha {
 
   static async areasPsiquicas(
     psique: {
-      controlEquipo: number;
-      psicoterapia: number;
-      evolucionPsiquica: number;
-      diagnosticoPsiquiatrico: number;
-      utilizacionFarmaco: number;
+      controlEquipo:boolean;
+      psicoterapia: boolean
+      evolucionPsiquica:boolean;
+      diagnosticoPsiquiatrico:boolean;
+      utilizacionFarmaco:boolean;
     },
     idFarmacos: number
   ) {

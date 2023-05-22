@@ -130,4 +130,11 @@ judicializacion FROM pacientes AS pa
 LEFT JOIN fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente
 WHERE id_paciente = ?
 `,
+
+seleccionPrenda: `SELECT sp.id_prenda_n_n, sp.fk_prenda_disconformidad FROM seleccion_prenda AS sp
+JOIN prendas_disconformidad AS pd ON sp.fk_prenda_disconformidad = pd.id_prenda_disconformidad
+JOIN historias_identidades_generos AS hg ON sp.fk_historia_genero = hg.id_historia_identidad_genero
+JOIN pacientes AS pa ON pa.fk_historia_genero = hg.id_historia_identidad_genero
+WHERE id_paciente= ?`
+
 };

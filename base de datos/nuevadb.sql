@@ -2,6 +2,12 @@ CREATE DATABASE proyecto_transicion
 USE proyecto_transicion
 DROP DATABASE proyecto_transicion
 
+CREATE TABLE EPISODIOS_PACIENTE(
+id_episodio INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+fecha_episodio DATE NOT NULL, 
+estado:paciente NOT NULL
+)
+
 CREATE TABLE CENTROS_SALUD (
 id_centro_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 nombre_centro_salud VARCHAR(50), 
@@ -22,11 +28,6 @@ FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 )
 
 
-CREATE TABLE EPISODIOS_PACIENTE(
-id_episodio INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-fecha_episodio DATE NOT NULL, 
-estado:paciente NOT NULL
-)
 
 --FICHA TECNICA
 create table fichas_tecnicas(
@@ -35,17 +36,15 @@ fecha_ingreso date not NULL,
 borrado_logico BOOLEAN NOT NULL,
 apoyo_escolar BOOLEAN  NOT NULL,
 judicializacion BOOLEAN NOT NULL,
+detalles_apoyo_es VARCHAR (255),
+detalles_judicializacion VARCHAR(255),
 fk_profesional_usuario INT NOT NULL,
 fk_paciente INT NOT NULL,
-fk_detalles_apoyo INT,
-fk_detalles_juicio INT, 
 fk_area_psiquica int, 
 fk_funcionalidad_genital int,  
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
-FOREIGN KEY (fk_detalles_juicio) REFERENCES DETALLES_JUICIO (id_detalle_juicio),
-FOREIGN KEY (fk_detalles_apoyo) REFERENCES DETALLES_APOYO (id_detalle_apoyo),
 FOREIGN KEY (fk_profesional_usuario) REFERENCES PROFESIONALES_USUARIOS_SALUD (id_profesional_salud),
 foreign key (fk_area_psiquica) references AREAS_PSIQUICAS (id_area_psiquica),
 foreign key (fk_paciente) references PACIENTES (id_paciente),
@@ -64,7 +63,8 @@ detalles_antecedente_perinatales VARCHAR(255),
 detalles_antecedentes_hospitalizaciones VARCHAR(255),
 detalles_antecedentes_quirurgicos VARCHAR(255),
 detalles_antecedentes_alergicos VARCHAR(255),
-detalles_antecedentes_pni VARCHAR(255)
+detalles_antecedentes_pni VARCHAR(255),
+detalles_funcionalidad_genital VARCHAR (255)
 )
 
 
@@ -82,32 +82,7 @@ telefono_persona_involucrada VARCHAR (15),
 domicilio_persona_involucrada VARCHAR (30)
 )
 
-
-
-
---antecedentes funcionalidad genital
-create table ANTECEDENTES_FUNCIONALIDADES_GENITAL(
-id_funcionalidad_genital int not null auto_increment primary key,
-detalle_funcionalidad_genital varchar (255) 
-)
-
-
---apoyo escolaridad
-CREATE TABLE DETALLES_APOYO(
-id_detalle_apoyo INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-detalles_apoyo VARCHAR (255)	NOT NULL
-)
-
-
---juicios
-
-CREATE TABLE DETALLES_JUICIO(
-id_detalle_juicio INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-detalles_juicio VARCHAR (255) NOT NULL
-)
-
  
-
 create table AREAS_PSIQUICAS(
 id_area_psiquica int not null auto_increment primary KEY,
 control_equipo_salud_mental boolean NOT NULL,
@@ -115,13 +90,7 @@ psicoterapia BOOLEAN  NOT NULL,
 evaluacion_psiquica BOOLEAN NOT NULL,
 diagnostico_psiquiatrico BOOLEAN  NOT NULL,
 utilizacion_farmaco BOOLEAN NOT NULL,
-fk_detalles_farmaco INT UNIQUE, 
-FOREIGN KEY (fk_detalles_farmaco) REFERENCES TIPOS_FARMACOS (id_tipo_farmaco)
-)
-
-create table TIPOS_FARMACOS(
-id_tipo_farmaco int not null auto_increment primary key, 
-detalles_farmaco VARCHAR (255)
+detalles_farmacos VARCHAR (255)
 )
  
 
@@ -142,46 +111,22 @@ domicilio_paciente varchar(50),
 telefono_paciente VARCHAR (20),
 uso_droga boolean NOT NULL, 
 antecedente_familires BOOLEAN NOT NULL,
+detalles_uso_droga VARCHAR (255),
+detalles_antecedentes_familia VARCHAR (255)
 fk_historia_genero INT UNIQUE,
-fk_antecedentes_familiares INT UNIQUE, 
-fk_detalles_drogas INT UNIQUE, 
 fk_habitos_alimenticios INT UNIQUE,
 FOREIGN KEY (fk_historia_genero) REFERENCES historias_identidades_generos (id_historia_identidad_genero),
-FOREIGN KEY (fk_antecedentes_familiares) REFERENCES ANTECEDENTES_FAMILIARES (id_antecedentes_familia),
-FOREIGN KEY (fk_detalles_drogas) REFERENCES DETALLES_DROGAS (id_droga),
 FOREIGN KEY (fk_habitos_alimenticios) REFERENCES HABITOS_ALIMENTICIOS (id_habito_alimenticio)
 );
 
 
 
-
-
--- habitos uso de drogas 
-
-CREATE TABLE DETALLES_DROGAS(
-id_droga INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-detalles_drogas VARCHAR(255) 
-)
-
-
-
-
 --habitos alimenticios 
-
 CREATE TABLE HABITOS_ALIMENTICIOS(
 id_habito_alimenticio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 detalle_habito_alimenticio VARCHAR (20) NOT NULL
 );
 
-
-
---antecedentes clinicos familia
-
-
-CREATE TABLE ANTECEDENTES_FAMILIARES(
-id_antecedentes_familia INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-detalles_antecedente VARCHAR (255) 
-)
 
 
 --historia identidad de genero
@@ -195,11 +140,9 @@ tiempo_latencia date not null,
 apoyo_nucleo_familiar BOOLEAN NOT NULL,
 uso_prenda BOOLEAN NOT NULL, 
 presencia_disforia BOOLEAN NOT NULL,
-fk_detalles_disforia INT UNIQUE, 
-FOREIGN KEY (fk_detalles_disforia) REFERENCES detalles_disforia (id_elemento_disforia)
+detalles_diforia VARCHAR (200)
 )
  
-
 
 
 CREATE TABLE SELECCION_PRENDA(
@@ -214,14 +157,4 @@ create table PRENDAS_DISCONFORMIDAD(
 id_prenda_disconformidad int not null auto_increment primary key, 
 nombre_prenda varchar(20) NOT NULL
 )
-
-
---presencia de disforia 
-
-create table DETALLES_DISFORIA(
-id_elemento_disforia int not null auto_increment primary key, 
-detalles_elemento varchar(255) 
-)
-
-
 

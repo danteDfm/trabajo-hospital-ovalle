@@ -12,10 +12,10 @@ class ConexionDatabase {
       this.sqlConexion = this.crearConexion();
   }
 
-  crearConexion(){
+  async crearConexion(){
     try {
 
-      const objSql =mysql.createConnection({
+      const objSql =await mysql.createConnection({
 
         host: "localhost",
         database: "proyecto_transicion",
@@ -39,19 +39,11 @@ class ConexionDatabase {
     if (!this.sqlConexion) {
       throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
     } 
-  
     return this.sqlConexion;
   }
 
 
-  async closeConnection() {
-    
-    if (this.sqlConexion) {
 
-      (await this.sqlConexion).end();
-
-    }
-  }
 }
 
 export default ConexionDatabase;

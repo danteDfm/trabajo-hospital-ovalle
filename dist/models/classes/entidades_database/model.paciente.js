@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Paciente = void 0;
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 const generaConsultas_1 = require("../../../utils/generaConsultas");
-const dic_query_1 = require("../../../consultas/dic.query");
+const dicQuery_1 = require("../../../consultas/dicQuery");
 class Paciente {
     constructor() { }
     crearPaciente(fkHistoriaGenero, fkAntecedentesFamilia, fkDetallesDrogas, fkHabitosAlimenticios, paciente) {
@@ -88,38 +88,26 @@ class Paciente {
                 if (!rutPaciente || rutPaciente.length < 9 || rutPaciente.length > 9) {
                     return "sin resultdos";
                 }
-                const paciente = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.paciente, [
+                const paciente = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.paciente, [
                     parseInt(rutPaciente),
                 ]);
                 const idPaciente = paciente[0].id_paciente;
-                const detalles = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.detallesPaciente, [
-                    idPaciente,
-                ]);
-                const hClinicas = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.historiasClinicas, [
-                    idPaciente,
-                ]);
-                const aFamilia = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.apoyoFamilia, [
-                    idPaciente,
-                ]);
-                const fGenital = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.funcionalidadGenital, [
-                    idPaciente,
-                ]);
-                const juicio = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.detallesJuicio, [
-                    idPaciente,
-                ]);
-                const encargado = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.encargado, [
-                    idPaciente,
-                ]);
-                const acompanante = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.acompanante, [
-                    idPaciente,
-                ]);
-                const areaPsique = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.areaPsicologica, [
-                    idPaciente,
-                ]);
-                const ficha = yield (0, consultasGenerales_1.consultasGenerales)(dic_query_1.dicQuerys.ficha, [idPaciente]);
+                const detalles = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.detallesPaciente, [idPaciente,]);
+                let prenda = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.seleccionPrenda, [idPaciente]);
+                //convertir los valores en arrelgos 
+                prenda = prenda.map((result) => { return Object.values(result); });
+                const hClinicas = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.historiasClinicas, [idPaciente]);
+                const aFamilia = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.apoyoFamilia, [idPaciente]);
+                const fGenital = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.funcionalidadGenital, [idPaciente]);
+                const juicio = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.detallesJuicio, [idPaciente]);
+                const encargado = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.encargado, [idPaciente]);
+                const acompanante = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.acompanante, [idPaciente]);
+                const areaPsique = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.areaPsicologica, [idPaciente]);
+                const ficha = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.dicQuerys.ficha, [idPaciente]);
                 return {
                     paciente: paciente[0],
                     detalles: detalles[0],
+                    prenda: prenda,
                     hClinicas: hClinicas[0],
                     aFamilia: aFamilia[0],
                     fGenital: fGenital[0],

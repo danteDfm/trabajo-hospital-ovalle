@@ -19,32 +19,27 @@ class ConexionDatabase {
         this.sqlConexion = this.crearConexion();
     }
     crearConexion() {
-        try {
-            const objSql = promise_1.default.createConnection({
-                host: "localhost",
-                database: "proyecto_transicion",
-                user: "root",
-                password: "dante569",
-            });
-            return objSql;
-        }
-        catch (err) {
-            console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
-            throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const objSql = yield promise_1.default.createConnection({
+                    host: "localhost",
+                    database: "proyecto_transicion",
+                    user: "root",
+                    password: "dante569",
+                });
+                return objSql;
+            }
+            catch (err) {
+                console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
+                throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
+            }
+        });
     }
     getConnection() {
         if (!this.sqlConexion) {
             throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
         }
         return this.sqlConexion;
-    }
-    closeConnection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.sqlConexion) {
-                (yield this.sqlConexion).end();
-            }
-        });
     }
 }
 exports.default = ConexionDatabase;

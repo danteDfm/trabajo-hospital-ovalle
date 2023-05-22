@@ -3,7 +3,7 @@ import {
   returnNull,
 } from "../../../consultas/consultasGenerales";
 import { repetir } from "../../../utils/generaConsultas";
-import { dicQuerys } from "../../../consultas/dic.query";
+import { dicQuerys } from "../../../consultas/dicQuery";
 export class Paciente {
   constructor() {}
 
@@ -15,8 +15,8 @@ export class Paciente {
     apellidoPaternoPaciente?: string,
     apellidoMaternoPaciente?: string,
     fechaNacimientoPaciente: Date,
-    antecedenteFamiliares: string,
-    usoDroga: string,
+    antecedenteFamiliares: boolean,
+    usoDroga: boolean,
     pronombre?: string,
     nombreSocial?: string,
     domicilioPaciente?: string,
@@ -145,35 +145,29 @@ export class Paciente {
      ]);
      const idPaciente = paciente[0].id_paciente;
  
-     const detalles = await consultasGenerales(dicQuerys.detallesPaciente, [
-       idPaciente,
-     ]);
-     const hClinicas = await consultasGenerales(dicQuerys.historiasClinicas, [
-       idPaciente,
-     ]);
-     const aFamilia = await consultasGenerales(dicQuerys.apoyoFamilia, [
-       idPaciente,
-     ]);
-     const fGenital = await consultasGenerales(dicQuerys.funcionalidadGenital, [
-       idPaciente,
-     ]);
-     const juicio = await consultasGenerales(dicQuerys.detallesJuicio, [
-       idPaciente,
-     ]);
-     const encargado = await consultasGenerales(dicQuerys.encargado, [
-       idPaciente,
-     ]);
-     const acompanante = await consultasGenerales(dicQuerys.acompanante, [
-       idPaciente,
-     ]);
-     const areaPsique = await consultasGenerales(dicQuerys.areaPsicologica, [
-       idPaciente,
-     ]);
+     const detalles = await consultasGenerales(dicQuerys.detallesPaciente, [idPaciente,]);
+     let prenda = await consultasGenerales(dicQuerys.seleccionPrenda, [idPaciente]);
+
+     //convertir los valores en arrelgos 
+     prenda = prenda.map((result:number)=>{return Object.values(result)});
+
+     const hClinicas = await consultasGenerales(dicQuerys.historiasClinicas, [ idPaciente]);
+     const aFamilia = await consultasGenerales(dicQuerys.apoyoFamilia, [idPaciente]);
+     const fGenital = await consultasGenerales(dicQuerys.funcionalidadGenital, [idPaciente]);
+     const juicio = await consultasGenerales(dicQuerys.detallesJuicio, [idPaciente]);
+     const encargado = await consultasGenerales(dicQuerys.encargado, [idPaciente]);
+     const acompanante = await consultasGenerales(dicQuerys.acompanante, [idPaciente]);
+     const areaPsique = await consultasGenerales(dicQuerys.areaPsicologica, [idPaciente]);
      const ficha = await consultasGenerales(dicQuerys.ficha, [idPaciente]);
- 
+     
+     
+
+      
+
      return {
        paciente: paciente[0],
        detalles: detalles[0],
+       prenda: prenda,
        hClinicas: hClinicas[0],
        aFamilia: aFamilia[0],
        fGenital: fGenital[0],

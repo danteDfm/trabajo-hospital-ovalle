@@ -1,8 +1,8 @@
 import { mysqlConnexion } from "..";
 
-type tipos = number | string | Date | undefined | boolean;
+type Formato = number | string | Date | undefined | boolean;
 
-export async function consultasGenerales(query: string, formato?: tipos[]) {
+export async function consultasGenerales(query: string, formato?:Formato[]) {
   try {
     const conexion = await mysqlConnexion;
     const [dataDbs]: any = await conexion?.query(query, formato);
@@ -12,7 +12,7 @@ export async function consultasGenerales(query: string, formato?: tipos[]) {
   }
 }
 
-export async function returnNull(query: string, formato: tipos) {
+export async function returnNull(query: string, formato: Formato) {
   try {
     if (!formato) {
       return 0;
