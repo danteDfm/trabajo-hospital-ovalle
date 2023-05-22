@@ -17,8 +17,9 @@ class DataTable {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const query = `SELECT id_paciente, id_ficha_tecnica , rut_paciente,
-       nombre_paciente,apellido_paterno_paciente, apellido_materno_paciente 
-       FROM fichas_tecnicas AS ft JOIN pacientes AS  pa ON ft.fk_paciente = pa.id_paciente`;
+      nombre_paciente,apellido_paterno_paciente, apellido_materno_paciente 
+      FROM fichas_tecnicas AS ft JOIN pacientes AS  pa ON ft.fk_paciente = pa.id_paciente
+      ORDER BY id_paciente DESC `;
                 const data = yield (0, consultasGenerales_1.consultasGenerales)(query);
                 return data;
             }

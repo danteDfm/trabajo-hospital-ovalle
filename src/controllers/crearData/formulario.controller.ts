@@ -39,7 +39,7 @@ export class FormularioController {
       const GeneroTipado: TypeHistoriaGenero = historiaGenero;
       const psiqueTipado: AreaPsiquica = AreaPsiquica;
       const encargado:TypePersonasInv = personasInv;
-      const aompanante:TypePersonasInv = personasInv;
+      const acompanante:TypePersonasInv = personasAcom;
       const antecedentes:TypeAntecedentesClinicos = antecedentesClinicos;
       
       let dataPaciente: Paciente = new Paciente(pacienteTipado);
@@ -47,9 +47,13 @@ export class FormularioController {
       let dataPrenda: PrendaDieta = new PrendaDieta(PrendaTipada);
       let dataHistoriaGen: HistoriaGenero = new HistoriaGenero(GeneroTipado);
       let dataAreaPsiquica: AreaPsique = new AreaPsique(psiqueTipado);
-      let dataEncargado:Involucrados = new Involucrados(personasInv);
-      let datainvolucrado:Involucrados = new Involucrados(personasAcom);
+
+      let dataEncargado:Involucrados = new Involucrados(encargado);
+      let datainvolucrado:Involucrados = new Involucrados(acompanante);
+
       let dataAntecedentes:AntecedentesCli = new AntecedentesCli(antecedentes);
+
+      console.log(datainvolucrado);
 
       let crearFormulario = new Formulario(
         dataPaciente,
