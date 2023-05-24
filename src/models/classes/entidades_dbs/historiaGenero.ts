@@ -1,4 +1,4 @@
-import { TypeHistoriaGenero } from "../../../types/tipos.entidades";
+import { TypeHistoriaGenero } from "../../types/tipos.entidades";
 
 export class HistoriaGenero {
     

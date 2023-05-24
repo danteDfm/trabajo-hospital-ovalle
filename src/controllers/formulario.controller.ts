@@ -1,11 +1,11 @@
-import { Formulario } from "../../models/classes/entidades/formulario";
-import { Paciente } from "../../models/classes/entidades/models_dbs/paciente";
-import { Ficha } from "../../models/classes/entidades/models_dbs/ficha";
-import { PrendaDieta } from "../../models/classes/entidades/models_dbs/prendas";
-import { HistoriaGenero } from "../../models/classes/entidades/models_dbs/historiaGenero";
-import { AreaPsique } from "../../models/classes/entidades/models_dbs/areaPsiquica";
-import { Involucrados } from "../../models/classes/entidades/models_dbs/personasInv";
-import { AntecedentesCli } from "../../models/classes/entidades/models_dbs/antecedentesCli";
+import { Formulario } from "../models/classes/formulario.model";
+import { Paciente } from "../models/classes/entidades_dbs/paciente";
+import { Ficha } from "../models/classes/entidades_dbs/ficha";
+import { PrendaDieta } from "../models/classes/entidades_dbs/prendas";
+import { HistoriaGenero } from "../models/classes/entidades_dbs/historiaGenero";
+import { AreaPsique } from "../models/classes/entidades_dbs/areaPsiquica";
+import { Involucrados } from "../models/classes/entidades_dbs/personasInv";
+import { AntecedentesCli } from "../models/classes/entidades_dbs/antecedentesCli";
 
 import { Request, Response } from "express";
 import {
@@ -16,7 +16,7 @@ import {
   AreaPsiquica,
   TypePersonasInv,
   TypeAntecedentesClinicos
-} from "../../models/types/tipos.entidades";
+} from "../models/types/tipos.entidades";
 
 export class FormularioController {
   static async crearFormulario(req: Request, res: Response) {
@@ -32,7 +32,7 @@ export class FormularioController {
         prendaYdieta,
       } = req.body;
       const {idUsuario} = req.params;
-
+      
       const pacienteTipado: TypePaciente = paciente;
       const fichaTipada: TypeFichaTecnica = ficha;
       const PrendaTipada: PrendaYdieta = prendaYdieta;
@@ -53,7 +53,7 @@ export class FormularioController {
 
       let dataAntecedentes:AntecedentesCli = new AntecedentesCli(antecedentes);
 
-      console.log(datainvolucrado);
+      
 
       let crearFormulario = new Formulario(
         dataPaciente,
@@ -65,9 +65,9 @@ export class FormularioController {
         datainvolucrado,
         dataAntecedentes
       );
-      crearFormulario.crearFicha(parseInt(idUsuario));
+      const msjCrearFicha=await crearFormulario.crearFicha(parseInt(idUsuario));
 
-      res.status(201).json("hola mundo");
+      res.status(201).json(msjCrearFicha);
     } catch (err) {
       res.status(500).json({
         err,
@@ -75,5 +75,26 @@ export class FormularioController {
       });
 
     }
+  }
+
+  static async mostrarPacienteController(req:Request, res:Response){
+
+    try{
+      const {rutPaciente} = req.params;
+      const paciente = await Formulario.buscarPaciente(rutPaciente);
+      res.status(201).json(paciente);
+
+
+    }catch(err){
+
+      res.status(500).json({
+
+        err, 
+        msj: "Error interno del servidor"
+
+      });
+
+    }
+
   }
 }

@@ -35,6 +35,7 @@ fecha_ingreso date not NULL,
 borrado_logico BOOLEAN NOT NULL,
 apoyo_escolar BOOLEAN  NOT NULL,
 judicializacion BOOLEAN NOT NULL,
+
 fk_profesional_usuario INT NOT NULL,
 fk_paciente INT NOT NULL,
 fk_detalles_apoyo INT,
@@ -44,6 +45,7 @@ fk_funcionalidad_genital int,
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
+
 FOREIGN KEY (fk_detalles_juicio) REFERENCES DETALLES_JUICIO (id_detalle_juicio),
 FOREIGN KEY (fk_detalles_apoyo) REFERENCES DETALLES_APOYO (id_detalle_apoyo),
 FOREIGN KEY (fk_profesional_usuario) REFERENCES PROFESIONALES_USUARIOS_SALUD (id_profesional_salud),
@@ -55,6 +57,7 @@ FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
 )
 
+SELECT * FROM pacientes 
 
 --historia clinca
 

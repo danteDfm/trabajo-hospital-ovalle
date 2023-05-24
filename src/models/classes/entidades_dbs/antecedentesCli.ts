@@ -1,4 +1,4 @@
-import { TypeAntecedentesClinicos } from "../../../types/tipos.entidades";
+import { TypeAntecedentesClinicos } from "../../types/tipos.entidades";
 
 export class AntecedentesCli{
 

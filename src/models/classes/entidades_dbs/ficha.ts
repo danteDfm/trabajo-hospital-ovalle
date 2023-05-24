@@ -1,4 +1,4 @@
-import { TypeFichaTecnica } from "../../../types/tipos.entidades";
+import { TypeFichaTecnica } from "../../types/tipos.entidades";
 
 export class Ficha{
 

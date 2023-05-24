@@ -10,53 +10,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsuarioController = void 0;
-const crearUsuario_1 = require("../models/classes/crearUsuario");
+const usurio_model_1 = require("../models/classes/usurio.model");
 const hash_contrasena_1 = require("../utils/bcrypt/hash.contrasena");
+let objUsuario = new usurio_model_1.Usuario();
 class UsuarioController {
-    constructor() { }
-    static listar(req, res) {
+    static crearUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idProfesional } = req.params;
-                const userObj = new crearUsuario_1.Usuario();
-                yield userObj.listarProfesional(parseInt(idProfesional));
-                res.send({
-                    nombre: userObj.getNombre(),
-                    rut: userObj.getRut(),
-                    email: userObj.getEmail(),
-                    cargo: userObj.getCargo(),
-                    centro: userObj.getCentro(),
-                });
+                let existenciaUser;
+                let contrasenaHasheada;
+                const { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
+                contrasenaHasheada = yield (0, hash_contrasena_1.hashContrasena)(contrasenaProfesional);
+                existenciaUser = yield objUsuario.exitenciaUsuario(rutProfesional);
+                if (existenciaUser)
+                    throw "Usuario ya existe en la base de datos";
+                objUsuario.setRutProfesional(rutProfesional);
+                objUsuario.setNombreProfesional(nombreProfesional);
+                objUsuario.setCargoProfesional(cargoProfesional);
+                objUsuario.setContrasenaProfesional(contrasenaHasheada);
+                objUsuario.SetEmailProfesional(emailProfesional);
+                objUsuario.setCentroProfesional(centroProfesional);
+                objUsuario.setRolProfesional(rolProfesional);
+                const msjCrearUser = yield objUsuario.ingresarUsuario();
+                res.status(201).json(msjCrearUser);
             }
             catch (err) {
                 res.status(500).json({
                     err,
-                    msj: "Error interno del Servidor",
+                    msj: "Error interno del servidor",
                 });
             }
         });
     }
-    static crearUsuario(req, res) {
+    static listaUsuarios(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { body } = req;
-                const hash = yield (0, hash_contrasena_1.hashContrasena)(body.contrasena);
-                const userObj = new crearUsuario_1.Usuario({
-                    rutProfesional: body.rutProfesional,
-                    nombreProfesional: body.nombreProfesional,
-                    emailProfesional: body.emailProfesional,
-                    contrasena: hash,
-                    cargoProfesional: body.cargoProfesional,
-                    centroSalud: body.centroSalud,
-                });
-                const msj = yield userObj.crearProfesional();
-                res.status(201).json({
-                    msj
-                });
+                const resultListar = yield objUsuario.listarUsuarios();
+                res.status(201).json(resultListar);
             }
             catch (err) {
                 res.status(500).json({
-                    msj: "Error al crear usuario",
+                    err,
+                    mjs: "Error interno del servidor",
+                });
+            }
+        });
+    }
+    static actualizarUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { idUsuario } = req.params;
+                let contrasenaHasheada;
+                let exitenciaUser;
+                const { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, } = req.body;
+                contrasenaHasheada = yield (0, hash_contrasena_1.hashContrasena)(contrasenaProfesional);
+                objUsuario.setRutProfesional(rutProfesional);
+                objUsuario.setNombreProfesional(nombreProfesional);
+                objUsuario.setCargoProfesional(cargoProfesional);
+                objUsuario.setContrasenaProfesional(contrasenaHasheada);
+                objUsuario.SetEmailProfesional(emailProfesional);
+                objUsuario.setCentroProfesional(centroProfesional);
+                const msjActualizarUsuario = yield objUsuario.actualizarUsuario(parseInt(idUsuario));
+                res.status(201).json(msjActualizarUsuario);
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor",
                 });
             }
         });

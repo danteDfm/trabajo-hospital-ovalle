@@ -1,4 +1,4 @@
-import { AreaPsiquica } from "../../../types/tipos.entidades";
+import { AreaPsiquica } from "../../types/tipos.entidades";
 
 
 export class AreaPsique{

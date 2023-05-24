@@ -10,9 +10,22 @@ estado:paciente NOT NULL
 
 CREATE TABLE CENTROS_SALUD (
 id_centro_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-nombre_centro_salud VARCHAR(50), 
+nombre_centro_salud VARCHAR(50),
+comuna_centro_atencion 
 logo VARCHAR (60)
 )
+
+
+
+
+SELECT nombre_centro_salud,id_paciente, id_ficha_tecnica , rut_paciente,
+      nombre_paciente,apellido_paterno_paciente, apellido_materno_paciente 
+      FROM fichas_tecnicas AS ft JOIN pacientes AS  pa ON ft.fk_paciente = pa.id_paciente
+      left JOIN PROFESIONALES_USUARIOS_SALUD AS ps ON ft.fk_profesional_usuario = ps.id_profesional_salud
+      left JOIN  centros_salud AS cs ON ps.fk_centro_salud = cs.id_centro_salud
+      WHERE nombre_centro_salud = "Antonio Tirado Lanas"
+      ORDER BY id_paciente DESC
+
 
 --PROFESIONALES DE LA SALUD
 
@@ -40,15 +53,13 @@ detalles_apoyo_es VARCHAR (255),
 detalles_judicializacion VARCHAR(255),
 fk_profesional_usuario INT NOT NULL,
 fk_paciente INT NOT NULL,
-fk_area_psiquica int, 
-fk_funcionalidad_genital int,  
+fk_area_psiquica int,   
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
 FOREIGN KEY (fk_profesional_usuario) REFERENCES PROFESIONALES_USUARIOS_SALUD (id_profesional_salud),
 foreign key (fk_area_psiquica) references AREAS_PSIQUICAS (id_area_psiquica),
 foreign key (fk_paciente) references PACIENTES (id_paciente),
-foreign key (fk_funcionalidad_genital) references ANTECEDENTES_FUNCIONALIDADES_GENITAL(id_funcionalidad_genital),
 foreign key (fk_historia_clinica) references HISTORIAS_CLINICAS (id_historia_clinica),
 FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion),
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
@@ -67,6 +78,7 @@ detalles_antecedentes_pni VARCHAR(255),
 detalles_funcionalidad_genital VARCHAR (255)
 )
 
+SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
 
 
 --persona involucrada
@@ -82,7 +94,7 @@ telefono_persona_involucrada VARCHAR (15),
 domicilio_persona_involucrada VARCHAR (30)
 )
 
- 
+
 create table AREAS_PSIQUICAS(
 id_area_psiquica int not null auto_increment primary KEY,
 control_equipo_salud_mental boolean NOT NULL,
@@ -93,7 +105,7 @@ utilizacion_farmaco BOOLEAN NOT NULL,
 detalles_farmacos VARCHAR (255)
 )
  
-
+SELECT * FROM AREAS_PSIQUICAS
 
 --paciente 
 
@@ -112,12 +124,16 @@ telefono_paciente VARCHAR (20),
 uso_droga boolean NOT NULL, 
 antecedente_familires BOOLEAN NOT NULL,
 detalles_uso_droga VARCHAR (255),
-detalles_antecedentes_familia VARCHAR (255)
+detalles_antecedentes_familia VARCHAR (255),
 fk_historia_genero INT UNIQUE,
 fk_habitos_alimenticios INT UNIQUE,
 FOREIGN KEY (fk_historia_genero) REFERENCES historias_identidades_generos (id_historia_identidad_genero),
 FOREIGN KEY (fk_habitos_alimenticios) REFERENCES HABITOS_ALIMENTICIOS (id_habito_alimenticio)
 );
+
+SELECT COUNT(id_paciente) AS "total paciente" FROM pacientes
+SELECT count(identidad_genero) AS "generos" FROM historias_identidades_generos
+WHERE identidad_genero = "genero fluido"
 
 
 
@@ -157,4 +173,19 @@ create table PRENDAS_DISCONFORMIDAD(
 id_prenda_disconformidad int not null auto_increment primary key, 
 nombre_prenda varchar(20) NOT NULL
 )
+
+
+SELECT 
+id_persona_involucrada_transicion,
+rut_persona_involucrada, 
+pasaporte,
+nombres_persona_involucrada, 
+apellido_paterno_persona_involucrada,   	
+apellido_materno_persona_involucrada, 
+parentesco_persona_involucrada,
+telefono_persona_involucrada,
+domicilio_persona_involucrada 
+FROM personas_involucradas_transicion
+where id_persona_involucrada_transicion = 26
+
 

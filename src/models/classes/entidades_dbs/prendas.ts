@@ -1,4 +1,4 @@
-import { PrendaYdieta } from "../../../types/tipos.entidades";
+import { PrendaYdieta } from "../../types/tipos.entidades";
 
 export class PrendaDieta{
 

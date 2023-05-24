@@ -1,13 +1,14 @@
-import { Paciente } from "./models_dbs/paciente";
-import { Ficha } from "./models_dbs/ficha";
-import { PrendaDieta } from "./models_dbs/prendas";
-import { HistoriaGenero } from "./models_dbs/historiaGenero";
-import { AreaPsique } from "./models_dbs/areaPsiquica";
-import { Involucrados } from "./models_dbs/personasInv";
-import { AntecedentesCli } from "./models_dbs/antecedentesCli";
+import { Paciente } from "./entidades_dbs/paciente";
+import { Ficha } from "./entidades_dbs/ficha";
+import { PrendaDieta } from "./entidades_dbs/prendas";
+import { HistoriaGenero } from "./entidades_dbs/historiaGenero";
+import { AreaPsique } from "./entidades_dbs/areaPsiquica";
+import { Involucrados } from "./entidades_dbs/personasInv";
+import { AntecedentesCli } from "./entidades_dbs/antecedentesCli";
 
-import { mysqlConnexion } from "../../..";
+import { mysqlConnexion } from "../..";
 import { OkPacket } from "mysql2";
+import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Formulario {
   private paciente: Paciente;
@@ -120,17 +121,51 @@ export class Formulario {
         ficha
       );
       const idFicha = (dataForm as OkPacket).insertId;
-
       await conexion?.commit();
       
 
-      return idFicha;
+      return "Ficha creada Correctamente";
+
     } catch (err) {
       conexion?.rollback();
       console.log(err);
-      throw err;
+      throw("Error en la consulta");
     }
   }
 
+ static async buscarPaciente(rutPaciente: string){
+
+    try{
+      const query:string = `SELECT 
+    rut_paciente,
+    pasaporte,
+    nombre_paciente, 
+    apellido_paterno_paciente, 
+    apellido_materno_paciente, 
+    pronombre,
+    nombre_social,
+    fecha_nacimiento_paciente, 
+    domicilio_paciente,
+    telefono_paciente,
+    uso_droga, 
+    antecedente_familires,
+    detalles_uso_droga,
+    detalles_antecedentes_familia,
+    fk_historia_genero,
+    fk_habitos_alimenticios
+    FROM pacientes 
+    WHERE rut_paciente LIKE "%${rutPaciente}"`;
+
+    const dataPaciente: Array<string> = await consultasGenerales(query);
+
+    return dataPaciente;
+    }catch(err){
+
+      console.log(err);
+      throw("Error de consulta");
+
+    }
+
+  }
 
 }

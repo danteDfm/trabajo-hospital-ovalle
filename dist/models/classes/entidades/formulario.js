@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Formulario = void 0;
 const __1 = require("../../..");
+const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class Formulario {
     constructor(paciente, ficha, prenda, historiGen, areaPsiquica, encargada, acompanante, antecedentes) {
         this.paciente = paciente;
@@ -70,7 +71,38 @@ class Formulario {
             catch (err) {
                 conexion === null || conexion === void 0 ? void 0 : conexion.rollback();
                 console.log(err);
-                throw err;
+                throw new Error("Error en la consulta");
+            }
+        });
+    }
+    static buscarPaciente(rutPaciente) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const query = `SELECT 
+    rut_paciente,
+    pasaporte,
+    nombre_paciente, 
+    apellido_paterno_paciente, 
+    apellido_materno_paciente, 
+    pronombre,
+    nombre_social,
+    fecha_nacimiento_paciente, 
+    domicilio_paciente,
+    telefono_paciente,
+    uso_droga, 
+    antecedente_familires,
+    detalles_uso_droga,
+    detalles_antecedentes_familia,
+    fk_historia_genero,
+    fk_habitos_alimenticios
+    FROM pacientes 
+    WHERE rut_paciente LIKE "%${rutPaciente}"`;
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query);
+                return dataPaciente;
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error("Error de consulta");
             }
         });
     }

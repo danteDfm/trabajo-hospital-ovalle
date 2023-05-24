@@ -1,4 +1,4 @@
-import { TypePaciente } from "../../../types/tipos.entidades";
+import { TypePaciente } from "../../types/tipos.entidades";
 
 
 export class Paciente{

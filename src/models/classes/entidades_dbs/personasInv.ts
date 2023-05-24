@@ -1,4 +1,4 @@
-import {TypePersonasInv } from "../../../types/tipos.entidades";
+import {TypePersonasInv } from "../../types/tipos.entidades";
 
 export class Involucrados{
 
