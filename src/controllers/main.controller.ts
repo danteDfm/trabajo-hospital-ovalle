@@ -13,17 +13,19 @@ export class MainController{
         let totalPacientes:number = 0;
         let long = gen.length;
 
-
+        const ingresosDia = await estadisticasFicha.ingresosDelDia();
        totalPacientes =  await estadisticasFicha.TotalPacientes();
        for(let i=0; i<long; i++){
            generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
        }
 
+      
        
          res.status(201).json({
 
             generos,
-            totalPacientes
+            totalPacientes,
+            ingresosDia
 
          });
 

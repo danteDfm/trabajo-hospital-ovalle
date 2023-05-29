@@ -87,6 +87,7 @@ export class DataTable {
     const fichas=await consultasGenerales(query, [rutPaciente]);
     const dataEspesifica=await consultasGenerales(query2, [rutPaciente, rutPaciente]);
 
+   
     fichas.unshift(dataEspesifica[0])
 
     return  fichas;

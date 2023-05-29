@@ -25,5 +25,12 @@ class PaginaPrincipal {
             return result.generos;
         });
     }
+    ingresosDelDia() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `SELECT count(id_ficha_tecnica) as ingresosDia FROM fichas_tecnicas WHERE DATE(fecha_ingreso) = CURDATE();`;
+            const result = yield (0, consultasGenerales_1.consultasGenerales)(query);
+            return result[0];
+        });
+    }
 }
 exports.PaginaPrincipal = PaginaPrincipal;

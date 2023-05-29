@@ -16,6 +16,13 @@ export class PaginaPrincipal{
          return result.generos;
 
     }
+    async ingresosDelDia(){
+
+        const query = `SELECT count(id_ficha_tecnica) as ingresosDia FROM fichas_tecnicas WHERE DATE(fecha_ingreso) = CURDATE();`;
+        const result=await consultasGenerales(query);
+        return result[0];
+
+    }
 
    
 

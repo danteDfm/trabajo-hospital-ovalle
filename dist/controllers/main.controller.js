@@ -19,13 +19,15 @@ class MainController {
             let generos = [];
             let totalPacientes = 0;
             let long = gen.length;
+            const ingresosDia = yield estadisticasFicha.ingresosDelDia();
             totalPacientes = yield estadisticasFicha.TotalPacientes();
             for (let i = 0; i < long; i++) {
                 generos.push(yield estadisticasFicha.cantidadGeneros(gen[i]));
             }
             res.status(201).json({
                 generos,
-                totalPacientes
+                totalPacientes,
+                ingresosDia
             });
         });
     }
