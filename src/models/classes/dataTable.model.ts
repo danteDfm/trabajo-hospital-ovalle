@@ -73,8 +73,8 @@ export class DataTable {
       const query:string = `SELECT rut_paciente,id_ficha_tecnica FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
       WHERE rut_paciente = ?
+      order by  id_ficha_tecnica desc
     `;
-
 
       const query2 = `SELECT fecha_ingreso, nombre_paciente,apellido_paterno_paciente , apellido_materno_paciente,rut_paciente, nombre_social, identidad_genero, fecha_nacimiento_paciente FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
