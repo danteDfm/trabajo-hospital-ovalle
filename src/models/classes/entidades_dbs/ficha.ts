@@ -2,7 +2,7 @@ import { TypeFichaTecnica } from "../../types/tipos.entidades";
 
 export class Ficha{
 
-    public fechaIngreso: Date;
+    public fechaIngreso: string;
     public borradoLogico: boolean;
     public apoyoEscolar: boolean;
     public judicializacio: boolean;

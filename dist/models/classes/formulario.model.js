@@ -78,7 +78,7 @@ class Formulario {
     static buscarPaciente(rutPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = ` 
+                const query = `
       SELECT
         id_paciente,
           fecha_ingreso,

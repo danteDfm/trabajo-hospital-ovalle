@@ -1,7 +1,7 @@
 
 export type TypeFichaTecnica = {
 
-  fechaIngreso:Date;
+  fechaIngreso:string;
   borradoLogico:boolean;
   apoyoEscolar:boolean;
   judicializacio: boolean;

@@ -7,7 +7,7 @@ import { AreaPsique } from "../models/classes/entidades_dbs/areaPsiquica";
 import { Involucrados } from "../models/classes/entidades_dbs/personasInv";
 import { AntecedentesCli } from "../models/classes/entidades_dbs/antecedentesCli";
 import { revertirFecha } from "../utils/revertirFecha";
-
+import moment from 'moment-timezone';
 
 
 
@@ -37,14 +37,19 @@ export class FormularioController {
       } = req.body;
       const {idUsuario} = req.params;
       let nuevoFormatoFechas:Array<string>;
+      const date = new Date();
+      const zona = 'America/santiago';
+      const hora  = moment().tz(zona).format('HH:mm:ss')
 
 
-      nuevoFormatoFechas = revertirFecha([paciente.fechaNacimientoPa, ficha.fechaIngreso, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
+      nuevoFormatoFechas = revertirFecha([paciente.fechaNacimientoPa, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
       
       paciente.fechaNacimientoPa = nuevoFormatoFechas[0];
-      ficha.fechaIngreso = nuevoFormatoFechas[1];
-      historiaGenero.inicioTransicioSexual = [2];
-      historiaGenero.tiempoLatencia = [3];
+      historiaGenero.inicioTransicioSexual = [1];
+      historiaGenero.tiempoLatencia = [2];
+ 
+      const fecha = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${hora}` as string;
+      ficha.fechaIngreso = fecha;
 
 
       const pacienteTipado: TypePaciente = paciente;

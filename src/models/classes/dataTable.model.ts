@@ -1,6 +1,7 @@
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 import { diccionarioSelect } from "../../consultas/dicQuery";
 
+
 export class DataTable {
   constructor() {}
 
@@ -16,6 +17,10 @@ export class DataTable {
         ORDER BY id_paciente DESC  
       `;
 
+    
+
+      
+      
       const data = await consultasGenerales(query, [centro])
       return data;
       
@@ -65,15 +70,25 @@ export class DataTable {
   async listarFichasPorRut(rutPaciente:string){
 
     try{
-      const query:string = `SELECT rut_paciente, fecha_ingreso, id_ficha_tecnica FROM fichas_tecnicas AS ft
+      const query:string = `SELECT rut_paciente,id_ficha_tecnica FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
       WHERE rut_paciente = ?
     `;
 
+      const query2 = `SELECT fecha_ingreso, nombre_paciente, rut_paciente, nombre_social, identidad_genero FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+      JOIN historias_identidades_generos AS hg ON pa.fk_historia_genero = hg.id_historia_identidad_genero
+      WHERE rut_paciente = '444444444' AND fecha_ingreso = (SELECT max(fecha_ingreso) FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+      JOIN historias_identidades_generos AS hg ON pa.fk_historia_genero = hg.id_historia_identidad_genero
+      WHERE rut_paciente = '444444444')`;
 
-    const dataPaciente=await consultasGenerales(query, [rutPaciente]);
+    const fichas=await consultasGenerales(query, [rutPaciente]);
+    const dataEspesifica=await consultasGenerales(query2, [rutPaciente]);
 
-    return dataPaciente;
+    fichas.unshift(dataEspesifica[0])
+
+    return  fichas;
     }catch(err){
 
       console.log(err);

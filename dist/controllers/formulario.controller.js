@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioController = void 0;
 const formulario_model_1 = require("../models/classes/formulario.model");
@@ -19,6 +22,7 @@ const areaPsiquica_1 = require("../models/classes/entidades_dbs/areaPsiquica");
 const personasInv_1 = require("../models/classes/entidades_dbs/personasInv");
 const antecedentesCli_1 = require("../models/classes/entidades_dbs/antecedentesCli");
 const revertirFecha_1 = require("../utils/revertirFecha");
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 class FormularioController {
     static crearFormulario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -26,11 +30,15 @@ class FormularioController {
                 const { ficha, antecedentesClinicos, personasInv, personasAcom, AreaPsiquica, paciente, historiaGenero, prendaYdieta, } = req.body;
                 const { idUsuario } = req.params;
                 let nuevoFormatoFechas;
-                nuevoFormatoFechas = (0, revertirFecha_1.revertirFecha)([paciente.fechaNacimientoPa, ficha.fechaIngreso, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
+                const date = new Date();
+                const zona = 'America/santiago';
+                const hora = (0, moment_timezone_1.default)().tz(zona).format('HH:mm:ss');
+                nuevoFormatoFechas = (0, revertirFecha_1.revertirFecha)([paciente.fechaNacimientoPa, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
                 paciente.fechaNacimientoPa = nuevoFormatoFechas[0];
-                ficha.fechaIngreso = nuevoFormatoFechas[1];
-                historiaGenero.inicioTransicioSexual = [2];
-                historiaGenero.tiempoLatencia = [3];
+                historiaGenero.inicioTransicioSexual = [1];
+                historiaGenero.tiempoLatencia = [2];
+                const fecha = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${hora}`;
+                ficha.fechaIngreso = fecha;
                 const pacienteTipado = paciente;
                 const fichaTipada = ficha;
                 const PrendaTipada = prendaYdieta;

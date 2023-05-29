@@ -138,7 +138,7 @@ export class Formulario {
 
   static async buscarPaciente(rutPaciente: string) {
     try {
-      const query: string = ` 
+      const query: string = `
       SELECT
         id_paciente,
           fecha_ingreso,
