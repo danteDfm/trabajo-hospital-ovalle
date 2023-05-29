@@ -8,8 +8,8 @@ export const diccionarioSelect = {
   judicializacion,
   detalles_apoyo_es,
   detalles_judicializacion,
-  fk_profesional_usuario,
   fk_paciente,
+  fk_profesional_usuario,
   fk_area_psiquica,   
   fk_historia_clinica, 
   fk_persona_involucrada_encargada,
@@ -58,7 +58,7 @@ export const diccionarioSelect = {
   JOIN  historias_identidades_generos AS hg ON sp.fk_historia_genero = hg.id_historia_identidad_genero
   WHERE id_historia_identidad_genero = ?`,
 
-  dieta: "SELECT detalle_habito_alimenticio FROM habitos_alimenticios WHERE id_habito_alimenticio = 44",
+  dieta: "SELECT detalle_habito_alimenticio FROM habitos_alimenticios WHERE id_habito_alimenticio = ?",
 
   antecedentes: `SELECT 
   detalles_antecedente_perinatales,

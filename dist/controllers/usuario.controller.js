@@ -20,10 +20,10 @@ class UsuarioController {
                 let existenciaUser;
                 let contrasenaHasheada;
                 const { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
-                contrasenaHasheada = yield (0, hash_contrasena_1.hashContrasena)(contrasenaProfesional);
                 existenciaUser = yield objUsuario.exitenciaUsuario(rutProfesional);
                 if (existenciaUser)
                     throw "Usuario ya existe en la base de datos";
+                contrasenaHasheada = yield (0, hash_contrasena_1.hashContrasena)(contrasenaProfesional);
                 objUsuario.setRutProfesional(rutProfesional);
                 objUsuario.setNombreProfesional(nombreProfesional);
                 objUsuario.setCargoProfesional(cargoProfesional);
@@ -61,7 +61,6 @@ class UsuarioController {
             try {
                 const { idUsuario } = req.params;
                 let contrasenaHasheada;
-                let exitenciaUser;
                 const { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, } = req.body;
                 contrasenaHasheada = yield (0, hash_contrasena_1.hashContrasena)(contrasenaProfesional);
                 objUsuario.setRutProfesional(rutProfesional);

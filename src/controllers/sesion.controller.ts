@@ -1,26 +1,52 @@
 import { Request, Response } from "express";
 import { Sesion } from "../models/classes/sesion.model";
 import { compararContrasena } from "../utils/bcrypt/hash.contrasena";
+import { Token } from "../utils/jwt/generarToken";
 
-const objSesion = new Sesion;
+const objSesion = new Sesion();
+const objToken = new Token();
 
+export class SessionController {
+  static async sesion(req: Request, res: Response) {
+    try {
 
-export class SessionController{
-    static async sesion(req:Request, res:Response){
+      let tokenJwt:string;
+      const { emailUsuario, contrasenaUsuario } = req.body;
 
+      if (!emailUsuario || !contrasenaUsuario) {
+        throw new Error("Los datos no puede estar vacios");
+      }
 
-        const {emailUsuario, contrasenaUsuario} = req.body;
-        objSesion.setEmail(emailUsuario);
-        const result = await objSesion.login(); 
+      objSesion.setEmail(emailUsuario);
+      const dataUsuario = await objSesion.login();
 
-        console.log(contrasenaUsuario);
-        console.log(result[0].contrasena);
+      if (!dataUsuario[0]) {
+        throw new Error("EL email no se encuentra en la base de datos");
+      }
+      const verificacion = await compararContrasena(
+        contrasenaUsuario,
+        dataUsuario[0].contrasena
+      );
+      if (!verificacion) {
+        throw new Error("La contraseña es incorrecta");
+      }
 
-        const re = await compararContrasena(result[0].contrasena, contrasenaUsuario);
+      objToken.formarPayload(dataUsuario[0].id_profesional_salud, dataUsuario[0].roles);
+      tokenJwt=objToken.generarToken();
+      
+      res.set(`Authorization`, `Bearer ${tokenJwt}`);
+      res.status(201).json("La peticion fue llevada con exito");
 
-        console.log(re);
-       res.send(result[0]);
-         
+    } catch (err) {
+      
+      const error = (err as Error).message;
+     
+      console.log(error);
+      res.status(500).json({
 
+        error: error,
+
+      });
     }
+  }
 }

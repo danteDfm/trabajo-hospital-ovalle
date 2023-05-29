@@ -22,9 +22,9 @@ function hashContrasena(contrasena) {
     });
 }
 exports.hashContrasena = hashContrasena;
-function compararContrasena(contrasenaDbs, contrasenaRecibida) {
+function compararContrasena(contrasenaRecibida, contrasenaDbs) {
     return __awaiter(this, void 0, void 0, function* () {
-        let comparacion = yield bcryptjs_1.default.compare(contrasenaDbs, contrasenaRecibida);
+        let comparacion = yield bcryptjs_1.default.compare(contrasenaRecibida, contrasenaDbs);
         return comparacion;
     });
 }

@@ -62,6 +62,7 @@ export class Formulario {
         "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES(NULL, ?,?,?,?,?,?,?,?)",
         genero
       );
+
       const idHistoriGen = (dataGen as OkPacket).insertId;
 
       prenda.map(async (data: number) => {
@@ -70,11 +71,13 @@ export class Formulario {
           data
         );
       });
+
       const [dataDieta]: any = await conexion?.query(
         "INSERT INTO HABITOS_ALIMENTICIOS VALUES (NULL, ?)",
         [dieta]
       );
-      const idDieta = (dataDieta as OkPacket).insertId;
+
+      let idDieta = (dataDieta as OkPacket).insertId;
 
       paciente.push(idHistoriGen);
       paciente.push(idDieta);
@@ -83,6 +86,8 @@ export class Formulario {
         `INSERT INTO PACIENTES VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         paciente
       );
+
+      const idPaciente = (dataPaciente as OkPacket).insertId;
 
       const [dataAreaPsiquica]: any = await conexion?.query(
         "INSERT INTO AREAS_PSIQUICAS VALUES (NULL, ?,?,?,?,?,?)",
@@ -103,69 +108,73 @@ export class Formulario {
         antecedentes
       );
 
-      const idPaciente = (dataPaciente as OkPacket).insertId;
       const idPsique = (dataAreaPsiquica as OkPacket).insertId;
       const idAntecedente = (dataAntecedentes as OkPacket).insertId;
       const idEncargada = (dataEncargada as OkPacket).insertId;
       const idAcompanante = (dataAcompanante as OkPacket).insertId;
 
-      ficha.push(idUsuario);
       ficha.push(idPaciente);
+      ficha.push(idUsuario);
       ficha.push(idPsique);
       ficha.push(idAntecedente);
       ficha.push(idEncargada);
       ficha.push(idAcompanante);
 
       const [dataForm]: any = await conexion?.query(
-        "INSERT INTO fichas_tecnicas VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO fichas_tecnicas VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?, ?)",
         ficha
       );
+
       const idFicha = (dataForm as OkPacket).insertId;
+
       await conexion?.commit();
-      
-
       return "Ficha creada Correctamente";
-
     } catch (err) {
       conexion?.rollback();
       console.log(err);
-      throw("Error en la consulta");
+      throw new Error("Error en la consulta");
     }
   }
 
- static async buscarPaciente(rutPaciente: string){
+  static async buscarPaciente(rutPaciente: string) {
+    try {
+      const query: string = ` 
+      SELECT
+        id_paciente,
+          fecha_ingreso,
+          rut_paciente,
+          pasaporte,
+          nombre_paciente,
+          apellido_paterno_paciente,
+          apellido_materno_paciente,
+          pronombre,
+          nombre_social,
+          fecha_nacimiento_paciente,
+          domicilio_paciente,
+          telefono_paciente,
+          uso_droga,
+          antecedente_familires,
+          detalles_uso_droga,
+          detalles_antecedentes_familia,
+          fk_historia_genero,
+          fk_habitos_alimenticios
+      FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+      WHERE rut_paciente LIKE "%${rutPaciente}"
+      AND pa.id_paciente = (
+          SELECT MAX(id_paciente)
+          FROM pacientes
+          WHERE rut_paciente LIKE "%${rutPaciente}"
+      )
+      `;
 
-    try{
-      const query:string = `SELECT 
-    rut_paciente,
-    pasaporte,
-    nombre_paciente, 
-    apellido_paterno_paciente, 
-    apellido_materno_paciente, 
-    pronombre,
-    nombre_social,
-    fecha_nacimiento_paciente, 
-    domicilio_paciente,
-    telefono_paciente,
-    uso_droga, 
-    antecedente_familires,
-    detalles_uso_droga,
-    detalles_antecedentes_familia,
-    fk_historia_genero,
-    fk_habitos_alimenticios
-    FROM pacientes 
-    WHERE rut_paciente LIKE "%${rutPaciente}"`;
+     
 
-    const dataPaciente: Array<string> = await consultasGenerales(query);
-
-    return dataPaciente;
-    }catch(err){
-
+      const dataPaciente: Array<string> = await consultasGenerales(query);
+      return dataPaciente;
+    } catch (err) {
       console.log(err);
-      throw("Error de consulta");
-
+      throw new Error("Error de consulta");
     }
-
   }
-
 }

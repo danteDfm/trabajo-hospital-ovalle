@@ -14,17 +14,17 @@ const consultasGenerales_1 = require("../../consultas/consultasGenerales");
 const dicQuery_1 = require("../../consultas/dicQuery");
 class DataTable {
     constructor() { }
-    //buscar paciente por centro
+    //listar pacientes por centro
     pacienteCentroEspesifico(centro, condicion) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `SELECT nombre_centro_salud,id_paciente, id_ficha_tecnica , rut_paciente,
-      nombre_paciente,apellido_paterno_paciente, apellido_materno_paciente 
-      FROM fichas_tecnicas AS ft JOIN pacientes AS  pa ON ft.fk_paciente = pa.id_paciente
-      left JOIN PROFESIONALES_USUARIOS_SALUD AS ps ON ft.fk_profesional_usuario = ps.id_profesional_salud
-      left JOIN  centros_salud AS cs ON ps.fk_centro_salud = cs.id_centro_salud
+                const query = `SELECT DISTINCT (rut_paciente), pa.nombre_paciente, pa.apellido_paterno_paciente, pa.apellido_materno_paciente,nombre_centro_salud FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+      JOIN profesionales_usuarios_salud AS pu ON pu.id_profesional_salud = ft.fk_profesional_usuario
+      JOIN centros_salud AS cs ON pu.fk_centro_salud = cs.id_centro_salud
       WHERE nombre_centro_salud ` + condicion + ` ?
-      ORDER BY id_paciente DESC`;
+      ORDER BY id_paciente DESC  
+      `;
                 const data = yield (0, consultasGenerales_1.consultasGenerales)(query, [centro]);
                 return data;
             }
@@ -60,6 +60,35 @@ class DataTable {
             catch (err) {
                 console.log(err);
                 throw ("Error de consulta");
+            }
+        });
+    }
+    listarFichasPorRut(rutPaciente) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const query = `SELECT rut_paciente, fecha_ingreso, id_ficha_tecnica FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
+      WHERE rut_paciente = ?
+    `;
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query, [rutPaciente]);
+                return dataPaciente;
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error("Error en la consulta Listar fichas");
+            }
+        });
+    }
+    static buscarSoloRut(rutPaciente) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const query = "SELECT id_paciente FROM PACIENTES WHERE rut_paciente = ?";
+                let dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query, [rutPaciente]);
+                return dataPaciente;
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error("Error listar por rut");
             }
         });
     }

@@ -6,6 +6,10 @@ import { HistoriaGenero } from "../models/classes/entidades_dbs/historiaGenero";
 import { AreaPsique } from "../models/classes/entidades_dbs/areaPsiquica";
 import { Involucrados } from "../models/classes/entidades_dbs/personasInv";
 import { AntecedentesCli } from "../models/classes/entidades_dbs/antecedentesCli";
+import { revertirFecha } from "../utils/revertirFecha";
+
+
+
 
 import { Request, Response } from "express";
 import {
@@ -32,7 +36,17 @@ export class FormularioController {
         prendaYdieta,
       } = req.body;
       const {idUsuario} = req.params;
+      let nuevoFormatoFechas:Array<string>;
+
+
+      nuevoFormatoFechas = revertirFecha([paciente.fechaNacimientoPa, ficha.fechaIngreso, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
       
+      paciente.fechaNacimientoPa = nuevoFormatoFechas[0];
+      ficha.fechaIngreso = nuevoFormatoFechas[1];
+      historiaGenero.inicioTransicioSexual = [2];
+      historiaGenero.tiempoLatencia = [3];
+
+
       const pacienteTipado: TypePaciente = paciente;
       const fichaTipada: TypeFichaTecnica = ficha;
       const PrendaTipada: PrendaYdieta = prendaYdieta;
@@ -41,8 +55,12 @@ export class FormularioController {
       const encargado:TypePersonasInv = personasInv;
       const acompanante:TypePersonasInv = personasAcom;
       const antecedentes:TypeAntecedentesClinicos = antecedentesClinicos;
-      
+    
+
       let dataPaciente: Paciente = new Paciente(pacienteTipado);
+
+
+
       let dataFicha: Ficha = new Ficha(fichaTipada);
       let dataPrenda: PrendaDieta = new PrendaDieta(PrendaTipada);
       let dataHistoriaGen: HistoriaGenero = new HistoriaGenero(GeneroTipado);
@@ -66,7 +84,6 @@ export class FormularioController {
         dataAntecedentes
       );
       const msjCrearFicha=await crearFormulario.crearFicha(parseInt(idUsuario));
-
       res.status(201).json(msjCrearFicha);
     } catch (err) {
       res.status(500).json({

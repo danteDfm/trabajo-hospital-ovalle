@@ -57,5 +57,21 @@ class TableController {
             }
         });
     }
+    //listar fichas tecnicas totales paciente
+    static fichasPacientes(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { rutPaciente } = req.params;
+                const dataFichas = yield objDataTable.listarFichasPorRut(rutPaciente);
+                res.status(201).json(dataFichas);
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
+            }
+        });
+    }
 }
 exports.TableController = TableController;

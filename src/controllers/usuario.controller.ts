@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Usuario } from "../models/classes/usurio.model";
-import { hashContrasena } from "../utils/bcrypt/hash.contrasena";
+import { compararContrasena, hashContrasena } from "../utils/bcrypt/hash.contrasena";
 
 let objUsuario = new Usuario();
 export class UsuarioController {
@@ -18,10 +18,11 @@ export class UsuarioController {
         rolProfesional,
       } = req.body;
 
-      contrasenaHasheada = await hashContrasena(contrasenaProfesional);
-      existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
-
+       existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
       if (existenciaUser) throw "Usuario ya existe en la base de datos";
+
+      contrasenaHasheada = await hashContrasena(contrasenaProfesional);
+      
 
       objUsuario.setRutProfesional(rutProfesional);
       objUsuario.setNombreProfesional(nombreProfesional);
@@ -57,7 +58,7 @@ export class UsuarioController {
     try {
       const { idUsuario } = req.params;
       let contrasenaHasheada: string;
-      let exitenciaUser: boolean;
+    
       const {
         rutProfesional,
         nombreProfesional,
@@ -68,6 +69,7 @@ export class UsuarioController {
       } = req.body;
 
       contrasenaHasheada = await hashContrasena(contrasenaProfesional);
+
 
       objUsuario.setRutProfesional(rutProfesional);
       objUsuario.setNombreProfesional(nombreProfesional);

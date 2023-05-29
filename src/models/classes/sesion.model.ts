@@ -11,19 +11,18 @@ export class Sesion {
 
   async login() {
     try {
-
       const query: string = `
-            SELECT email_profesional_salud, contrasena FROM profesionales_usuarios_salud
+            SELECT email_profesional_salud, contrasena, id_profesional_salud, roles  FROM profesionales_usuarios_salud
             WHERE email_profesional_salud = ?`;
 
       const result = await consultasGenerales(query, [this.email]);
       return result;
-
     } catch (err) {
       console.log(err);
       throw new Error("Error en la consulta");
     }
   }
+
 
   setEmail(email: string) {
     this.email = email;

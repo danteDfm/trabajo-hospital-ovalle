@@ -10,7 +10,7 @@ const router = Router();
 
 export function endPoints(app: Application){
 
-    app.use('/api', router);
+    app.use('/api/v1', router);
 
     router.use('/form', routerFormulario);
     router.use('/table', routerTable);

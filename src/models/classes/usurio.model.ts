@@ -45,7 +45,7 @@ export class Usuario {
         this.rolProfesional,
       ]);
 
-      console.log(this.rutProfesional);
+     
       return "Usuario ha sido creado";
     } catch (err) {
       console.log(err);

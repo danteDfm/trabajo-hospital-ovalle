@@ -12,7 +12,7 @@ const user_routes_1 = __importDefault(require("./user.routes"));
 const sesion_routes_1 = __importDefault(require("./sesion.routes"));
 const router = (0, express_1.Router)();
 function endPoints(app) {
-    app.use('/api', router);
+    app.use('/api/v1', router);
     router.use('/form', formulario_routes_1.default);
     router.use('/table', table_routes_1.default);
     router.use('/main', main_routes_1.default);

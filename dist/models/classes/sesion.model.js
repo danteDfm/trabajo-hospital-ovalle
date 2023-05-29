@@ -20,7 +20,7 @@ class Sesion {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const query = `
-            SELECT email_profesional_salud, contrasena FROM profesionales_usuarios_salud
+            SELECT email_profesional_salud, contrasena, id_profesional_salud, roles  FROM profesionales_usuarios_salud
             WHERE email_profesional_salud = ?`;
                 const result = yield (0, consultasGenerales_1.consultasGenerales)(query, [this.email]);
                 return result;

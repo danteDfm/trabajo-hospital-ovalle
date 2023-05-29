@@ -18,12 +18,19 @@ const historiaGenero_1 = require("../models/classes/entidades_dbs/historiaGenero
 const areaPsiquica_1 = require("../models/classes/entidades_dbs/areaPsiquica");
 const personasInv_1 = require("../models/classes/entidades_dbs/personasInv");
 const antecedentesCli_1 = require("../models/classes/entidades_dbs/antecedentesCli");
+const revertirFecha_1 = require("../utils/revertirFecha");
 class FormularioController {
     static crearFormulario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { ficha, antecedentesClinicos, personasInv, personasAcom, AreaPsiquica, paciente, historiaGenero, prendaYdieta, } = req.body;
                 const { idUsuario } = req.params;
+                let nuevoFormatoFechas;
+                nuevoFormatoFechas = (0, revertirFecha_1.revertirFecha)([paciente.fechaNacimientoPa, ficha.fechaIngreso, historiaGenero.inicioTransicioSexual, historiaGenero.tiempoLatencia]);
+                paciente.fechaNacimientoPa = nuevoFormatoFechas[0];
+                ficha.fechaIngreso = nuevoFormatoFechas[1];
+                historiaGenero.inicioTransicioSexual = [2];
+                historiaGenero.tiempoLatencia = [3];
                 const pacienteTipado = paciente;
                 const fichaTipada = ficha;
                 const PrendaTipada = prendaYdieta;

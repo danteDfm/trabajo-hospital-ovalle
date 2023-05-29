@@ -19,6 +19,9 @@ export class TableController {
   }
 
 
+
+  
+
   static async tableCentrosDiferente(req: Request, res: Response) {
     try {
       const pacientes = await objDataTable.pacienteCentroEspesifico("Antonio Tirado Lanas", "!=");
@@ -49,4 +52,30 @@ export class TableController {
     }
 
   }
+
+  //listar fichas tecnicas totales paciente
+  
+  static async fichasPacientes(req:Request, res:Response){
+
+    try{
+
+     const {rutPaciente} = req.params;
+     const dataFichas= await objDataTable.listarFichasPorRut(rutPaciente);
+
+     res.status(201).json(dataFichas)
+
+    }catch(err){
+
+      res.status(500).json({
+
+        err, 
+        msj: "Error interno del servidor"
+
+      })
+
+    }
+
+  }
+
+
 }

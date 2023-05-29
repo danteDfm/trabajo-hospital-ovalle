@@ -7,8 +7,8 @@ export async function hashContrasena(contrasena: string): Promise<string>{
     return hash;
 }
 
-export async function compararContrasena(contrasenaDbs:string, contrasenaRecibida:string): Promise<boolean>{
+export async function compararContrasena(contrasenaRecibida:string, contrasenaDbs:string): Promise<boolean>{
 
-    let comparacion:boolean = await bcrypt.compare(contrasenaDbs, contrasenaRecibida);
+    let comparacion:boolean = await bcrypt.compare(contrasenaRecibida, contrasenaDbs);
     return comparacion;
 }

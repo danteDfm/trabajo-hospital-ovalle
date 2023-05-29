@@ -4,18 +4,17 @@ import { diccionarioSelect } from "../../consultas/dicQuery";
 export class DataTable {
   constructor() {}
 
-  //buscar paciente por centro
+  //listar pacientes por centro
   async pacienteCentroEspesifico(centro:string, condicion:string) {
     try {
 
-      
-      const query: string = `SELECT nombre_centro_salud,id_paciente, id_ficha_tecnica , rut_paciente,
-      nombre_paciente,apellido_paterno_paciente, apellido_materno_paciente 
-      FROM fichas_tecnicas AS ft JOIN pacientes AS  pa ON ft.fk_paciente = pa.id_paciente
-      left JOIN PROFESIONALES_USUARIOS_SALUD AS ps ON ft.fk_profesional_usuario = ps.id_profesional_salud
-      left JOIN  centros_salud AS cs ON ps.fk_centro_salud = cs.id_centro_salud
+      const query: string = `SELECT DISTINCT (rut_paciente), pa.nombre_paciente, pa.apellido_paterno_paciente, pa.apellido_materno_paciente,nombre_centro_salud FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+      JOIN profesionales_usuarios_salud AS pu ON pu.id_profesional_salud = ft.fk_profesional_usuario
+      JOIN centros_salud AS cs ON pu.fk_centro_salud = cs.id_centro_salud
       WHERE nombre_centro_salud `+condicion+` ?
-      ORDER BY id_paciente DESC`;
+      ORDER BY id_paciente DESC  
+      `;
 
       const data = await consultasGenerales(query, [centro])
       return data;
@@ -31,6 +30,7 @@ export class DataTable {
   async traerDataPaciente(idFicha:number){
    try{
 
+  
     const dataFicha = await consultasGenerales(diccionarioSelect.ficha, [idFicha]);
     const dataPaciente = await consultasGenerales(diccionarioSelect.paciente, [dataFicha[0].fk_paciente]);
     const dataHistoria= await consultasGenerales(diccionarioSelect.HistoriaGenero, [dataPaciente[0].fk_historia_genero]);
@@ -41,7 +41,6 @@ export class DataTable {
     const acompanantes = await  consultasGenerales(diccionarioSelect.involucrados, [dataFicha[0].fk_persona_involucrada_acompanante]);
     const dataPsique = await  consultasGenerales(diccionarioSelect.psique, [dataFicha[0].fk_area_psiquica]);
 
-
     dataFicha.push(dataAntecedentes[0]);
     dataFicha.push(dataPsique[0]);
     dataFicha.push(dataPaciente[0]);
@@ -51,7 +50,7 @@ export class DataTable {
     dataFicha.push(involucrados[0]);
     dataFicha.push(acompanantes[0]);
 
-  
+ 
     return dataFicha;
 
   }catch(err){
@@ -61,6 +60,46 @@ export class DataTable {
 
     }
   }
+
+
+  async listarFichasPorRut(rutPaciente:string){
+
+    try{
+      const query:string = `SELECT rut_paciente, fecha_ingreso, id_ficha_tecnica FROM fichas_tecnicas AS ft
+      JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
+      WHERE rut_paciente = ?
+    `;
+
+
+    const dataPaciente=await consultasGenerales(query, [rutPaciente]);
+
+    return dataPaciente;
+    }catch(err){
+
+      console.log(err);
+      throw new Error("Error en la consulta Listar fichas");
+
+    }
+
+  }
+
+  static async buscarSoloRut(rutPaciente:string):Promise<number | undefined>{
+
+   try{
+
+    const query:string = "SELECT id_paciente FROM PACIENTES WHERE rut_paciente = ?";
+    let dataPaciente: Promise <number | undefined> = await consultasGenerales(query, [rutPaciente]);
+    return dataPaciente;
+
+   }
+   catch(err){
+
+    console.log(err);
+    throw new Error("Error listar por rut");
+
+   }  
+  }
+
 
   
 }
