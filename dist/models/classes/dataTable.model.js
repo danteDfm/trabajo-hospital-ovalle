@@ -70,15 +70,15 @@ class DataTable {
       JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
       WHERE rut_paciente = ?
     `;
-                const query2 = `SELECT fecha_ingreso, nombre_paciente, rut_paciente, nombre_social, identidad_genero FROM fichas_tecnicas AS ft
+                const query2 = `SELECT fecha_ingreso, nombre_paciente,apellido_paterno_paciente , apellido_materno_paciente,rut_paciente, nombre_social, identidad_genero, fecha_nacimiento_paciente FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
       JOIN historias_identidades_generos AS hg ON pa.fk_historia_genero = hg.id_historia_identidad_genero
-      WHERE rut_paciente = '444444444' AND fecha_ingreso = (SELECT max(fecha_ingreso) FROM fichas_tecnicas AS ft
+      WHERE rut_paciente = ? AND fecha_ingreso = (SELECT max(fecha_ingreso) FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
       JOIN historias_identidades_generos AS hg ON pa.fk_historia_genero = hg.id_historia_identidad_genero
-      WHERE rut_paciente = '444444444')`;
+      WHERE rut_paciente = ?)`;
                 const fichas = yield (0, consultasGenerales_1.consultasGenerales)(query, [rutPaciente]);
-                const dataEspesifica = yield (0, consultasGenerales_1.consultasGenerales)(query2, [rutPaciente]);
+                const dataEspesifica = yield (0, consultasGenerales_1.consultasGenerales)(query2, [rutPaciente, rutPaciente]);
                 fichas.unshift(dataEspesifica[0]);
                 return fichas;
             }
