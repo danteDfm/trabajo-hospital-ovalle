@@ -18,12 +18,12 @@ class DataTable {
     pacienteCentroEspesifico(centro, condicion) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `SELECT DISTINCT (rut_paciente), pa.nombre_paciente, pa.apellido_paterno_paciente, pa.apellido_materno_paciente,nombre_centro_salud FROM fichas_tecnicas AS ft
-      JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
-      JOIN profesionales_usuarios_salud AS pu ON pu.id_profesional_salud = ft.fk_profesional_usuario
-      JOIN centros_salud AS cs ON pu.fk_centro_salud = cs.id_centro_salud
-      WHERE nombre_centro_salud ` + condicion + ` ?
-      ORDER BY id_paciente DESC  
+                const query = `SELECT  DISTINCT (rut_paciente), id_paciente,pa.nombre_paciente, pa.apellido_paterno_paciente, pa.apellido_materno_paciente,nombre_centro_salud FROM fichas_tecnicas AS ft
+        JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
+        JOIN profesionales_usuarios_salud AS pu ON pu.id_profesional_salud = ft.fk_profesional_usuario
+        JOIN centros_salud AS cs ON pu.fk_centro_salud = cs.id_centro_salud
+        WHERE nombre_centro_salud ` + condicion + ` ?
+        ORDER BY id_paciente DESC  
       `;
                 const data = yield (0, consultasGenerales_1.consultasGenerales)(query, [centro]);
                 return data;
