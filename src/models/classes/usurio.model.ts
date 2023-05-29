@@ -35,14 +35,16 @@ export class Usuario {
     try {
       const query: string = `INSERT INTO PROFESIONALES_USUARIOS_SALUD VALUES (NULL, ?,?,?,?,?,?,?)`;
 
+  
+
       await consultasGenerales(query, [
         this.rutProfesional,
         this.nombreProfesional,
         this.emailProfesional,
         this.cargoProfesional,
         this.contrasenaProfesional,
-        this.centroProfesional,
         this.rolProfesional,
+        this.centroProfesional
       ]);
 
      

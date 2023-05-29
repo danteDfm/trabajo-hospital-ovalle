@@ -21,7 +21,7 @@ const routes_1 = require("../../routes");
 const conexion_database_1 = __importDefault(require("../../database/conexion.database"));
 class Server {
     constructor() {
-        this.objConexion = new conexion_database_1.default;
+        this.objConexion = new conexion_database_1.default();
         this.app = (0, express_1.default)();
         this.settings();
         this.middlewares();

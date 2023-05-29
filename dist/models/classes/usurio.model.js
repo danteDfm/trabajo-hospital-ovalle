@@ -33,8 +33,8 @@ class Usuario {
                     this.emailProfesional,
                     this.cargoProfesional,
                     this.contrasenaProfesional,
-                    this.centroProfesional,
                     this.rolProfesional,
+                    this.centroProfesional
                 ]);
                 return "Usuario ha sido creado";
             }

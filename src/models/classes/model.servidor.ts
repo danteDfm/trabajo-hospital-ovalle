@@ -5,15 +5,12 @@ import morgan from "morgan";
 import { endPoints } from "../../routes";
 import ConexionDatabase from "../../database/conexion.database";
 
-
-
 export class Server {
   private app: Application;
   private objConexion;
 
   constructor() {
-
-    this.objConexion = new ConexionDatabase;
+    this.objConexion = new ConexionDatabase();
     this.app = express();
     this.settings();
     this.middlewares();
@@ -23,6 +20,7 @@ export class Server {
     this.app.set("port", process.env.PORT || 3002);
   }
   middlewares(): void {
+
     this.app.use(cors());
     this.app.use(morgan("dev"));
     this.app.use(express.json());
@@ -34,10 +32,7 @@ export class Server {
 
   async conexionDatabase() {
     try {
-
-
       return await this.objConexion.getConnection();
-
     } catch (err) {
       console.log(err);
     }

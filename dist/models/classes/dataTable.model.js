@@ -66,12 +66,13 @@ class DataTable {
     listarFichasPorRut(rutPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `SELECT rut_paciente,id_ficha_tecnica FROM fichas_tecnicas AS ft
+                const query = `SELECT rut_paciente, id_ficha_tecnica, nombre_profesional_salud, fecha_ingreso FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON  ft.fk_paciente = pa.id_paciente
+      JOIN profesionales_usuarios_salud AS u ON ft.fk_profesional_usuario = u.id_profesional_salud
       WHERE rut_paciente = ?
       order by  id_ficha_tecnica desc
     `;
-                const query2 = `SELECT fecha_ingreso, nombre_paciente,apellido_paterno_paciente , apellido_materno_paciente,rut_paciente, nombre_social, identidad_genero, fecha_nacimiento_paciente FROM fichas_tecnicas AS ft
+                const query2 = `SELECT nombre_paciente,apellido_paterno_paciente , apellido_materno_paciente,rut_paciente, nombre_social, identidad_genero, fecha_nacimiento_paciente FROM fichas_tecnicas AS ft
       JOIN pacientes AS pa ON ft.fk_paciente = pa.id_paciente
       JOIN historias_identidades_generos AS hg ON pa.fk_historia_genero = hg.id_historia_identidad_genero
       WHERE rut_paciente = ? AND fecha_ingreso = (SELECT max(fecha_ingreso) FROM fichas_tecnicas AS ft

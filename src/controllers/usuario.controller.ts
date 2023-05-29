@@ -18,6 +18,7 @@ export class UsuarioController {
         rolProfesional,
       } = req.body;
 
+      
        existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
       if (existenciaUser) throw "Usuario ya existe en la base de datos";
 
