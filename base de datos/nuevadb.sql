@@ -19,12 +19,8 @@ comuna_centro_atencion VARCHAR (20),
 logo VARCHAR (60)
 )
 
-CREATE TRIGGER truguna 
-AFTER INSERT ON fichas_tecnicas 
-FOR EACH ROW 
-BEGIN 
+SELECT * FROM  PROFESIONALES_USUARIOS_SALUD
 
-END 
 
 --PROFESIONALES DE LA SALUD
 
@@ -41,6 +37,7 @@ FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 )
 
 
+
 --FICHA TECNICA
 create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
@@ -50,11 +47,13 @@ apoyo_escolar BOOLEAN  NOT NULL,
 judicializacion BOOLEAN NOT NULL,
 detalles_apoyo_es VARCHAR (255),
 detalles_judicializacion VARCHAR(255),
+fk_paciente INT NOT NULL, 
 fk_profesional_usuario INT NOT NULL,
 fk_area_psiquica int,   
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
+FOREIGN KEY (fk_paciente) REFERENCES pacientes (id_paciente),
 FOREIGN KEY (fk_profesional_usuario) REFERENCES PROFESIONALES_USUARIOS_SALUD (id_profesional_salud),
 foreign key (fk_area_psiquica) references AREAS_PSIQUICAS (id_area_psiquica),
 foreign key (fk_historia_clinica) references HISTORIAS_CLINICAS (id_historia_clinica),
@@ -62,17 +61,9 @@ FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
 )
 
+SELECT * FROM fichas_tecnicas WHERE DATE(fecha_ingreso) = CURDATE()
 
-CREATE TABLE FICHAS_PACIENTES(
-id_ficha_paciente INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-fk_ficha_tecnica INT NOT NULL, 
-fk_paciente INT NOT NULL, 
-FOREIGN KEY (fk_ficha_tecnica ) REFERENCES fichas_tecnicas(id_ficha_tecnica ),
-FOREIGN KEY (FK_paciente) REFERENCES pacientes (id_paciente)
-)
-
-SELECT * FROM fichas_pacientes
-
+SELECT fecha_ingreso FROM fichas_tecnicas
 
 --historia clinca
 
@@ -85,6 +76,7 @@ detalles_antecedentes_alergicos VARCHAR(255),
 detalles_antecedentes_pni VARCHAR(255),
 detalles_funcionalidad_genital VARCHAR (255)
 )
+
 
 
 --persona involucrada
@@ -159,7 +151,7 @@ presencia_disforia BOOLEAN NOT NULL,
 detalles_diforia VARCHAR (200)
 )
  
-
+SELECT * FROM 
 
 CREATE TABLE SELECCION_PRENDA(
 id_prenda_n_n INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -174,7 +166,5 @@ id_prenda_disconformidad int not null auto_increment primary key,
 nombre_prenda varchar(20) NOT NULL
 )
 
-
-
-
-
+      
+      
