@@ -5,3 +5,5 @@ objServidor.iniciarServidor();
 const mysqlConnexion = objServidor.conexionDatabase();
 
 export { mysqlConnexion };
+
+console.log("hola mundo");
