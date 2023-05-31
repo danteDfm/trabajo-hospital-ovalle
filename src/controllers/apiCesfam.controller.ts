@@ -3,7 +3,7 @@ import soapRequest  from 'easy-soap-request';
 //import fs from ("fs");
 import xmlBuilder from "xmlbuilder";
 import convert from 'xml-js';
-import { resolve } from "path";
+//import { resolve } from "path";
 
 const url = "http://ws.fonasa.cl:8080/Certificados/Previsional";
 const headers = {
