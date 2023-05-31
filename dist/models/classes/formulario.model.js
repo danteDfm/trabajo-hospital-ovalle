@@ -17,17 +17,27 @@ class Formulario {
         this.involucrado = involucrado;
         this.acompanante = acompanante;
     }
-    init() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.conexion = yield __1.mysqlConnexion;
-        });
-    }
     crearPrimerPaso() {
-        const paciente = Object.values(this.paciente);
-        const involucrado = Object.values(this.involucrado);
-        const acompanante = Object.values(this.acompanante);
-        console.log(involucrado);
-        console.log(acompanante);
+        return __awaiter(this, void 0, void 0, function* () {
+            const conexion = yield __1.mysqlConnexion;
+            const valuePaciente = Object.values(this.paciente);
+            const valueInvolucrado = Object.values(this.involucrado);
+            const valueAcompanante = Object.values(this.acompanante);
+            try {
+                const [resultadoPaciente] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(`INSERT INTO PACIENTES VALUES (NULL, ?,?,?,?,?,?,?,?,?)`, valuePaciente));
+                const [resultadoInvolucrado] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(`INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?)`, valueInvolucrado));
+                const [resultadoAcompanante] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(`INSERT INTO PERSONAS_INVOLUCRADAS_TRANSICION VALUES (NULL, ?,?,?,?,?,?,?)`, valueAcompanante));
+                const idp = resultadoPaciente.insertId;
+                const ida = resultadoInvolucrado.insertId;
+                const idi = resultadoAcompanante.insertId;
+                console.log(idp);
+                console.log(ida);
+                console.log(idi);
+            }
+            catch (error) {
+                throw new Error("Error de consulta primer paso");
+            }
+        });
     }
 }
 exports.Formulario = Formulario;
