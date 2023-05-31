@@ -12,6 +12,9 @@ rut_paciente VARCHAR NOT NULL,
 estado_ficha NOT NULL
 )
 
+
+
+
 CREATE TABLE CENTROS_SALUD(
 id_centro_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 nombre_centro_salud VARCHAR(50),
@@ -38,10 +41,14 @@ FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 
 
 
+INSERT INTO profesionales_usuarios_salud 
+VALUES (NULL, "196674292", "Kahory", "khory@gmail.com", "Doctor", "KahoryFlores", "commonUser", 1) 
+
 --FICHA TECNICA
 create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
 fecha_ingreso date not NULL,
+estado_ficha BOOLEAN NOT NULL, 
 borrado_logico BOOLEAN NOT NULL,
 apoyo_escolar BOOLEAN  NOT NULL,
 judicializacion BOOLEAN NOT NULL,
@@ -151,7 +158,7 @@ presencia_disforia BOOLEAN NOT NULL,
 detalles_diforia VARCHAR (200)
 )
  
-SELECT * FROM 
+
 
 CREATE TABLE SELECCION_PRENDA(
 id_prenda_n_n INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 

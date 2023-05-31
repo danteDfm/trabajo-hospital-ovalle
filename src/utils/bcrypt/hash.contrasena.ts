@@ -4,6 +4,8 @@ export async function hashContrasena(contrasena: string): Promise<string>{
 
     let salt = await bcrypt.genSalt(10);
     let hash: string = await bcrypt.hash(contrasena, salt);
+
+    console.log(hash);
     return hash;
 }
 

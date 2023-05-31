@@ -18,6 +18,7 @@ function hashContrasena(contrasena) {
     return __awaiter(this, void 0, void 0, function* () {
         let salt = yield bcryptjs_1.default.genSalt(10);
         let hash = yield bcryptjs_1.default.hash(contrasena, salt);
+        console.log(hash);
         return hash;
     });
 }
