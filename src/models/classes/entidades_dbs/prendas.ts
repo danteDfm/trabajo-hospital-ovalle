@@ -1,15 +1,9 @@
-// import { PrendaYdieta } from "../../interfaces/tipos.entidades";
+import { Prenda } from "../../interfaces/tipos.entidades";
 
-// export class PrendaDieta{
+export class CPrenda implements Prenda {
+  public tipoPrenda?: Array<number>;
 
-//     public detallesHabitoAlimenticio:string;
-//     public fkPrendaDisconformidad?:Array<number>;
-
-//     constructor(pyd:PrendaYdieta){
-
-//         this.detallesHabitoAlimenticio = pyd.detallesHabitoAlimenticio;
-//         this.fkPrendaDisconformidad = pyd.fkPrendaDisconformidad;
-
-//     }
-
-// 
+  constructor(prenda: Prenda) {
+    this.tipoPrenda = prenda.tipoPrenda;
+  }
+}

@@ -10,19 +10,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioController = void 0;
+//clase principal
 const formulario_model_1 = require("../models/classes/formulario.model");
+//clases
 const paciente_1 = require("../models/classes/entidades_dbs/paciente");
+const personasInv_1 = require("../models/classes/entidades_dbs/personasInv");
 class FormularioController {
     static guardarFichaTecnica(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { paciente } = req.body;
+                const { paciente, involucrado, acompanante } = req.body;
+                const { paso } = req.query;
+                //tipado de objetos
                 const pacienteTipado = paciente;
+                const involucradoTipado = involucrado;
+                const acompananteTipado = acompanante;
                 const nuevoPaciente = new paciente_1.Paciente(pacienteTipado);
-                console.log(nuevoPaciente);
-                const objForm = new formulario_model_1.Formulario(nuevoPaciente);
-                console.log(objForm.paciente);
-                res.json("hola");
+                const nuevoInvolucrado = new personasInv_1.Involucrado(involucradoTipado);
+                const nuevoAcompanante = new personasInv_1.Involucrado(acompananteTipado);
+                const objFormulario = new formulario_model_1.Formulario(nuevoPaciente, nuevoInvolucrado, nuevoAcompanante);
+                objFormulario.crearPrimerPaso();
+                if (paso === "primero")
+                    return res.status(200).json("primer paso completado");
+                res.status(200).json("Formulario completado");
             }
             catch (err) {
                 res.json(err);

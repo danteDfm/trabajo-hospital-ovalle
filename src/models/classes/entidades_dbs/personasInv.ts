@@ -1,27 +1,35 @@
-// import {TypePersonasInv } from "../../interfaces/tipos.entidades";
+import { InterfacePersonasInv } from "../../interfaces/tipos.entidades";
 
-// export class Involucrados{
+export class Involucrado implements InterfacePersonasInv {
+  public rutInvolucrado: string | null;
+  public nombreInvolucrado: string | null;
+  public apellidoPInvolucrado: string | null;
+  public apellidoMInvolucrado: string | null;
+  public parentescoInvolucrado: string | null;
+  public telefonoInvolucrado: string | null;
+  public domicilioInvolucrado: string | null;
 
-//     public rutInvolucrada?:string;
-//     public pasaporte?:string;
-//     public nombreInvolucrada?:string;
-//     public apellidoPInvolucrada?:string;
-//     public apellidoMInvolucrada?:string;
-//     public parentescoInvolucrada?:string;
-//     public telefonoInvolucrada?:string;
-//     public domicilioInvolucrada?:string;
-
-//     constructor(involucrado:TypePersonasInv){
-
-//         this.rutInvolucrada = involucrado.rutInvolucrada;
-//         this.pasaporte = involucrado.pasaporte;
-//         this.nombreInvolucrada = involucrado.nombreInvolucrada;
-//         this.apellidoPInvolucrada = involucrado.apellidoPInvolucrada;
-//         this.apellidoMInvolucrada = involucrado.apellidoMInvolucrada;
-//         this.parentescoInvolucrada =  involucrado.parentescoInvolucrada;
-//         this.telefonoInvolucrada = involucrado.telefonoInvolucrada;
-//         this.domicilioInvolucrada = involucrado.domicilioInvolucrada;
-
-//     }
-    
-// }
+  constructor(involucrado: InterfacePersonasInv) {
+    this.rutInvolucrado = involucrado.rutInvolucrado
+      ? involucrado.rutInvolucrado
+      : null;
+    this.nombreInvolucrado = involucrado.nombreInvolucrado
+      ? involucrado.nombreInvolucrado
+      : null;
+    this.apellidoPInvolucrado = involucrado.apellidoPInvolucrado
+      ? involucrado.apellidoPInvolucrado
+      : null;
+    this.apellidoMInvolucrado = involucrado.apellidoMInvolucrado
+      ? involucrado.apellidoMInvolucrado
+      : null;
+    this.parentescoInvolucrado = involucrado.parentescoInvolucrado
+      ? involucrado.parentescoInvolucrado
+      : null;
+    this.telefonoInvolucrado = involucrado.telefonoInvolucrado
+      ? involucrado.telefonoInvolucrado
+      : null;
+    this.domicilioInvolucrado = involucrado.domicilioInvolucrado
+      ? involucrado.domicilioInvolucrado
+      : null;
+  }
+}

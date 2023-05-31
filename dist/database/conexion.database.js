@@ -22,8 +22,8 @@ class ConexionDatabase {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const objSql = yield promise_1.default.createConnection({
-                    host: "localhost",
-                    database: "proyecto_transicion",
+                    host: "127.0.0.1",
+                    database: "TRANSICION_GENERO",
                     user: "root",
                     password: "dante569",
                 });
@@ -31,7 +31,7 @@ class ConexionDatabase {
             }
             catch (err) {
                 console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
-                throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
+                throw new Error("LA CONEXION A LA BASE DE DATOS SE HA PERDIDO");
             }
         });
     }

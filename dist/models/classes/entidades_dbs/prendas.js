@@ -1,10 +1,9 @@
 "use strict";
-// import { PrendaYdieta } from "../../interfaces/tipos.entidades";
-// export class PrendaDieta{
-//     public detallesHabitoAlimenticio:string;
-//     public fkPrendaDisconformidad?:Array<number>;
-//     constructor(pyd:PrendaYdieta){
-//         this.detallesHabitoAlimenticio = pyd.detallesHabitoAlimenticio;
-//         this.fkPrendaDisconformidad = pyd.fkPrendaDisconformidad;
-//     }
-// 
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CPrenda = void 0;
+class CPrenda {
+    constructor(prenda) {
+        this.tipoPrenda = prenda.tipoPrenda;
+    }
+}
+exports.CPrenda = CPrenda;
