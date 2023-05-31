@@ -1,15 +1,16 @@
 
-export type TypeFichaTecnica = {
+export interface FichaTecnica{
 
   fechaIngreso:string;
   borradoLogico:boolean;
+  estadoFicha:boolean;
   apoyoEscolar:boolean;
   judicializacio: boolean;
   detallesApoyo: string;
   detallesJudicializacion:string;
 
 }
-export type TypeAntecedentesClinicos = {
+export interface AntecedentesClinicos{
   antecedentePerinatales: string;
   antecedenteHospitalizaciones: string;
   antecedentesQuirurgicos: string;
@@ -17,7 +18,7 @@ export type TypeAntecedentesClinicos = {
   antecedentesPni: string;
   funcionalidadGenital: string;
 }
-export type TypePersonasInv = {
+export interface PersonasInv{
   rutInvolucrada: string;
   pasaporte: string;
   nombreInvolucrada: string;
@@ -27,7 +28,7 @@ export type TypePersonasInv = {
   telefonoInvolucrada: string;
   domicilioInvolucrada: string;
 }
-export type AreaPsiquica = {
+export interface AreaPsiquica{
   controlEquipoSaludMental: boolean;
   psicoterapia: boolean;
   evaluacionPsiquica: boolean;
@@ -36,25 +37,34 @@ export type AreaPsiquica = {
   detallesFarmacos: string;
 }
 
-export type TypePaciente ={
+export interface InterfacePaciente{
   rutPaciente: string;
-  pasaporte: string;
   nombrePaciente: string;
-  apellidoPaternoPa: string;
-  apellidoMaternoPa: string;
-  pronombre: string;
-  nombreSocial: string;
+  apellidoPaternoPa?: string | null;
+  apellidoMaternoPa?: string | null;
+  pronombre?: string;
+  nombreSocial?: string;
   fechaNacimientoPa: Date;
-  domicilioPaciente: string;
-  telefonoPaciente: string;
-  usoDroga: boolean;
-  antecedenteFamilires: boolean;
-  detallesUsoDroga: string;
-  detallesAntecedentesFa: string;
+  domicilioPaciente?: string;
+  telefonoPaciente?: string;
 
 }
 
-export type TypeHistoriaGenero = {
+export interface HistoriaDrogas{
+  usoDroga?:boolean, 
+  detalleDroga?:string
+}
+
+export interface AntecedentesFamilia{
+    antecedente:boolean, 
+    detalleAntecedente:boolean, 
+}
+
+export interface Dieta{
+  tipoDieta:string
+}
+
+export interface HistoriaGenero{
   identidadGenero: string;
   orientacionSexual: string;
   inicioTransicioSexual: Date;
@@ -63,12 +73,5 @@ export type TypeHistoriaGenero = {
   usoPrenda: boolean;
   presenciaDisforia: boolean;
   detallesDiforia: string;
-}
-
-export type PrendaYdieta={
-
-  detallesHabitoAlimenticio: string;
-  fkPrendaDisconformidad: Array<number>; 
-
 }
 

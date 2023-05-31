@@ -1,45 +1,26 @@
-import { TypePaciente } from "../../types/tipos.entidades";
+import { InterfacePaciente } from "../../interfaces/tipos.entidades";
 
-
-export class Paciente{
-
-  //data paciente
-  public rutPaciente?: string;
+export class Paciente implements InterfacePaciente {
+  public rutPaciente: string;
   public pasaporte?: string;
   public nombrePaciente: string;
-  public apellidoPaternoPa?: string;
-  public apellidoMaternoPa?: string;
+  public apellidoPaternoPa?: string | null;
+  public apellidoMaternoPa?: string | null;
   public pronombre?: string;
   public nombreSocial?: string;
   public fechaNacimientoPa: Date;
   public domicilioPaciente?: string;
   public telefonoPaciente?: string;
-  public usoDroga: boolean;
-  public antecedenteFamilires: boolean;
-  public detallesUsoDroga?: string;
-  public detallesAntecedentesFa?: string;
 
-  constructor(paciente: TypePaciente){
-    
+  constructor(paciente: InterfacePaciente) {
     this.rutPaciente = paciente.rutPaciente;
-    this.pasaporte = paciente.pasaporte;
     this.nombrePaciente = paciente.nombrePaciente;
-    this.apellidoPaternoPa = paciente.apellidoPaternoPa;
-    this.apellidoMaternoPa = paciente.apellidoMaternoPa;
+    this.apellidoPaternoPa = paciente.apellidoPaternoPa ? paciente.apellidoPaternoPa: null;
+    this.apellidoMaternoPa = paciente.apellidoMaternoPa ? paciente.apellidoMaternoPa: null;
     this.pronombre = paciente.pronombre;
-    this.nombreSocial= paciente.nombreSocial;
-    this.fechaNacimientoPa =paciente.fechaNacimientoPa;
+    this.nombreSocial = paciente.nombreSocial;
+    this.fechaNacimientoPa = paciente.fechaNacimientoPa;
     this.domicilioPaciente = paciente.domicilioPaciente;
     this.telefonoPaciente = paciente.telefonoPaciente;
-    this.usoDroga = paciente.usoDroga;
-    this.antecedenteFamilires = paciente.antecedenteFamilires;
-    this.detallesUsoDroga = paciente.detallesUsoDroga;
-    this.detallesAntecedentesFa = paciente.detallesAntecedentesFa;
- 
-
   }
-
 }
-
-
-

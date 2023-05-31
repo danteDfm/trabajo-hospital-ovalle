@@ -1,15 +1,15 @@
-import { PrendaYdieta } from "../../types/tipos.entidades";
+// import { PrendaYdieta } from "../../interfaces/tipos.entidades";
 
-export class PrendaDieta{
+// export class PrendaDieta{
 
-    public detallesHabitoAlimenticio:string;
-    public fkPrendaDisconformidad?:Array<number>;
+//     public detallesHabitoAlimenticio:string;
+//     public fkPrendaDisconformidad?:Array<number>;
 
-    constructor(pyd:PrendaYdieta){
+//     constructor(pyd:PrendaYdieta){
 
-        this.detallesHabitoAlimenticio = pyd.detallesHabitoAlimenticio;
-        this.fkPrendaDisconformidad = pyd.fkPrendaDisconformidad;
+//         this.detallesHabitoAlimenticio = pyd.detallesHabitoAlimenticio;
+//         this.fkPrendaDisconformidad = pyd.fkPrendaDisconformidad;
 
-    }
+//     }
 
-}
+// 
