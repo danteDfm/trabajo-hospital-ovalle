@@ -23,7 +23,7 @@ class ConexionDatabase {
             try {
                 const objSql = yield promise_1.default.createConnection({
                     host: "localhost",
-                    database: "proyecto_transicion",
+                    database: "TRANSICION_GENERO",
                     user: "root",
                     password: "dante569",
                 });
