@@ -19,23 +19,32 @@ class FormularioController {
     static guardarFichaTecnica(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { paciente, involucrado, acompanante } = req.body;
+                let objFormulario;
+                const { ficha, paciente, involucrado, acompanante } = req.body;
                 const { paso } = req.query;
-                //tipado de objetos
-                const pacienteTipado = paciente;
-                const involucradoTipado = involucrado;
-                const acompananteTipado = acompanante;
-                const nuevoPaciente = new paciente_1.Paciente(pacienteTipado);
-                const nuevoInvolucrado = new personasInv_1.Involucrado(involucradoTipado);
-                const nuevoAcompanante = new personasInv_1.Involucrado(acompananteTipado);
-                const objFormulario = new formulario_model_1.Formulario(nuevoPaciente, nuevoInvolucrado, nuevoAcompanante);
-                objFormulario.crearPrimerPaso();
-                if (paso === "primero")
-                    return res.status(200).json("primer paso completado");
+                let pacienteTipado;
+                let involucradoTipado;
+                let acompananteTipado;
+                if (paso === "primero" && ficha.estadoFicha) {
+                    //tipado de objetos
+                    pacienteTipado = paciente;
+                    involucradoTipado = involucrado;
+                    acompananteTipado = acompanante;
+                    //creacion de entidades
+                    const nuevoPaciente = new paciente_1.Paciente(pacienteTipado);
+                    const nuevoInvolucrado = new personasInv_1.Involucrado(involucradoTipado);
+                    const nuevoAcompanante = new personasInv_1.Involucrado(acompananteTipado);
+                    objFormulario = new formulario_model_1.Formulario(nuevoPaciente, nuevoInvolucrado, nuevoAcompanante);
+                    const msj = yield objFormulario.crearPrimerPaso();
+                    console.log(msj);
+                    return res.status(200).json(msj);
+                }
                 res.status(200).json("Formulario completado");
             }
             catch (err) {
-                res.json(err);
+                res.status(400).json({
+                    msj: err.message,
+                });
             }
         });
     }

@@ -14,31 +14,53 @@ import { Request, Response } from "express";
 export class FormularioController {
   static async guardarFichaTecnica(req: Request, res: Response) {
     try {
-      const { paciente, involucrado, acompanante } = req.body;
+
+      let objFormulario;
+
+      const {ficha ,paciente, involucrado, acompanante } = req.body;
       const { paso } = req.query;
 
-      //tipado de objetos
-      const pacienteTipado: InterfacePaciente = paciente;
-      const involucradoTipado: InterfacePersonasInv = involucrado;
-      const acompananteTipado: InterfacePersonasInv = acompanante;
+      let  pacienteTipado: InterfacePaciente; 
+      let involucradoTipado: InterfacePersonasInv;
+      let acompananteTipado: InterfacePersonasInv;
 
+     
 
-      const nuevoPaciente = new Paciente(pacienteTipado);
-      const nuevoInvolucrado = new Involucrado(involucradoTipado);
-      const nuevoAcompanante = new Involucrado(acompananteTipado);
+  
+      if (paso === "primero" && ficha.estadoFicha){
 
-      const objFormulario = new Formulario(nuevoPaciente, nuevoInvolucrado, nuevoAcompanante);
+        //tipado de objetos
+        pacienteTipado = paciente;
+        involucradoTipado= involucrado;
+        acompananteTipado= acompanante;
 
-      objFormulario.crearPrimerPaso();
+        //creacion de entidades
+        const nuevoPaciente = new Paciente(pacienteTipado);
+        const nuevoInvolucrado = new Involucrado(involucradoTipado);
+        const nuevoAcompanante = new Involucrado(acompananteTipado);
 
+        
+        objFormulario = new Formulario(nuevoPaciente, nuevoInvolucrado, nuevoAcompanante);
+        const msj = await objFormulario.crearPrimerPaso();
 
+      
 
+        console.log(msj);
 
-      if (paso === "primero") return res.status(200).json("primer paso completado");
+        return res.status(200).json(msj);
+      }
 
       res.status(200).json("Formulario completado");
+
+
     } catch (err: any) {
-      res.json(err);
+
+      res.status(400).json({
+
+        msj: err.message, 
+        
+      });
+
     }
   }
 }
