@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EntidadFicha = void 0;
+exports.EntidadPaciente = void 0;
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
-class EntidadFicha {
+class EntidadPaciente {
     constructor(fichas) {
         this.paciente = fichas.paciente;
     }
@@ -38,16 +38,6 @@ class EntidadFicha {
             }
         });
     }
-    crearFicha(query, datos) {
-        try {
-            const data = (0, consultasGenerales_1.consultasGenerales)(query, datos);
-            const idFicha = data.insertId;
-            return idFicha;
-        }
-        catch (err) {
-            throw ("Error en crear la ficha tecnica");
-        }
-    }
     comprobarVariables() {
         try {
             if (!this.paciente.rutPaciente ||
@@ -64,5 +54,17 @@ class EntidadFicha {
             };
         }
     }
+    crearFicha(query, datos) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield (0, consultasGenerales_1.consultasGenerales)(query, datos);
+                const idFicha = data.insertId;
+                return "La operacion fue llevada con exito";
+            }
+            catch (err) {
+                throw ("Error en crear la ficha tecnica");
+            }
+        });
+    }
 }
-exports.EntidadFicha = EntidadFicha;
+exports.EntidadPaciente = EntidadPaciente;
