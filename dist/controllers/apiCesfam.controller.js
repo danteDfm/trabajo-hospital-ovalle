@@ -17,6 +17,7 @@ const easy_soap_request_1 = __importDefault(require("easy-soap-request"));
 //import fs from ("fs");
 const xmlbuilder_1 = __importDefault(require("xmlbuilder"));
 const xml_js_1 = __importDefault(require("xml-js"));
+//import { resolve } from "path";
 const url = "http://ws.fonasa.cl:8080/Certificados/Previsional";
 const headers = {
     "user-agent": "sampleTest",

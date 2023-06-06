@@ -21,7 +21,6 @@ export class Cesfam{
 
             let { run, dverificador} = req.body;
             
-    
             run = run.split("-");
     
             let xml = xmlBuilder
@@ -48,6 +47,7 @@ export class Cesfam{
             const paciente = parseXMLToJSON.elements[0].elements[1].elements[0].elements[0].elements[9].elements;
     
             res.json({
+                
                 run: `${paciente[0].elements[0].text}-${paciente[1].elements[0].text}`,
                 nombre: paciente[2].elements[0].text,
                 apellido_paterno: paciente[3].elements[0].text,

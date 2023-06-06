@@ -3,6 +3,6 @@ const router = Router();
 import { Cesfam } from "../controllers/apiCesfam.controller";
 
 
-router.get('/obtener', Cesfam.api);
+router.post('/obtener', Cesfam.api);
 
 export default router;
