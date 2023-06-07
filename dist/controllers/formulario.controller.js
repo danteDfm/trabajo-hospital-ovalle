@@ -14,6 +14,8 @@ const primer_paso_model_1 = require("../models/classes/formulario/primer.paso.mo
 const espesificarFecha_1 = require("../utils/espesificarFecha");
 const segundo_paso_model_1 = require("../models/classes/formulario/segundo.paso.model");
 const tercer_paso_model_1 = require("../models/classes/formulario/tercer.paso.model");
+const cuarto_paso_model_1 = require("../models/classes/formulario/cuarto.paso.model");
+const dicQuery_1 = require("../consultas/dicQuery");
 class FormularioController {
     static primerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -114,7 +116,7 @@ class FormularioController {
     }
     static tercerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { fichas, paciente, dieta, involucrado, acompanante, areaPsiquica, genero, prendas, } = req.body;
+            const { fichas, paciente, dieta, involucrado, acompanante, areaPsiquica, historialDrogas, genero, prendas, } = req.body;
             const { idPaciente } = req.query;
             const { idFicha } = req.query;
             const { idUsuario } = req.params;
@@ -129,52 +131,193 @@ class FormularioController {
             const fichaTipada = {
                 paciente,
             };
-            const objTercer = new tercer_paso_model_1.FormularioTercerPaso(areaPsiquicaTipada, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
-            if (idPaciente != undefined &&
-                paciente.rutPaciente == "noaplica" &&
-                genero.identidadGenero == "noaplica" &&
-                involucrado.rutInvolucrado == "noaplica" &&
-                acompanante.rutInvolucrado == "noaplica" &&
-                idFicha != undefined) {
-                console.log("primer caso");
-                const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                const msj = yield objTercer.crearFicha(`
+            try {
+                const objTercer = new tercer_paso_model_1.FormularioTercerPaso(areaPsiquicaTipada, historialDrogas.usoDroga, historialDrogas.detallesDroga, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
+                if (idPaciente != undefined &&
+                    genero.identidadGenero == "noaplica" &&
+                    involucrado.rutInvolucrado == "noaplica" &&
+                    acompanante.rutInvolucrado == "noaplica" &&
+                    idFicha != undefined) {
+                    console.log("primer caso");
+                    const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
+                    const msj = yield objTercer.crearFicha(`
         UPDATE fichas_tecnicas SET fecha_ingreso = ?,
         nivelFormulario = ?, apoyo_escolar = ?, detalles_apoyo_es = ?, fk_area_psiquica=? WHERE id_ficha_tecnica = ? `, [
+                        fichas.fechaIngreso,
+                        fichas.nivel,
+                        fichas.apoyoEscolar,
+                        fichas.detallesApoyo,
+                        idTercerPaso.idAreaPsiquica,
+                        idFicha,
+                    ]);
+                    return res.status(200).send(msj);
+                }
+                if (idPaciente != undefined &&
+                    idFicha != undefined &&
+                    paciente.rutPaciente == "noaplica" &&
+                    involucrado.rutInvolucrado == "noaplica" &&
+                    acompanante.rutInvolucrado == "noaplica") {
+                    console.log("segundo caso");
+                    objTercer.crearSegundoPaso(parseInt(idPaciente));
+                    const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
+                    const msj = yield objTercer.crearFicha(`
+      UPDATE fichas_tecnicas SET
+      fecha_ingreso = ?,
+      nivelFormulario = ?,
+      apoyo_escolar = ?,
+      detalles_apoyo_es = ?,
+      fk_area_psiquica = ?
+      WHERE id_ficha_tecnica = ?`, [
+                        fichas.fechaIngreso,
+                        fichas.nivel,
+                        fichas.apoyoEscolar,
+                        fichas.detallesApoyo,
+                        idTercerPaso.idAreaPsiquica,
+                        idFicha,
+                    ]);
+                    return res.send(msj);
+                }
+                objTercer.comprobarVariables();
+                const idPacient = yield objTercer.crearPaciente();
+                const idprimer = yield objTercer.guardarPrimerPaso();
+                yield objTercer.crearSegundoPaso(idPacient);
+                const idTercer = yield objTercer.crearTercerPaso(idPacient);
+                const msj = yield objTercer.crearFicha(`INSERT INTO fichas_tecnicas (fecha_ingreso, 
+        borrado_logico,
+        estado_ficha,
+        nivelFormulario,
+        apoyo_escolar,
+        detalles_apoyo_es, 
+        fk_paciente,
+        fk_profesional_usuario,
+        fk_area_psiquica,
+        fk_persona_involucrada_encargada,
+        fk_persona_involucrada_acompanante) VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [
                     fichas.fechaIngreso,
+                    fichas.borradoLogico,
+                    fichas.estadoFicha,
                     fichas.nivel,
                     fichas.apoyoEscolar,
                     fichas.detallesApoyo,
-                    idTercerPaso.idAreaPsiquica,
-                    idFicha,
+                    idPacient,
+                    idUsuario,
+                    idTercer.idAreaPsiquica,
+                    idprimer.idInvolucrado,
+                    idprimer.idAcompanante,
                 ]);
                 return res.status(200).send(msj);
             }
-            if (idPaciente != undefined &&
-                idFicha != undefined &&
-                paciente.rutPaciente == "noaplica" &&
-                involucrado.rutInvolucrado == "noaplica" &&
-                acompanante.rutInvolucrado == "noaplica") {
-                console.log("segundo caso");
-                objTercer.crearSegundoPaso(parseInt(idPaciente));
-                const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                objTercer.crearFicha(`UPDATE fichas_tecnicas SET
-      fecha_ingreso = ?,
-      nivelFormulario = ?
-      poyo_escolar = ?,
-      detalles_apoyo_es = ?,
-      fk_area_psiquica=? 
-      where id_ficha_tecnica =  ?
-      WHERE id_ficha_tecnica= ?`, [
-                    fichas.fechaIngreso,
-                    fichas.nivel,
-                    fichas.apoyoEscolar,
-                    fichas.detallesApoyo,
-                    idTercerPaso.idAreaPsiquica,
-                    idFicha
-                ]);
+            catch (err) {
+                return res.status(500).json("Error interno del servidor");
             }
-            return res.send("hola mundo");
+        });
+    }
+    static cuartoPasoController(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idUsuario } = req.params;
+            const { idFicha, idPaciente, pasoDinamico } = req.query;
+            const { fichas, paciente, antecedentes, dieta, involucrado, acompanante, areaPsiquica, historialDrogas, genero, prendas, } = req.body;
+            fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
+            //usar interfaces para tipar los objetos
+            const historiaGeneroTipada = genero;
+            const areaPsiquicaTipada = areaPsiquica;
+            const antecedentesTipado = antecedentes;
+            const primerPasoTipado = {
+                involucrado,
+                acompanante,
+            };
+            const fichaTipada = {
+                paciente,
+            };
+            const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDroga, historialDrogas.detallesDroga, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
+            try {
+                switch (pasoDinamico) {
+                    case "caso4":
+                        objCuarto.comprobarVariables();
+                        const idsPaciente = yield objCuarto.crearPaciente();
+                        const idsPrimerPaso = yield objCuarto.guardarPrimerPaso();
+                        yield objCuarto.crearSegundoPaso(idsPaciente);
+                        const idsTercerPaso = yield objCuarto.crearTercerPaso(idsPaciente);
+                        const idsCuartoPaso = yield objCuarto.crearCuartoPaso();
+                        const msj4 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.crearPrimerPaso, [
+                            fichas.fechaIngreso,
+                            fichas.estadoFicha,
+                            fichas.borradoLogico,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.judicializacion,
+                            fichas.detallesApoyo,
+                            fichas.detallesJudicializacion,
+                            idsPaciente,
+                            idUsuario,
+                            idsTercerPaso.idAreaPsiquica,
+                            idsCuartoPaso,
+                            idsPrimerPaso.idInvolucrado,
+                            idsPrimerPaso.idAcompanante,
+                        ]);
+                        res.status(200).send(msj4);
+                    case "paso3":
+                        yield objCuarto.crearSegundoPaso(parseInt(idPaciente));
+                        const idsTercerPas = yield objCuarto.crearTercerPaso(parseInt(idPaciente));
+                        const idsCuartoPas = yield objCuarto.crearCuartoPaso();
+                        const msj3 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update3, [
+                            fichas.fechaIngreso,
+                            fichas.estadoFicha,
+                            fichas.borradoLogico,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.judicializacion,
+                            fichas.detallesApoyo,
+                            fichas.detallesJudicializacion,
+                            idPaciente,
+                            idUsuario,
+                            idsTercerPas.idAreaPsiquica,
+                            idsCuartoPas,
+                            idFicha,
+                        ]);
+                        res.status(200).send(msj3);
+                    case "paso2":
+                        const idsTercerPaso1 = yield objCuarto.crearTercerPaso(parseInt(idPaciente));
+                        const idsCuartoPaso1 = yield objCuarto.crearCuartoPaso();
+                        const msj2 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update2, [
+                            fichas.fechaIngreso,
+                            fichas.estadoFicha,
+                            fichas.borradoLogico,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.judicializacion,
+                            fichas.detallesApoyo,
+                            fichas.detallesJudicializacion,
+                            idPaciente,
+                            idUsuario,
+                            idsTercerPaso1.idAreaPsiquica,
+                            idsCuartoPaso1,
+                            idFicha,
+                        ]);
+                        res.status(200).send(msj2);
+                    case "paso1":
+                        const idsCuartoPaso2 = yield objCuarto.crearCuartoPaso();
+                        const msj1 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update1, [
+                            fichas.fechaIngreso,
+                            fichas.estadoFicha,
+                            fichas.borradoLogico,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.judicializacion,
+                            fichas.detallesApoyo,
+                            fichas.detallesJudicializacion,
+                            idPaciente,
+                            idUsuario,
+                            idsCuartoPaso2,
+                            idFicha,
+                        ]);
+                        res.status(200).send(msj1);
+                }
+                res.status(200).send("sin coincidencias");
+            }
+            catch (err) {
+                res.status(500).json("Error interno del servidor");
+            }
         });
     }
 }

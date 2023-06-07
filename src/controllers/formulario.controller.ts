@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { FormularioPrimerPaso } from "../models/classes/formulario/primer.paso.model";
-import { PrimerPaso } from "../models/interfaces/tipos.entidades";
+import {
+  AntecedentesClinicos,
+  PrimerPaso,
+} from "../models/interfaces/tipos.entidades";
 import {
   Pacientes,
   HistoriaGenero,
@@ -9,6 +12,8 @@ import {
 import { fechaExacta } from "../utils/espesificarFecha";
 import { FormularioSegundoPaso } from "../models/classes/formulario/segundo.paso.model";
 import { FormularioTercerPaso } from "../models/classes/formulario/tercer.paso.model";
+import { FormularioCuartoPaso } from "../models/classes/formulario/cuarto.paso.model";
+import { diccionarioPasos } from "../consultas/dicQuery";
 
 export class FormularioController {
   static async primerPasoController(req: Request, res: Response) {
@@ -150,6 +155,7 @@ export class FormularioController {
       involucrado,
       acompanante,
       areaPsiquica,
+      historialDrogas,
       genero,
       prendas,
     } = req.body;
@@ -174,8 +180,160 @@ export class FormularioController {
       paciente,
     };
 
-    const objTercer = new FormularioTercerPaso(
+    try {
+      const objTercer = new FormularioTercerPaso(
+        areaPsiquicaTipada,
+        historialDrogas.usoDroga,
+        historialDrogas.detallesDroga,
+        dieta,
+        historiaGeneroTipada,
+        primerPasoTipado,
+        fichaTipada,
+        prendas
+      );
+
+      if (
+        idPaciente != undefined &&
+        genero.identidadGenero == "noaplica" &&
+        involucrado.rutInvolucrado == "noaplica" &&
+        acompanante.rutInvolucrado == "noaplica" &&
+        idFicha != undefined
+      ) {
+        console.log("primer caso");
+        const idTercerPaso = await objTercer.crearTercerPaso(
+          parseInt(idPaciente as string)
+        );
+
+        const msj = await objTercer.crearFicha(
+          `
+        UPDATE fichas_tecnicas SET fecha_ingreso = ?,
+        nivelFormulario = ?, apoyo_escolar = ?, detalles_apoyo_es = ?, fk_area_psiquica=? WHERE id_ficha_tecnica = ? `,
+          [
+            fichas.fechaIngreso,
+            fichas.nivel,
+            fichas.apoyoEscolar,
+            fichas.detallesApoyo,
+            idTercerPaso.idAreaPsiquica,
+            idFicha,
+          ]
+        );
+
+        return res.status(200).send(msj);
+      }
+
+      if (
+        idPaciente != undefined &&
+        idFicha != undefined &&
+        paciente.rutPaciente == "noaplica" &&
+        involucrado.rutInvolucrado == "noaplica" &&
+        acompanante.rutInvolucrado == "noaplica"
+      ) {
+        console.log("segundo caso");
+
+        objTercer.crearSegundoPaso(parseInt(idPaciente as string));
+        const idTercerPaso = await objTercer.crearTercerPaso(
+          parseInt(idPaciente as string)
+        );
+
+        const msj = await objTercer.crearFicha(
+          `
+      UPDATE fichas_tecnicas SET
+      fecha_ingreso = ?,
+      nivelFormulario = ?,
+      apoyo_escolar = ?,
+      detalles_apoyo_es = ?,
+      fk_area_psiquica = ?
+      WHERE id_ficha_tecnica = ?`,
+          [
+            fichas.fechaIngreso,
+            fichas.nivel,
+            fichas.apoyoEscolar,
+            fichas.detallesApoyo,
+            idTercerPaso.idAreaPsiquica,
+            idFicha,
+          ]
+        );
+
+        return res.send(msj);
+      }
+
+      objTercer.comprobarVariables();
+      const idPacient = await objTercer.crearPaciente();
+
+      const idprimer = await objTercer.guardarPrimerPaso();
+      await objTercer.crearSegundoPaso(idPacient);
+      const idTercer = await objTercer.crearTercerPaso(idPacient);
+
+      const msj = await objTercer.crearFicha(
+        `INSERT INTO fichas_tecnicas (fecha_ingreso, 
+        borrado_logico,
+        estado_ficha,
+        nivelFormulario,
+        apoyo_escolar,
+        detalles_apoyo_es, 
+        fk_paciente,
+        fk_profesional_usuario,
+        fk_area_psiquica,
+        fk_persona_involucrada_encargada,
+        fk_persona_involucrada_acompanante) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+        [
+          fichas.fechaIngreso,
+          fichas.borradoLogico,
+          fichas.estadoFicha,
+          fichas.nivel,
+          fichas.apoyoEscolar,
+          fichas.detallesApoyo,
+          idPacient,
+          idUsuario,
+          idTercer.idAreaPsiquica,
+          idprimer.idInvolucrado,
+          idprimer.idAcompanante,
+        ]
+      );
+
+      return res.status(200).send(msj);
+    } catch (err: any) {
+      return res.status(500).json("Error interno del servidor");
+    }
+  }
+
+  static async cuartoPasoController(req: Request, res: Response) {
+    const { idUsuario } = req.params;
+    const { idFicha, idPaciente, pasoDinamico } = req.query;
+    const {
+      fichas,
+      paciente,
+      antecedentes,
+      dieta,
+      involucrado,
+      acompanante,
+      areaPsiquica,
+      historialDrogas,
+      genero,
+      prendas,
+    } = req.body;
+
+    fichas.fechaIngreso = fechaExacta();
+
+    //usar interfaces para tipar los objetos
+
+    const historiaGeneroTipada: HistoriaGenero = genero;
+    const areaPsiquicaTipada: AreaPsiquica = areaPsiquica;
+    const antecedentesTipado: AntecedentesClinicos = antecedentes;
+    const primerPasoTipado: PrimerPaso = {
+      involucrado,
+      acompanante,
+    };
+
+    const fichaTipada: Pacientes = {
+      paciente,
+    };
+
+    const objCuarto = new FormularioCuartoPaso(
+      antecedentesTipado,
       areaPsiquicaTipada,
+      historialDrogas.usoDroga,
+      historialDrogas.detallesDroga,
       dieta,
       historiaGeneroTipada,
       primerPasoTipado,
@@ -183,75 +341,126 @@ export class FormularioController {
       prendas
     );
 
-    if (
-      idPaciente != undefined &&
-      paciente.rutPaciente == "noaplica" &&
-      genero.identidadGenero == "noaplica" &&
-      involucrado.rutInvolucrado == "noaplica" &&
-      acompanante.rutInvolucrado == "noaplica" &&
-      idFicha != undefined
-    ) {
+    try {
 
+      switch(pasoDinamico){
 
-
-      console.log("primer caso");
-      const idTercerPaso = await objTercer.crearTercerPaso(
-        parseInt(idPaciente as string)
-      );
-
-      const msj = await objTercer.crearFicha(
-        `
-        UPDATE fichas_tecnicas SET fecha_ingreso = ?,
-        nivelFormulario = ?, apoyo_escolar = ?, detalles_apoyo_es = ?, fk_area_psiquica=? WHERE id_ficha_tecnica = ? `,
-        [
-          fichas.fechaIngreso,
-          fichas.nivel,
-          fichas.apoyoEscolar,
-          fichas.detallesApoyo,
-          idTercerPaso.idAreaPsiquica,
-          idFicha,
-        ]
-      );
-
-      return res.status(200).send(msj);
-    }
-
-    if (  
-
-      idPaciente != undefined &&
-      idFicha != undefined &&
-      paciente.rutPaciente == "noaplica" &&
-      involucrado.rutInvolucrado == "noaplica" &&
-      acompanante.rutInvolucrado == "noaplica"
-
-    ) { 
-
-      console.log("segundo caso");
-
-      objTercer.crearSegundoPaso(parseInt(idPaciente as string));
+        case "caso4":   
+  
+        objCuarto.comprobarVariables();
+        const idsPaciente = await objCuarto.crearPaciente();
+        const idsPrimerPaso = await objCuarto.guardarPrimerPaso();
+        await objCuarto.crearSegundoPaso(idsPaciente);
+        const idsTercerPaso = await objCuarto.crearTercerPaso(idsPaciente);
+        const idsCuartoPaso = await objCuarto.crearCuartoPaso();
+  
+        const msj4 = await objCuarto.crearFicha( diccionarioPasos.crearPrimerPaso,
+          [
+            fichas.fechaIngreso,
+            fichas.estadoFicha,
+            fichas.borradoLogico,
+            fichas.nivel,
+            fichas.apoyoEscolar,
+            fichas.judicializacion,
+            fichas.detallesApoyo,
+            fichas.detallesJudicializacion,
+            idsPaciente,
+            idUsuario,
+            idsTercerPaso.idAreaPsiquica,
+            idsCuartoPaso,
+            idsPrimerPaso.idInvolucrado,
+            idsPrimerPaso.idAcompanante,
+          ]
+        );
+        res.status(200).send(msj4);
+  
+        case "paso3": 
+       
+          await objCuarto.crearSegundoPaso(parseInt(idPaciente as string));
+          const idsTercerPas = await objCuarto.crearTercerPaso(
+            parseInt(idPaciente as string)
+          );
+          const idsCuartoPas = await objCuarto.crearCuartoPaso();
+  
+          const msj3 = await objCuarto.crearFicha(
+            diccionarioPasos.update3,
+            [
+              fichas.fechaIngreso,
+              fichas.estadoFicha,
+              fichas.borradoLogico,
+              fichas.nivel,
+              fichas.apoyoEscolar,
+              fichas.judicializacion,
+              fichas.detallesApoyo,
+              fichas.detallesJudicializacion,
+              idPaciente,
+              idUsuario,
+              idsTercerPas.idAreaPsiquica,
+              idsCuartoPas,
+              idFicha,
+            ]
+          );
+  
+          res.status(200).send(msj3);
+          case "paso2": 
+  
+          const idsTercerPaso1 = await objCuarto.crearTercerPaso(
+            parseInt(idPaciente as string)
+          );
+          const idsCuartoPaso1 = await objCuarto.crearCuartoPaso();
+  
+          const msj2 = await objCuarto.crearFicha(
+            diccionarioPasos.update2,
+            [
+              fichas.fechaIngreso,
+              fichas.estadoFicha,
+              fichas.borradoLogico,
+              fichas.nivel,
+              fichas.apoyoEscolar,
+              fichas.judicializacion,
+              fichas.detallesApoyo,
+              fichas.detallesJudicializacion,
+              idPaciente,
+              idUsuario,
+              idsTercerPaso1.idAreaPsiquica,
+              idsCuartoPaso1,
+              idFicha,
+            ]
+          );
+          res.status(200).send(msj2);
+          case "paso1":
+            
+          const idsCuartoPaso2 = await objCuarto.crearCuartoPaso();
+  
+          const msj1 = await objCuarto.crearFicha(
+           diccionarioPasos.update1,
+            [
+              fichas.fechaIngreso,
+              fichas.estadoFicha,
+              fichas.borradoLogico,
+              fichas.nivel,
+              fichas.apoyoEscolar,
+              fichas.judicializacion,
+              fichas.detallesApoyo,
+              fichas.detallesJudicializacion,
+              idPaciente,
+              idUsuario,
+              idsCuartoPaso2,
+              idFicha,
+            ]
+          );
+  
+          res.status(200).send(msj1);
+  
+      }
+  
       
-      const idTercerPaso= await objTercer.crearTercerPaso(parseInt(idPaciente as string));
-
-      objTercer.crearFicha(`UPDATE fichas_tecnicas SET
-      fecha_ingreso = ?,
-      nivelFormulario = ?
-      poyo_escolar = ?,
-      detalles_apoyo_es = ?,
-      fk_area_psiquica=? 
-      where id_ficha_tecnica =  ?
-      WHERE id_ficha_tecnica= ?`, [
-
-        fichas.fechaIngreso,
-        fichas.nivel,
-        fichas.apoyoEscolar,
-        fichas.detallesApoyo,
-        idTercerPaso.idAreaPsiquica,
-        idFicha
-
-      ]);
-
+       
+      res.status(200).send("sin coincidencias");
+    } catch (err) {
+      res.status(500).json("Error interno del servidor");
     }
-
-    return res.send("hola mundo");
   }
+
+
 }

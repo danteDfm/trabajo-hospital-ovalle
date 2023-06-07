@@ -21,23 +21,24 @@ export interface Pacientes{
 
 export interface AntecedentesClinicos {
 
-  antecedentePerinatales?: string;
-  antecedenteHospitalizaciones?: string;
-  antecedentesQuirurgicos?: string;
-  antecedentesAlergicos?: string;
-  antecedentesPni?: string;
-  funcionalidadGenital?: string;
+  antecedentePerinatales: string | null;
+  antecedenteHospitalizaciones: string | null;
+  antecedentesQuirurgicos: string | null;
+  antecedentesAlergicos: string | null;
+  antecedentesPni: string | null;
+  funcionalidadGenital: string | null;
+  antecedentesFamilia:string | null
 }
 
 
 
 export interface AreaPsiquica {
-  controlEquipoSaludMental?: boolean;
-  psicoterapia?: boolean;
-  evaluacionPsiquica?: boolean;
-  diagnosticoPsiquiatrico?: boolean;
-  utilizacionFarmaco?: boolean;
-  detallesFarmacos?: string;
+  controlEquipoSaludMental?: boolean | null;
+  psicoterapia?: boolean | null;
+  evaluacionPsiquica?: boolean | null;
+  diagnosticoPsiquiatrico?: boolean | null;
+  utilizacionFarmaco?: boolean | null;
+  detallesFarmacos?: string | null;
 }
 
 export interface PrimerPaso{

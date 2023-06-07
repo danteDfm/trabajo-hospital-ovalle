@@ -6,4 +6,5 @@ const formulario_controller_1 = require("../controllers/formulario.controller");
 router.post('/primer-paso/:idUsuario', formulario_controller_1.FormularioController.primerPasoController);
 router.post('/segundo-paso/:idUsuario', formulario_controller_1.FormularioController.segundoPasoController);
 router.post('/tercer-paso/:idUsuario', formulario_controller_1.FormularioController.tercerPasoController);
+router.post('/cuarto-paso/:idUsuario', formulario_controller_1.FormularioController.cuartoPasoController);
 exports.default = router;
