@@ -20,7 +20,6 @@ class FormularioController {
     static primerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `INSERT INTO FICHAS_TECNICAS (fecha_ingreso, estado_ficha, borrado_logico,nivelFormulario ,fk_paciente, fk_profesional_usuario, fk_persona_involucrada_encargada, fk_persona_involucrada_acompanante) VALUES (?,?,?,?,?,?, ?,?)`;
                 const { idUsuario } = req.params;
                 const { paciente, involucrado, acompanante, fichas } = req.body;
                 fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
@@ -35,7 +34,7 @@ class FormularioController {
                 objPrimerPaso.comprobarVariables();
                 const idPrimerPaso = yield objPrimerPaso.guardarPrimerPaso();
                 const idPaciente = yield objPrimerPaso.crearPaciente();
-                const ficha = yield objPrimerPaso.crearFicha(query, [
+                const ficha = yield objPrimerPaso.crearFicha(dicQuery_1.primerPaso, [
                     fichas.fechaIngreso,
                     fichas.estadoFicha,
                     fichas.borradoLogico,
@@ -61,7 +60,7 @@ class FormularioController {
             try {
                 const { genero, involucrado, acompanante, paciente, fichas, prendas } = req.body;
                 const { idUsuario } = req.params;
-                const { idPaciente, idFicha } = req.query;
+                const { idPaciente, idFicha, pasoDinamico } = req.query;
                 let idsPrimero;
                 fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
                 const historiaGeneroTipada = genero;
@@ -73,37 +72,35 @@ class FormularioController {
                     paciente,
                 };
                 const objSegundoPaso = new segundo_paso_model_1.FormularioSegundoPaso(historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
-                //si los campos viene con noplica significa que existen campos en el paso uno y se esta siguiendo un formulario anterior
-                //para este paso necesitamos tanto id de usuario como de la ficha
-                if (primerPasoTipado.involucrado.rutInvolucrado == "no aplica" &&
-                    primerPasoTipado.acompanante.rutInvolucrado == "no aplica" &&
-                    fichaTipada.paciente.rutPaciente == "no aplica") {
-                    //necessitamos verificar que el id no sea undefined para hacer un parseo y asi mandar un numero para crear las tablas segundo paso
-                    if (idPaciente != undefined) {
-                        let idParseado = parseInt(idPaciente, 10);
-                        objSegundoPaso.crearSegundoPaso(idParseado);
-                    }
-                    //se actualiza la tabla ficha con la hora, el nivel, para eso necesitamos el id de la ficha
-                    const msj = yield objSegundoPaso.crearFicha(`UPDATE  fichas_tecnicas SET fecha_ingreso = ?, nivelFormulario = ?
-         where id_ficha_tecnica =  ?`, [fichas.fechaIngreso, fichas.nivel, idFicha]);
-                    return res.status(200).send(msj);
+                switch (pasoDinamico) {
+                    case "caso1":
+                        //en caso de no entrar al if se crean nuevos campos
+                        objSegundoPaso.comprobarVariables();
+                        const idDbs = yield objSegundoPaso.crearPaciente();
+                        idsPrimero = yield objSegundoPaso.guardarPrimerPaso();
+                        yield objSegundoPaso.crearSegundoPaso(idDbs);
+                        const msj = yield objSegundoPaso.crearFicha(dicQuery_1.diccSegundoPaso.case1, [
+                            fichas.fechaIngreso,
+                            fichas.estadoFicha,
+                            fichas.borradoLogico,
+                            fichas.nivel,
+                            idDbs,
+                            idUsuario,
+                            idsPrimero.idInvolucrado,
+                            idsPrimero.idAcompanante,
+                        ]);
+                        return res.status(200).send(msj);
+                    case "caso2":
+                        objSegundoPaso.crearSegundoPaso(parseInt(idPaciente));
+                        const msj2 = yield objSegundoPaso.crearFicha(dicQuery_1.diccSegundoPaso.case2, [
+                            fichas.fechaIngreso,
+                            fichas.nivel,
+                            idFicha,
+                        ]);
+                        return res.status(200).send(msj2);
+                    default:
+                        return res.status(200).send("no se encontraaron coincidencias");
                 }
-                //en caso de no entrar al if se crean nuevos campos
-                objSegundoPaso.comprobarVariables();
-                const idDbs = yield objSegundoPaso.crearPaciente();
-                idsPrimero = yield objSegundoPaso.guardarPrimerPaso();
-                yield objSegundoPaso.crearSegundoPaso(idDbs);
-                const msj = yield objSegundoPaso.crearFicha(`INSERT INTO FICHAS_TECNICAS (fecha_ingreso, estado_ficha, borrado_logico,nivelFormulario ,fk_paciente, fk_profesional_usuario, fk_persona_involucrada_encargada, fk_persona_involucrada_acompanante) VALUES (?,?,?,?,?,?,?,?)`, [
-                    fichas.fechaIngreso,
-                    fichas.estadoFicha,
-                    fichas.borradoLogico,
-                    fichas.nivel,
-                    idDbs,
-                    idUsuario,
-                    idsPrimero.idInvolucrado,
-                    idsPrimero.idAcompanante,
-                ]);
-                return res.status(200).send(msj);
             }
             catch (error) {
                 console.log(error);
@@ -117,8 +114,7 @@ class FormularioController {
     static tercerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { fichas, paciente, dieta, involucrado, acompanante, areaPsiquica, historialDrogas, genero, prendas, } = req.body;
-            const { idPaciente } = req.query;
-            const { idFicha } = req.query;
+            const { idFicha, idPaciente, pasoDinamico } = req.query;
             const { idUsuario } = req.params;
             fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
             //usar interfaces para tipar los objetos
@@ -131,81 +127,56 @@ class FormularioController {
             const fichaTipada = {
                 paciente,
             };
+            const objTercer = new tercer_paso_model_1.FormularioTercerPaso(areaPsiquicaTipada, historialDrogas.usoDroga, historialDrogas.detallesDroga, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
             try {
-                const objTercer = new tercer_paso_model_1.FormularioTercerPaso(areaPsiquicaTipada, historialDrogas.usoDroga, historialDrogas.detallesDroga, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
-                if (idPaciente != undefined &&
-                    genero.identidadGenero == "noaplica" &&
-                    involucrado.rutInvolucrado == "noaplica" &&
-                    acompanante.rutInvolucrado == "noaplica" &&
-                    idFicha != undefined) {
-                    console.log("primer caso");
-                    const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                    const msj = yield objTercer.crearFicha(`
-        UPDATE fichas_tecnicas SET fecha_ingreso = ?,
-        nivelFormulario = ?, apoyo_escolar = ?, detalles_apoyo_es = ?, fk_area_psiquica=? WHERE id_ficha_tecnica = ? `, [
-                        fichas.fechaIngreso,
-                        fichas.nivel,
-                        fichas.apoyoEscolar,
-                        fichas.detallesApoyo,
-                        idTercerPaso.idAreaPsiquica,
-                        idFicha,
-                    ]);
-                    return res.status(200).send(msj);
+                switch (pasoDinamico) {
+                    case "caso1":
+                        objTercer.comprobarVariables();
+                        const idPacient = yield objTercer.crearPaciente();
+                        const idprimer = yield objTercer.guardarPrimerPaso();
+                        yield objTercer.crearSegundoPaso(idPacient);
+                        const idTercer = yield objTercer.crearTercerPaso(idPacient);
+                        const msj1 = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case1, [
+                            fichas.fechaIngreso,
+                            fichas.borradoLogico,
+                            fichas.estadoFicha,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.detallesApoyo,
+                            idPacient,
+                            idUsuario,
+                            idTercer.idAreaPsiquica,
+                            idprimer.idInvolucrado,
+                            idprimer.idAcompanante,
+                        ]);
+                        res.status(201).json(msj1);
+                    case "caso2":
+                        console.log("segundo caso");
+                        objTercer.crearSegundoPaso(parseInt(idPaciente));
+                        const idTercerPaso2 = yield objTercer.crearTercerPaso(parseInt(idPaciente));
+                        const msj2 = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case2, [
+                            fichas.fechaIngreso,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.detallesApoyo,
+                            idTercerPaso2.idAreaPsiquica,
+                            idFicha,
+                        ]);
+                        return res.status(201).json(msj2);
+                    case "caso3":
+                        const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
+                        const msj = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case3, [
+                            fichas.fechaIngreso,
+                            fichas.nivel,
+                            fichas.apoyoEscolar,
+                            fichas.detallesApoyo,
+                            idTercerPaso.idAreaPsiquica,
+                            idFicha,
+                        ]);
+                        return res.status(200).json(msj);
+                    default:
+                        return res.status(200).send("no han habido coincidencias");
                 }
-                if (idPaciente != undefined &&
-                    idFicha != undefined &&
-                    paciente.rutPaciente == "noaplica" &&
-                    involucrado.rutInvolucrado == "noaplica" &&
-                    acompanante.rutInvolucrado == "noaplica") {
-                    console.log("segundo caso");
-                    objTercer.crearSegundoPaso(parseInt(idPaciente));
-                    const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                    const msj = yield objTercer.crearFicha(`
-      UPDATE fichas_tecnicas SET
-      fecha_ingreso = ?,
-      nivelFormulario = ?,
-      apoyo_escolar = ?,
-      detalles_apoyo_es = ?,
-      fk_area_psiquica = ?
-      WHERE id_ficha_tecnica = ?`, [
-                        fichas.fechaIngreso,
-                        fichas.nivel,
-                        fichas.apoyoEscolar,
-                        fichas.detallesApoyo,
-                        idTercerPaso.idAreaPsiquica,
-                        idFicha,
-                    ]);
-                    return res.send(msj);
-                }
-                objTercer.comprobarVariables();
-                const idPacient = yield objTercer.crearPaciente();
-                const idprimer = yield objTercer.guardarPrimerPaso();
-                yield objTercer.crearSegundoPaso(idPacient);
-                const idTercer = yield objTercer.crearTercerPaso(idPacient);
-                const msj = yield objTercer.crearFicha(`INSERT INTO fichas_tecnicas (fecha_ingreso, 
-        borrado_logico,
-        estado_ficha,
-        nivelFormulario,
-        apoyo_escolar,
-        detalles_apoyo_es, 
-        fk_paciente,
-        fk_profesional_usuario,
-        fk_area_psiquica,
-        fk_persona_involucrada_encargada,
-        fk_persona_involucrada_acompanante) VALUES (?,?,?,?,?,?,?,?,?,?,?)`, [
-                    fichas.fechaIngreso,
-                    fichas.borradoLogico,
-                    fichas.estadoFicha,
-                    fichas.nivel,
-                    fichas.apoyoEscolar,
-                    fichas.detallesApoyo,
-                    idPacient,
-                    idUsuario,
-                    idTercer.idAreaPsiquica,
-                    idprimer.idInvolucrado,
-                    idprimer.idAcompanante,
-                ]);
-                return res.status(200).send(msj);
             }
             catch (err) {
                 return res.status(500).json("Error interno del servidor");
@@ -233,13 +204,14 @@ class FormularioController {
             try {
                 switch (pasoDinamico) {
                     case "caso4":
+                        console.log("paso4");
                         objCuarto.comprobarVariables();
                         const idsPaciente = yield objCuarto.crearPaciente();
                         const idsPrimerPaso = yield objCuarto.guardarPrimerPaso();
                         yield objCuarto.crearSegundoPaso(idsPaciente);
                         const idsTercerPaso = yield objCuarto.crearTercerPaso(idsPaciente);
                         const idsCuartoPaso = yield objCuarto.crearCuartoPaso();
-                        const msj4 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.crearPrimerPaso, [
+                        const msj4 = yield objCuarto.crearFicha(dicQuery_1.diccCuartoPaso.crearPrimerPaso, [
                             fichas.fechaIngreso,
                             fichas.estadoFicha,
                             fichas.borradoLogico,
@@ -255,12 +227,13 @@ class FormularioController {
                             idsPrimerPaso.idInvolucrado,
                             idsPrimerPaso.idAcompanante,
                         ]);
-                        res.status(200).send(msj4);
-                    case "paso3":
+                        return res.status(200).send(msj4);
+                    case "caso3":
+                        console.log("paso3");
                         yield objCuarto.crearSegundoPaso(parseInt(idPaciente));
                         const idsTercerPas = yield objCuarto.crearTercerPaso(parseInt(idPaciente));
                         const idsCuartoPas = yield objCuarto.crearCuartoPaso();
-                        const msj3 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update3, [
+                        const msj3 = yield objCuarto.crearFicha(dicQuery_1.diccCuartoPaso.update3, [
                             fichas.fechaIngreso,
                             fichas.estadoFicha,
                             fichas.borradoLogico,
@@ -275,11 +248,12 @@ class FormularioController {
                             idsCuartoPas,
                             idFicha,
                         ]);
-                        res.status(200).send(msj3);
-                    case "paso2":
+                        return res.status(200).send(msj3);
+                    case "caso2":
+                        console.log("paso2");
                         const idsTercerPaso1 = yield objCuarto.crearTercerPaso(parseInt(idPaciente));
                         const idsCuartoPaso1 = yield objCuarto.crearCuartoPaso();
-                        const msj2 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update2, [
+                        const msj2 = yield objCuarto.crearFicha(dicQuery_1.diccCuartoPaso.update2, [
                             fichas.fechaIngreso,
                             fichas.estadoFicha,
                             fichas.borradoLogico,
@@ -294,10 +268,11 @@ class FormularioController {
                             idsCuartoPaso1,
                             idFicha,
                         ]);
-                        res.status(200).send(msj2);
-                    case "paso1":
+                        return res.status(200).send(msj2);
+                    case "caso1":
+                        console.log("paso1");
                         const idsCuartoPaso2 = yield objCuarto.crearCuartoPaso();
-                        const msj1 = yield objCuarto.crearFicha(dicQuery_1.diccionarioPasos.update1, [
+                        const msj1 = yield objCuarto.crearFicha(dicQuery_1.diccCuartoPaso.update1, [
                             fichas.fechaIngreso,
                             fichas.estadoFicha,
                             fichas.borradoLogico,
@@ -311,12 +286,13 @@ class FormularioController {
                             idsCuartoPaso2,
                             idFicha,
                         ]);
-                        res.status(200).send(msj1);
+                        return res.status(200).send(msj1);
+                    default:
+                        return res.status(200).send("sin coincidencias");
                 }
-                res.status(200).send("sin coincidencias");
             }
             catch (err) {
-                res.status(500).json("Error interno del servidor");
+                return res.status(500).json("Error interno del servidor");
             }
         });
     }

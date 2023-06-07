@@ -56,13 +56,6 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
             catch (err) {
                 console.log(err);
                 yield (conexion === null || conexion === void 0 ? void 0 : conexion.rollback());
-                if (err == 101) {
-                    throw {
-                        code: err,
-                        status: "failure",
-                        msj: "Error, el id no debe venir vacio",
-                    };
-                }
                 throw {
                     status: "failure",
                     msj: "Error al crear el segundo paso",

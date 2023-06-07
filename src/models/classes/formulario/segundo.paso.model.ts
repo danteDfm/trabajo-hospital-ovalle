@@ -50,7 +50,8 @@ export class FormularioSegundoPaso
 
 
 
-  async crearSegundoPaso(idPaciente: number) {
+  async crearSegundoPaso(idPaciente: number){
+
     const conexion = await mysqlConnexion;
     const query: string =
       "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES (NULL, ?,?,?,?,?,?,?,?,?, ?)";
@@ -59,6 +60,7 @@ export class FormularioSegundoPaso
     try {
 
       await conexion?.beginTransaction();
+
       const [setHeaderHgenero]: any = await conexion?.query(query, [
         this.identidadGenero,
         this.orientacionSexual,
@@ -71,7 +73,6 @@ export class FormularioSegundoPaso
         idPaciente,
         this.autoPercepcion
       ]);
-
 
       const idHgenero = (setHeaderHgenero as OkPacket).insertId;
 
@@ -86,15 +87,7 @@ export class FormularioSegundoPaso
 
       console.log(err);
       await conexion?.rollback();
-      if (err == 101) {
-        throw {
-          code: err,
-          status: "failure",
-          msj: "Error, el id no debe venir vacio",
-        };
-      }
-
-
+  
       throw {
         status: "failure",
         msj: "Error al crear el segundo paso",
