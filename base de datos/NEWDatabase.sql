@@ -1,12 +1,13 @@
 INSERT INTO prendas_disconformidad VALUES (NULL, "Bracket"), (NULL, "Tukcet"), (NULL, "Packet");
-
-INSERT INTO centros_salud VALUES (NULL, "Antonio tirado Lanas", "Coquimbo", "/logo")
-
-INSERT INTO profesionales_usuarios_salud VALUES (NULL, "181231232", "Daniel", "daniel@gmail.com", "medico", "daniel", "commonUser", 1)
+INSERT INTO centros_salud VALUES (NULL, "Antonio tirado Lanas", "Coquimbo", "/logo");
+INSERT INTO profesionales_usuarios_salud VALUES (NULL, "181231232", "Daniel", "daniel@gmail.com", "medico", "daniel", "commonUser", 1);
 
 
+select * from  fichas_tecnicas
+select * from areas_psiquicas
 
---DESCRIBE es para ver la estructura de la tabla
+select * from pacientes;
+select * from PERSONAS_INVOLUCRADAS_TRANSICION
 
 
 

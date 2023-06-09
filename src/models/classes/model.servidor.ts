@@ -21,7 +21,11 @@ export class Server {
   }
   middlewares(): void {
 
-    this.app.use(cors());
+
+    this.app.use(cors({
+      exposedHeaders: ['Authorization']
+    }));
+   
     this.app.use(morgan("dev"));
     this.app.use(express.json());
   }
@@ -44,3 +48,5 @@ export class Server {
     });
   }
 }
+
+

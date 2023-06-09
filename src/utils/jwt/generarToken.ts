@@ -9,6 +9,8 @@ export class Token {
   private dataToken: {};
 
   constructor() {
+
+    process.env.TZ = 'UTC';
     this.secret = process.env.SECRET_TOKEN as string;
     this.payload = {};
     this.token = "";
@@ -23,13 +25,15 @@ export class Token {
     return this.payload;
   }
 
-  generarToken() {
+  generarToken(){
+
+
     this.token = jsonToken.sign(this.payload, this.secret, {expiresIn: '5h'});
     return this.token;
   }
 
-  verificarToken() {
-    this.dataToken = jsonToken.verify(this.token, this.secret);
+  verificarToken(token:string) {
+    this.dataToken = jsonToken.verify(token, this.secret);
     return this.dataToken;
   }
 }

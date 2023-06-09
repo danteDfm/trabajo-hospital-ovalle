@@ -20,20 +20,36 @@ class SessionController {
                 objSesion.setEmail(emailUsuario);
                 objSesion.setContrasena(contrasenaUsuario);
                 const token = yield objSesion.login();
-                res.set('Content-Type', 'application/json');
-                res.set(`Authorization`, `Bearer ${token}`);
-                res.status(200).json("La peticion fue llevada con exito");
+                res.set("Content-Type", "application/json");
+                res.setHeader('Authorization', `Bearer ${token}`);
+                res.status(200).json({ message: "peticion llevada a cabo" });
             }
             catch (err) {
                 if (err.code == 103 || err.code == 101 || err.code == 102) {
                     return res.status(400).json(err.error);
                 }
+                console.log(err);
                 return res.status(500).json("Error interno del servidor");
+            }
+        });
+    }
+    static verificarToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const header = req.headers;
+            try {
+                if (header.authorization == 'Bearer null')
+                    throw ({ ok: false });
+                const data = objSesion.verificarToken(header.authorization);
+                const resultData = yield objSesion.seleccionarUsuario(data.sub);
+                res.status(200).json({
+                    ok: true,
+                    resultData
+                });
+            }
+            catch (err) {
+                res.status(400).json(err);
             }
         });
     }
 }
 exports.SessionController = SessionController;
-//header 
-//res.set('Content-Type', 'application/json');
-//res.set(`Authorization`, `Bearer ${token}`);

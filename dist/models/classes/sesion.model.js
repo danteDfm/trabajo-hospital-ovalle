@@ -21,10 +21,10 @@ class Sesion {
     }
     login() {
         return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+    SELECT email_profesional_salud, contrasena, id_profesional_salud, roles  FROM profesionales_usuarios_salud
+    WHERE email_profesional_salud = ?`;
             try {
-                const query = `
-            SELECT email_profesional_salud, contrasena, id_profesional_salud, roles  FROM profesionales_usuarios_salud
-            WHERE email_profesional_salud = ?`;
                 if (!this.email || !this.contrasena) {
                     throw {
                         error: "Los datos no puede estar vacios",
@@ -51,6 +51,39 @@ class Sesion {
             }
             catch (err) {
                 throw err;
+            }
+        });
+    }
+    verificarToken(token) {
+        var _a;
+        try {
+            const tokenFormat = (_a = token.split(" ").pop()) === null || _a === void 0 ? void 0 : _a.toString();
+            if (!tokenFormat)
+                throw { ok: false };
+            const data = this.objToken.verificarToken(tokenFormat);
+            return data;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+    seleccionarUsuario(idUser) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+    select nombre_profesional_salud, cargo_profesional_salud,
+    roles, comuna_centro_atencion, logo  from PROFESIONALES_USUARIOS_SALUD as ps
+    left join CENTROS_SALUD as cs on ps.fk_centro_salud = cs.id_centro_salud
+    where id_profesional_salud  = ?;
+    `;
+            try {
+                if (!idUser)
+                    throw "id vacio";
+                const dataUsuario = yield (0, consultasGenerales_1.consultasGenerales)(query, [idUser]);
+                return dataUsuario[0];
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error("Error en la solicitud");
             }
         });
     }

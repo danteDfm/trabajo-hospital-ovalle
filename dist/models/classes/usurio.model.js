@@ -48,14 +48,14 @@ class Usuario {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const query = `
-    UPDATE PROFESIONALES_USUARIOS_SALUD SET
-    rut_profesional_salud = ?, 
-    nombre_profesional_salud = ?,
-    email_profesional_salud = ?,
-    cargo_profesional_salud  = ?,
-    contrasena = ?,
-    fk_centro_salud = ?
-    WHERE id_profesional_salud = ?`;
+      UPDATE PROFESIONALES_USUARIOS_SALUD SET
+      rut_profesional_salud = ?, 
+      nombre_profesional_salud = ?,
+      email_profesional_salud = ?,
+      cargo_profesional_salud  = ?,
+      contrasena = ?,
+      fk_centro_salud = ?
+      WHERE id_profesional_salud = ?`;
                 (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.rutProfesional,
                     this.nombreProfesional,

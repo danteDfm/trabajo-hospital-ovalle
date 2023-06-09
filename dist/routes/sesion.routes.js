@@ -4,4 +4,5 @@ const express_1 = require("express");
 const sesion_controller_1 = require("../controllers/sesion.controller");
 const router = (0, express_1.Router)();
 router.post('/credenciales', sesion_controller_1.SessionController.sesion);
+router.get('/verificar', sesion_controller_1.SessionController.verificarToken);
 exports.default = router;

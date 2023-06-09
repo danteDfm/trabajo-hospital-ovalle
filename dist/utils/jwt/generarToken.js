@@ -8,6 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
 class Token {
     constructor() {
+        process.env.TZ = 'UTC';
         this.secret = process.env.SECRET_TOKEN;
         this.payload = {};
         this.token = "";
@@ -24,8 +25,8 @@ class Token {
         this.token = jsonwebtoken_1.default.sign(this.payload, this.secret, { expiresIn: '5h' });
         return this.token;
     }
-    verificarToken() {
-        this.dataToken = jsonwebtoken_1.default.verify(this.token, this.secret);
+    verificarToken(token) {
+        this.dataToken = jsonwebtoken_1.default.verify(token, this.secret);
         return this.dataToken;
     }
 }

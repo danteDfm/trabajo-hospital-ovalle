@@ -57,15 +57,16 @@ export class Usuario {
 
   async actualizarUsuario(idProfesionalSalud: number) {
     try {
-      const query: string = `
-    UPDATE PROFESIONALES_USUARIOS_SALUD SET
-    rut_profesional_salud = ?, 
-    nombre_profesional_salud = ?,
-    email_profesional_salud = ?,
-    cargo_profesional_salud  = ?,
-    contrasena = ?,
-    fk_centro_salud = ?
-    WHERE id_profesional_salud = ?`;
+
+        const query: string = `
+      UPDATE PROFESIONALES_USUARIOS_SALUD SET
+      rut_profesional_salud = ?, 
+      nombre_profesional_salud = ?,
+      email_profesional_salud = ?,
+      cargo_profesional_salud  = ?,
+      contrasena = ?,
+      fk_centro_salud = ?
+      WHERE id_profesional_salud = ?`;
 
       consultasGenerales(query, [
         this.rutProfesional,
@@ -84,14 +85,17 @@ export class Usuario {
     }
   }
   async listarUsuarios() {
+   
     try {
       const rolApartado = "administrador";
+
       const query: string = `
     SELECT id_profesional_salud,
     rut_profesional_salud,
     nombre_profesional_salud, email_profesional_salud,
     cargo_profesional_salud,  
     fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
+
       const listUsuarios = await consultasGenerales(query, [rolApartado]);
       return listUsuarios;
     } catch (err) {
@@ -112,6 +116,7 @@ export class Usuario {
     }
   }
 
+ 
   public setRutProfesional(rutProfesional: string): void {
     this.rutProfesional = rutProfesional;
   }

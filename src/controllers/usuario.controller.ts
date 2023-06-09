@@ -9,6 +9,7 @@ export class UsuarioController {
       let existenciaUser: boolean;
       let contrasenaHasheada: string;
       const {
+
         rutProfesional,
         nombreProfesional,
         cargoProfesional,
