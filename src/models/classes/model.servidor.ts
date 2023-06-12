@@ -17,7 +17,7 @@ export class Server {
     this.routes();
   }
   settings(): void {
-    this.app.set("port", process.env.PORT || 3002);
+    this.app.set("port", process.env.PORT || 3003);
   }
   middlewares(): void {
 

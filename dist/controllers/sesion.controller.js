@@ -21,7 +21,7 @@ class SessionController {
                 objSesion.setContrasena(contrasenaUsuario);
                 const token = yield objSesion.login();
                 res.set("Content-Type", "application/json");
-                res.setHeader('Authorization', `Bearer ${token}`);
+                res.setHeader("Authorization", `Bearer ${token}`);
                 res.status(200).json({ message: "peticion llevada a cabo" });
             }
             catch (err) {
@@ -37,13 +37,13 @@ class SessionController {
         return __awaiter(this, void 0, void 0, function* () {
             const header = req.headers;
             try {
-                if (header.authorization == 'Bearer null')
-                    throw ({ ok: false });
+                if (header.authorization == "Bearer null")
+                    throw { ok: false };
                 const data = objSesion.verificarToken(header.authorization);
                 const resultData = yield objSesion.seleccionarUsuario(data.sub);
                 res.status(200).json({
                     ok: true,
-                    resultData
+                    resultData,
                 });
             }
             catch (err) {

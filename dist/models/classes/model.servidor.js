@@ -28,7 +28,7 @@ class Server {
         this.routes();
     }
     settings() {
-        this.app.set("port", process.env.PORT || 3002);
+        this.app.set("port", process.env.PORT || 3003);
     }
     middlewares() {
         this.app.use((0, cors_1.default)({

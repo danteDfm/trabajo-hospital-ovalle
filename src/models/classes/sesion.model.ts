@@ -40,6 +40,8 @@ export class Sesion {
         result[0].contrasena
       );
 
+   
+
       if (!verificacion) {
         throw {
           error: "Contraseña es invalida",
