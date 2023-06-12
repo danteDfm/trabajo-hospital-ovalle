@@ -19,7 +19,8 @@ function consultasGenerales(query, formato) {
             return dataDbs;
         }
         catch (err) {
-            throw err;
+            console.log(err);
+            throw ("Error interno de la consultas generales");
         }
     });
 }

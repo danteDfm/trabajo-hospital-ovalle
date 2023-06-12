@@ -1,6 +1,5 @@
 import { mysqlConnexion } from "..";
-
-type Formato = number | string | Date | undefined | boolean;
+import { Formato } from "../models/types/paciente";
 
 export async function consultasGenerales(query: string, formato?:Formato[]) {
   try {
@@ -8,7 +7,9 @@ export async function consultasGenerales(query: string, formato?:Formato[]) {
     const [dataDbs]: any = await conexion?.query(query, formato);
     return dataDbs;
   } catch (err) {
-    throw err;
+    
+    console.log(err);
+    throw ("Error interno de la consultas generales");
   }
 }
 

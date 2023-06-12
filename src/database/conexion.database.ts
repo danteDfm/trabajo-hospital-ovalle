@@ -18,18 +18,17 @@ class ConexionDatabase {
       const objSql =await mysql.createConnection({
 
         host: "localhost",
-        database: "TRANSICION_GENERO",
+        database: "proyecto_transicion",
         user: "root",
         password: "dante569",
 
       });
 
       return objSql;
-      
     } catch (err) {
 
       console.log(`ERROR DE CONEXION A LA BASE DE DATOS ---> ${err}`);
-      throw new Error("LA CONEXION A LA BASE D DATOS SE HA PERDIDO");
+      throw new Error("LA CONEXION A LA BASE DE DATOS SE HA PERDIDO");
 
     }
   }

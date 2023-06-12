@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HistoriaGenero = void 0;
-class HistoriaGenero {
+exports.CHistoriaGenero = void 0;
+class CHistoriaGenero {
     constructor(genero) {
-        this.identidadGenero = genero.identidadGenero;
+        this.identidadGenero = genero.identidadGenero ? genero.identidadGenero : null;
         this.orientacionSexual = genero.orientacionSexual;
         this.inicioTransicioSexual = genero.inicioTransicioSexual;
         this.tiempoLatencia = genero.tiempoLatencia;
@@ -13,4 +13,4 @@ class HistoriaGenero {
         this.detallesDiforia = genero.detallesDiforia;
     }
 }
-exports.HistoriaGenero = HistoriaGenero;
+exports.CHistoriaGenero = CHistoriaGenero;
