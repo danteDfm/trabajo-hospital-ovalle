@@ -84,8 +84,6 @@ export class Sesion {
 
       if (!idUser) throw "id vacio";
       const dataUsuario = await consultasGenerales(query, [idUser]);
-
-
       return dataUsuario[0];
     } catch (err) {
       console.log(err);
