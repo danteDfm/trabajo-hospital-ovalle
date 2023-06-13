@@ -9,23 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TablaController = void 0;
-const tabla_model_1 = require("../models/classes/tabla.model");
-class TablaController {
-    static listarPaciente(req, res) {
+exports.Tabla = void 0;
+const consultasGenerales_1 = require("../../consultas/consultasGenerales");
+class Tabla {
+    listarPacientes() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const objTable = new tabla_model_1.Tabla();
-                const dataPaciente = yield objTable.listarPacientes();
-                return res.status(200).json(dataPaciente);
+                const query = `select id_paciente, id_ficha_tecnica ,fecha_ingreso,rut_paciente, nombre_paciente, apellido_paterno_paciente, apellido_materno_paciente, nombre_centro_salud from  fichas_tecnicas as ft
+            join PACIENTES as pa on ft.fk_paciente = pa.id_paciente
+            join PROFESIONALES_USUARIOS_SALUD as ucs on ft.fk_profesional_usuario = id_profesional_salud 
+            join  CENTROS_SALUD as cs on fk_centro_salud = cs.id_centro_salud
+            where estado_ficha  =  true 
+            order by fecha_ingreso desc 
+        `;
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query);
+                return dataPaciente;
             }
             catch (err) {
-                return res.status(500).json({
-                    err,
-                    msj: "Error interno del servidor",
-                });
+                throw new Error(err);
             }
         });
     }
 }
-exports.TablaController = TablaController;
+exports.Tabla = Tabla;

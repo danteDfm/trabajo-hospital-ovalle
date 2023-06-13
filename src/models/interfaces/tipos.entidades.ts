@@ -1,10 +1,8 @@
 
 
-export interface Pacientes{
+    export interface Pacientes {
 
-    paciente: {
-
-      rutPaciente: string;
+      rutPaciente?: string;
       nombrePaciente: string;
       apellidoPaternoPa: string | null;
       apellidoMaternoPa: string | null;
@@ -15,7 +13,6 @@ export interface Pacientes{
       telefonoPaciente: string | null;
     }
 
-}
 
 
 
@@ -49,10 +46,12 @@ export interface PrimerPaso{
     nombreInvolucrado: string | null;
     apellidoPInvolucrado: string | null;
     apellidoMInvolucrado: string | null;
+    fechaNacimiento: string | null
+
     parentescoInvolucrado: string | null;
     telefonoInvolucrado: string | null;
     domicilioInvolucrado: string | null;
-    fechaNacimiento: string | null
+  
   },
   acompanante: {
 
@@ -60,10 +59,11 @@ export interface PrimerPaso{
       nombreInvolucrado: string | null;
       apellidoPInvolucrado: string | null;
       apellidoMInvolucrado: string | null;
+      fechaNacimiento: string | null;
       parentescoInvolucrado: string | null;
       telefonoInvolucrado: string | null;
       domicilioInvolucrado: string | null;
-      fechaNacimiento: string | null;
+
   
     }
 }
@@ -86,15 +86,15 @@ export interface HistoriaGenero {
     
     identidadGenero: string | null;
     orientacionSexual: string | null;
+    autopercepcion: number | null;
     inicioTransicioSexual: Date | null;
     tiempoLatencia: Date | null;
     apoyoFamiliar: boolean | null;
     usoPrenda: boolean | null;
     presenciaDisforia: boolean | null;
     detallesDiforia: string | null;
-    autoPercepcion: number | null;
+   
 
-  
   
 }
 

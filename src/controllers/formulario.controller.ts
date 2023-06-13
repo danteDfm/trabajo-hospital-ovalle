@@ -19,17 +19,16 @@ import {
   diccTercerPaso,
   primerPaso,
 } from "../consultas/dicQuery";
+import { EntidadPaciente } from "../models/classes/Pacientes";
 
 export class FormularioController {
   static async primerPasoController(req: Request, res: Response) {
     try {
       const { idUsuario } = req.params;
       const { paciente, involucrado, acompanante, fichas } = req.body;
-      fichas.fechaIngreso = fechaExacta();
 
-      const fichaTipada: Pacientes = {
-        paciente,
-      };
+      fichas.fechaIngreso = fechaExacta();
+      const fichaTipada: Pacientes = paciente;
 
       const primerPasoTipado: PrimerPaso = {
         involucrado,
@@ -84,9 +83,7 @@ export class FormularioController {
         involucrado,
         acompanante,
       };
-      const fichaTipada: Pacientes = {
-        paciente,
-      };
+      const fichaTipada: Pacientes = paciente;
 
       const objSegundoPaso = new FormularioSegundoPaso(
         historiaGeneroTipada,
@@ -154,7 +151,8 @@ export class FormularioController {
       prendas,
     } = req.body;
 
-    const { idFicha, idPaciente, pasoDinamico } = req.query;
+    const { idFicha, idPaciente } = req.query;
+    const { pasoDinamico } = req.params;
     const { idUsuario } = req.params;
 
     fichas.fechaIngreso = fechaExacta();
@@ -169,9 +167,7 @@ export class FormularioController {
       acompanante,
     };
 
-    const fichaTipada: Pacientes = {
-      paciente,
-    };
+    const fichaTipada: Pacientes = paciente;
 
     const objTercer = new FormularioTercerPaso(
       areaPsiquicaTipada,
@@ -189,11 +185,9 @@ export class FormularioController {
         case "caso1":
           objTercer.comprobarVariables();
           const idPacient = await objTercer.crearPaciente();
-
           const idprimer = await objTercer.guardarPrimerPaso();
           await objTercer.crearSegundoPaso(idPacient);
           const idTercer = await objTercer.crearTercerPaso(idPacient);
-
           const msj1 = await objTercer.crearFicha(diccTercerPaso.case1, [
             fichas.fechaIngreso,
             fichas.borradoLogico,
@@ -254,8 +248,8 @@ export class FormularioController {
   }
 
   static async cuartoPasoController(req: Request, res: Response) {
-    const { idUsuario } = req.params;
-    const { idFicha, idPaciente, pasoDinamico } = req.query;
+    const { pasoDinamico, idUsuario } = req.params;
+
     const {
       fichas,
       paciente,
@@ -271,7 +265,6 @@ export class FormularioController {
 
     fichas.fechaIngreso = fechaExacta();
 
-    //usar interfaces para tipar los objetos
 
     const historiaGeneroTipada: HistoriaGenero = genero;
     const areaPsiquicaTipada: AreaPsiquica = areaPsiquica;
@@ -281,10 +274,7 @@ export class FormularioController {
       acompanante,
     };
 
-    const fichaTipada: Pacientes = {
-      paciente,
-    };
-
+    const fichaTipada: Pacientes = paciente;
     const objCuarto = new FormularioCuartoPaso(
       antecedentesTipado,
       areaPsiquicaTipada,
@@ -299,119 +289,83 @@ export class FormularioController {
 
     try {
       switch (pasoDinamico) {
-        case "caso4":
-          console.log("paso4");
-          objCuarto.comprobarVariables();
-          const idsPaciente = await objCuarto.crearPaciente();
-
-          const idsPrimerPaso = await objCuarto.guardarPrimerPaso();
-          await objCuarto.crearSegundoPaso(idsPaciente);
-
-          const idsTercerPaso = await objCuarto.crearTercerPaso(idsPaciente);
-          const idsCuartoPaso = await objCuarto.crearCuartoPaso();
-
-          const msj4 = await objCuarto.crearFicha(
-            diccCuartoPaso.crearPrimerPaso,
-            [
-              fichas.fechaIngreso,
-              fichas.estadoFicha,
-              fichas.borradoLogico,
-              fichas.nivel,
-              fichas.apoyoEscolar,
-              fichas.judicializacion,
-              fichas.detallesApoyo,
-              fichas.detallesJudicializacion,
-              idsPaciente,
-              idUsuario,
-              idsTercerPaso.idAreaPsiquica,
-              idsCuartoPaso,
-              idsPrimerPaso.idInvolucrado,
-              idsPrimerPaso.idAcompanante,
-            ]
-          );
-
-          return res.status(200).send(msj4);
-
-        case "caso3":
-          console.log("paso3");
-
-          await objCuarto.crearSegundoPaso(parseInt(idPaciente as string));
-          const idsTercerPas = await objCuarto.crearTercerPaso(
-            parseInt(idPaciente as string)
-          );
-
-          const idsCuartoPas = await objCuarto.crearCuartoPaso();
-
-          const msj3 = await objCuarto.crearFicha(diccCuartoPaso.update3, [
-            fichas.fechaIngreso,
-            fichas.estadoFicha,
-            fichas.borradoLogico,
-            fichas.nivel,
-            fichas.apoyoEscolar,
-            fichas.judicializacion,
-            fichas.detallesApoyo,
-            fichas.detallesJudicializacion,
-            idPaciente,
-            idUsuario,
-            idsTercerPas.idAreaPsiquica,
-            idsCuartoPas,
-            idFicha,
-          ]);
-
-          return res.status(200).send(msj3);
-
-        case "caso2":
-          console.log("paso2");
-          const idsTercerPaso1 = await objCuarto.crearTercerPaso(
-            parseInt(idPaciente as string)
-          );
-          const idsCuartoPaso1 = await objCuarto.crearCuartoPaso();
-
-          const msj2 = await objCuarto.crearFicha(diccCuartoPaso.update2, [
-            fichas.fechaIngreso,
-            fichas.estadoFicha,
-            fichas.borradoLogico,
-            fichas.nivel,
-            fichas.apoyoEscolar,
-            fichas.judicializacion,
-            fichas.detallesApoyo,
-            fichas.detallesJudicializacion,
-            idPaciente,
-            idUsuario,
-            idsTercerPaso1.idAreaPsiquica,
-            idsCuartoPaso1,
-            idFicha,
-          ]);
-          return res.status(200).send(msj2);
-
         case "caso1":
+          try {
+            console.log("caso 1");
 
-        
-          console.log("paso1");
+            objCuarto.comprobarVariables();
+            const idsPaciente = await objCuarto.crearPaciente();
 
-          const idsCuartoPaso2 = await objCuarto.crearCuartoPaso();
-          const msj1 = await objCuarto.crearFicha(diccCuartoPaso.update1, [
-            fichas.fechaIngreso,
-            fichas.estadoFicha,
-            fichas.borradoLogico,
-            fichas.nivel,
-            fichas.apoyoEscolar,
-            fichas.judicializacion,
-            fichas.detallesApoyo,
-            fichas.detallesJudicializacion,
-            idPaciente,
-            idUsuario,
-            idsCuartoPaso2,
-            idFicha,
-          ]);
+            const idsPrimerPaso = await objCuarto.guardarPrimerPaso();
+            await objCuarto.crearSegundoPaso(idsPaciente);
+            const idsTercerPaso = await objCuarto.crearTercerPaso(idsPaciente);
+            const idsCuartoPaso = await objCuarto.crearCuartoPaso();
 
-          return res.status(200).send(msj1);
+            const msj4 = await objCuarto.crearFicha(
+              diccCuartoPaso.crearPrimerPaso,
+              [
+                fichas.fechaIngreso,
+                fichas.estadoFicha,
+                fichas.nivel,
+                fichas.apoyoEscolar,
+                fichas.judicializacion,
+                fichas.detallesApoyo,
+                fichas.detallesJudicializacion,
+                idsPaciente,
+                idUsuario,
+                idsTercerPaso.idAreaPsiquica,
+                idsCuartoPaso,
+                idsPrimerPaso.idInvolucrado,
+                idsPrimerPaso.idAcompanante,
+              ]
+            );
 
+            return res.status(200).send(msj4);
+          } catch (err: any) {
+            return res.status(400).send({
+              err,
+              msj: "Error interno del servidor",
+            });
+          }
         default:
           return res.status(200).send("sin coincidencias");
       }
     } catch (err) {
       return res.status(500).json("Error interno del servidor");
+    }
+  }
+  static async actualizarForm(req: any, res: Response) {
+    let objCuartoPaso;
+
+    const {
+      paciente,
+      involucrado,
+      acompanante,
+      historiaGenero,
+      detallesPrendas,
+      areaPsiquica,
+      detallesDieta,
+      antecedentes,
+    } = req.body;
+    try {
+      console.log(req.idTablas);
+
+      const pacienteTipado: Pacientes = paciente;
+      const primerPasoTipado: PrimerPaso = {
+        involucrado,
+        acompanante,
+      };
+      const generoTipado: HistoriaGenero = historiaGenero;
+      const areaPsiquicaTipada: AreaPsiquica = areaPsiquica;
+      const antecentesTipado: AntecedentesClinicos = antecedentes;
+
+      res.send("hola mundo");
+    } catch (err: any) {
+      console.log(err);
+      res.status(400).json({
+        err,
+        msj: "Error interno del servidor",
+      });
     }
   }
 }

@@ -1,5 +1,9 @@
+import { TablaController } from "../controllers/dataTable.controller";
 import { Router } from "express";
 const router = Router();
-import { TableController } from "../controllers/dataTable.controller";
+
+
+router.get('/listar', TablaController.listarPaciente);
+
 
 export default router;

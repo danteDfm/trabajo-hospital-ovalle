@@ -15,14 +15,16 @@ const __1 = require("../../..");
 class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
     constructor(areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas) {
         super(genero, primerPaso, pacientes, prendas);
-        (this.controlEquipoSaludMental = areaPsiquica.controlEquipoSaludMental || null),
+        (this.controlEquipoSaludMental =
+            areaPsiquica.controlEquipoSaludMental || null),
             (this.psicoterapia = areaPsiquica.psicoterapia || null),
             (this.evaluacionPsiquica = areaPsiquica.evaluacionPsiquica || null),
-            (this.diagnosticoPsiquiatrico = areaPsiquica.diagnosticoPsiquiatrico || null),
+            (this.diagnosticoPsiquiatrico =
+                areaPsiquica.diagnosticoPsiquiatrico || null),
             (this.utilizacionFarmaco = areaPsiquica.utilizacionFarmaco || null),
             (this.detallesFarmacos = areaPsiquica.detallesFarmacos || null);
-        this.usoDroga = usoDroga;
-        this.detallesDroga = detallesDroga;
+        this.usoDroga = usoDroga || null;
+        this.detallesDroga = detallesDroga || null;
         this.dieta = dieta || null;
     }
     crearTercerPaso(idPaciente) {
@@ -48,7 +50,7 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
                 const [headDataDrogas] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query3, [
                     this.usoDroga,
                     this.detallesDroga,
-                    idPaciente
+                    idPaciente,
                 ]));
                 const idAreaPsiquica = headDataPsico.insertId;
                 const idDieta = headDataDieta.insertId;
@@ -57,13 +59,38 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
                 return {
                     idAreaPsiquica,
                     idDieta,
-                    idDrogas
+                    idDrogas,
                 };
             }
             catch (err) {
                 yield (conexion === null || conexion === void 0 ? void 0 : conexion.rollback());
                 console.log(err);
                 throw "Error de consulta";
+            }
+        });
+    }
+    actulizarTercerPaso(idAreaPsiquica, idDieta) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const objConexion = yield __1.mysqlConnexion;
+            const queryAreaPsique = `UPDATE AREAS_PSIQUICAS SET
+    control_equipo_salud_mental = ?, psicoterapia  = ?,
+    evaluacion_psiquica= ?,  diagnostico_psiquiatrico = ?, utilizacion_farmaco = ?, detalles_farmacos = ? WHERE id_area_psiquica = ?`;
+            const queryHabitos = `UPDATE HABITOS_ALIMENTICIOS SET detalle_habito_alimenticio = ? WHERE id_habito_alimenticio = ?`;
+            try {
+                yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryAreaPsique, [
+                    this.controlEquipoSaludMental,
+                    this.psicoterapia,
+                    this.evaluacionPsiquica,
+                    this.diagnosticoPsiquiatrico,
+                    this.utilizacionFarmaco,
+                    this.detallesFarmacos,
+                    idAreaPsiquica
+                ]));
+                yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryHabitos, [this.dieta, idDieta]));
+                return "Los datos han sido actualizados: tercer paso";
+            }
+            catch (err) {
+                throw new Error(err);
             }
         });
     }

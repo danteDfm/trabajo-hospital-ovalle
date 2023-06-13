@@ -8,25 +8,21 @@ export class MainController{
     static async estadisticas(req:Request, res:Response){
 
         const gen = ["masculino", "femenino", "genero fluido", "agenero", "biogenero"];
-      
+        let ingresosDia 
         let generos:Array<number> = [];
         let totalPacientes:number = 0;
         let long = gen.length;
 
-        const ingresosDia = await estadisticasFicha.ingresosDelDia();
+       ingresosDia = await estadisticasFicha.ingresosDelDia();
        totalPacientes =  await estadisticasFicha.TotalPacientes();
        for(let i=0; i<long; i++){
            generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
        }
-
-      
        
          res.status(201).json({
-
             generos,
             totalPacientes,
             ingresosDia
-
          });
 
     }

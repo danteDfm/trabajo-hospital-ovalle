@@ -8,8 +8,7 @@ export class UsuarioController {
     try {
       let existenciaUser: boolean;
       let contrasenaHasheada: string;
-      const {
-
+      let  {
         rutProfesional,
         nombreProfesional,
         cargoProfesional,
@@ -20,7 +19,9 @@ export class UsuarioController {
       } = req.body;
 
       
-       existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
+        
+   
+        existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
       if (existenciaUser) throw "Usuario ya existe en la base de datos";
 
       contrasenaHasheada = await hashContrasena(contrasenaProfesional);
@@ -37,6 +38,8 @@ export class UsuarioController {
       const msjCrearUser = await objUsuario.ingresarUsuario();
       res.status(201).json(msjCrearUser);
     } catch (err) {
+
+      console.log(err);
       res.status(500).json({
         err,
         msj: "Error interno del servidor",

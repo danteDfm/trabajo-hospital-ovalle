@@ -44,8 +44,7 @@ export class FormularioCuartoPaso
     );
 
     this.antecedentePerinatales = antecedentes.antecedentePerinatales;
-    this.antecedenteHospitalizaciones =
-      antecedentes.antecedenteHospitalizaciones;
+    this.antecedenteHospitalizaciones = antecedentes.antecedenteHospitalizaciones;
     this.antecedentesQuirurgicos = antecedentes.antecedentesQuirurgicos;
     this.antecedentesAlergicos = antecedentes.antecedentesAlergicos;
     this.antecedentesPni = antecedentes.antecedentesPni;
@@ -74,5 +73,39 @@ export class FormularioCuartoPaso
       console.log(err);
       throw "Error al ejecutar la consulta";
     }
+  }
+  
+  async actualizarCuartoPaso(idAntecedentes:number){
+
+    const conexion = await mysqlConnexion;
+    const query:string = `UPDATE HISTORIAS_CLINICAS
+    SET  detalles_antecedente_perinatales = ?, detalles_antecedentes_hospitalizaciones  = ?,
+    detalles_antecedentes_quirurgicos =?, detalles_antecedentes_alergicos = ?, detalles_antecedentes_pni =  ?, detalles_funcionalidad_genita = ? WHERE id_historia_clinica = ? `;
+
+
+    try{
+
+
+      await conexion?.query(query, [
+
+        this.antecedentePerinatales, 
+        this.antecedenteHospitalizaciones, 
+        this.antecedentesQuirurgicos, 
+        this.antecedentesAlergicos, 
+        this.antecedentesPni, 
+        this.funcionalidadGenital,
+        idAntecedentes
+
+      ]);
+
+      return "Los datos han sido actualizados: cuarto paso";
+
+    }catch(err:any){
+
+
+      throw new Error(err);
+
+    }
+
   }
 }

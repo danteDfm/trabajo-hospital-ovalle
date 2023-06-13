@@ -16,8 +16,7 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
     constructor(antecedentes, areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas) {
         super(areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas);
         this.antecedentePerinatales = antecedentes.antecedentePerinatales;
-        this.antecedenteHospitalizaciones =
-            antecedentes.antecedenteHospitalizaciones;
+        this.antecedenteHospitalizaciones = antecedentes.antecedenteHospitalizaciones;
         this.antecedentesQuirurgicos = antecedentes.antecedentesQuirurgicos;
         this.antecedentesAlergicos = antecedentes.antecedentesAlergicos;
         this.antecedentesPni = antecedentes.antecedentesPni;
@@ -44,6 +43,29 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
             catch (err) {
                 console.log(err);
                 throw "Error al ejecutar la consulta";
+            }
+        });
+    }
+    actualizarCuartoPaso(idAntecedentes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const conexion = yield __1.mysqlConnexion;
+            const query = `UPDATE HISTORIAS_CLINICAS
+    SET  detalles_antecedente_perinatales = ?, detalles_antecedentes_hospitalizaciones  = ?,
+    detalles_antecedentes_quirurgicos =?, detalles_antecedentes_alergicos = ?, detalles_antecedentes_pni =  ?, detalles_funcionalidad_genita = ? WHERE id_historia_clinica = ? `;
+            try {
+                yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query, [
+                    this.antecedentePerinatales,
+                    this.antecedenteHospitalizaciones,
+                    this.antecedentesQuirurgicos,
+                    this.antecedentesAlergicos,
+                    this.antecedentesPni,
+                    this.funcionalidadGenital,
+                    idAntecedentes
+                ]));
+                return "Los datos han sido actualizados: cuarto paso";
+            }
+            catch (err) {
+                throw new Error(err);
             }
         });
     }

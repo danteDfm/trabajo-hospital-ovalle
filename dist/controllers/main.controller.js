@@ -16,10 +16,11 @@ class MainController {
     static estadisticas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const gen = ["masculino", "femenino", "genero fluido", "agenero", "biogenero"];
+            let ingresosDia;
             let generos = [];
             let totalPacientes = 0;
             let long = gen.length;
-            const ingresosDia = yield estadisticasFicha.ingresosDelDia();
+            ingresosDia = yield estadisticasFicha.ingresosDelDia();
             totalPacientes = yield estadisticasFicha.TotalPacientes();
             for (let i = 0; i < long; i++) {
                 generos.push(yield estadisticasFicha.cantidadGeneros(gen[i]));

@@ -18,7 +18,7 @@ class ConexionDatabase {
       const objSql =await mysql.createConnection({
 
         host: "localhost",
-        database: "proyecto_transicion",
+        database: "TRANSICION_GENERO",
         user: "root",
         password: "dante569",
 

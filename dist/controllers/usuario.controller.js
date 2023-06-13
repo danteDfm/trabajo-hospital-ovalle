@@ -19,7 +19,7 @@ class UsuarioController {
             try {
                 let existenciaUser;
                 let contrasenaHasheada;
-                const { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
+                let { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
                 existenciaUser = yield objUsuario.exitenciaUsuario(rutProfesional);
                 if (existenciaUser)
                     throw "Usuario ya existe en la base de datos";
@@ -35,6 +35,7 @@ class UsuarioController {
                 res.status(201).json(msjCrearUser);
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({
                     err,
                     msj: "Error interno del servidor",

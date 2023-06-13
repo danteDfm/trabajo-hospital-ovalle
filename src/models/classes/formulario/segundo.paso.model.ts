@@ -14,13 +14,14 @@ export class FormularioSegundoPaso
 {
   public identidadGenero: string | null;
   public orientacionSexual: string | null;
+  public autopercepcion: number | null;
   public inicioTransicioSexual: Date | null;
   public tiempoLatencia: Date | null;
   public apoyoFamiliar: boolean | null;
   public usoPrenda: boolean | null;
   public presenciaDisforia: boolean | null;
   public detallesDiforia: string | null;
-  public autoPercepcion: number | null;
+
 
   public tipoPrenda:(number)[]| null;
 
@@ -36,13 +37,14 @@ export class FormularioSegundoPaso
    
     (this.identidadGenero = genero.identidadGenero || null),
       (this.orientacionSexual = genero.orientacionSexual || null),
+      this.autopercepcion = genero.autopercepcion|| null;
       (this.inicioTransicioSexual = genero.inicioTransicioSexual || null),
       (this.tiempoLatencia = genero.tiempoLatencia || null),
       (this.apoyoFamiliar = genero.apoyoFamiliar || null),
       (this.usoPrenda = genero.usoPrenda || null),
       (this.presenciaDisforia = genero.presenciaDisforia || null),
       (this.detallesDiforia = genero.detallesDiforia || null);
-      this.autoPercepcion = genero.autoPercepcion || null
+    
 
       this.tipoPrenda = prendas || null;
 
@@ -53,8 +55,7 @@ export class FormularioSegundoPaso
   async crearSegundoPaso(idPaciente: number){
 
     const conexion = await mysqlConnexion;
-    const query: string =
-      "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES (NULL, ?,?,?,?,?,?,?,?,?, ?)";
+    const query: string =  "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES (NULL, ?,?,?,?,?,?,?,?,?, ?)";
     const query1: string = "INSERT INTO SELECCION_PRENDA VALUES (null, ?,?)";
 
     try {
@@ -64,6 +65,7 @@ export class FormularioSegundoPaso
       const [setHeaderHgenero]: any = await conexion?.query(query, [
         this.identidadGenero,
         this.orientacionSexual,
+        this.autopercepcion,
         this.inicioTransicioSexual,
         this.tiempoLatencia,
         this.apoyoFamiliar,
@@ -71,7 +73,7 @@ export class FormularioSegundoPaso
         this.presenciaDisforia,
         this.detallesDiforia,
         idPaciente,
-        this.autoPercepcion
+       
       ]);
 
       const idHgenero = (setHeaderHgenero as OkPacket).insertId;
@@ -94,4 +96,40 @@ export class FormularioSegundoPaso
       };
     }
   }
+  async actualizarSegundoPaso(idHistoria:number, idPrenda:number){
+    const objConexion = await mysqlConnexion;
+    const queryHistoria = `UPDATE HISTORIAS_IDENTIDADES_GENEROS
+    SET identidad_genero  = ?, orientacion_sexual= ?, autopercepcion = ? ,tiempo_latencia  = ?,apoyo_nucleo_familiar= ?, uso_prenda  = ?, presencia_disforia = ?, detalles_diforia = ? WHERE id_historia_identidad_genero = ?`;
+
+    const queryPrenda = `UPDATE SELECCION_PRENDA SET fk_prenda_disconformidad  =  ? WHERE id_prenda_n_n = ?`;
+
+    try{
+
+      await objConexion?.query(queryHistoria,[
+        this.identidadGenero, 
+        this.orientacionSexual, 
+        this.autopercepcion,
+        this.tiempoLatencia, 
+        this.apoyoFamiliar, 
+        this.usoPrenda, 
+        this.presenciaDisforia, 
+        this.detallesDiforia, 
+        idHistoria
+      ]);
+  
+      this.tipoPrenda?.map(async (prendas) =>{
+        await objConexion?.query(queryPrenda, [prendas, idPrenda]);
+      });
+      
+    
+        return "Los datos han sido actualizados: segundo paso";
+
+    }catch(err:any){
+      throw new Error(err);
+    }
+
+  }
 }
+
+
+
