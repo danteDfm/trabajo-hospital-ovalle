@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FichasController = void 0;
 const fichas_model_1 = require("../models/classes/fichas.model");
-const objFicha = new fichas_model_1.Fichas;
+const objFicha = new fichas_model_1.Fichas();
 class FichasController {
     static fichaActiva(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -19,13 +19,13 @@ class FichasController {
             try {
                 const fichaActiva = yield objFicha.listarFichaActiva(parseInt(idFicha));
                 return res.status(201).json({
-                    fichaActiva
+                    fichaActiva,
                 });
             }
             catch (err) {
                 return res.status(500).json({
                     err,
-                    msj: "Error interno del servidor"
+                    msj: "Error interno del servidor",
                 });
             }
         });
@@ -40,7 +40,7 @@ class FichasController {
             catch (err) {
                 res.status(500).json({
                     err,
-                    msj: "Error interno del servidor"
+                    msj: "Error interno del servidor",
                 });
             }
         });

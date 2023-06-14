@@ -27,7 +27,6 @@ class EntidadPaciente {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let idPaciente;
-                let pacienteFormateada;
                 const consulta = "SELECT id_paciente FROM PACIENTES WHERE rut_paciente = ?";
                 const creacion = "INSERT INTO PACIENTES VALUES (NULL, ?,?,?,?,?,?,?,?,?)";
                 const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(consulta, [

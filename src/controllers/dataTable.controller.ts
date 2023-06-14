@@ -10,6 +10,7 @@ export class TablaController {
 
       return res.status(200).json(dataPaciente);
     } catch (err: any) {
+     
       return res.status(500).json({
         err,
         msj: "Error interno del servidor",

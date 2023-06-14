@@ -110,7 +110,6 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
    try{ 
 
     const objConexion = await mysqlConnexion;
-    
     await objConexion?.query(query, [
       this.involucrado.nombreInvolucrado,
       this.involucrado.apellidoPInvolucrado,

@@ -27,11 +27,11 @@ export class EntidadPaciente implements Pacientes {
     this.telefonoPaciente = fichas.telefonoPaciente || null;
   }
 
-  async crearPaciente(): Promise<number> {
+  async crearPaciente(): Promise<number>{
+
     try {
       let idPaciente: number;
-      let pacienteFormateada;
-
+  
       const consulta: string =
         "SELECT id_paciente FROM PACIENTES WHERE rut_paciente = ?";
       const creacion: string =
@@ -84,11 +84,10 @@ export class EntidadPaciente implements Pacientes {
       };
     }
   }
-  async crearFicha(
-    query: string,
-    datos: (string | number | Date | null | undefined)[]
-  ) {
+
+  async crearFicha(query: string, datos: (string | number | Date | null | undefined)[]){
     try {
+
       const data: any = await consultasGenerales(query, datos);
       const idFicha = (data as OkPacket).insertId;
       return "La operacion fue llevada con exito";
@@ -96,6 +95,9 @@ export class EntidadPaciente implements Pacientes {
       throw "Error en crear la ficha tecnica";
     }
   }
+
+
+
   async actulizarPaciente(idPaciente: number) {
     try {
 

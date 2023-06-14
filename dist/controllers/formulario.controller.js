@@ -15,8 +15,8 @@ const espesificarFecha_1 = require("../utils/espesificarFecha");
 const segundo_paso_model_1 = require("../models/classes/formulario/segundo.paso.model");
 const tercer_paso_model_1 = require("../models/classes/formulario/tercer.paso.model");
 const cuarto_paso_model_1 = require("../models/classes/formulario/cuarto.paso.model");
-const dicQuery_1 = require("../consultas/dicQuery");
 const fichas_model_1 = require("../models/classes/fichas.model");
+const dicQuery_1 = require("../consultas/dicQuery");
 const objFichas = new fichas_model_1.Fichas();
 class FormularioController {
     static buscarFichaPaciente(req, res) {
@@ -34,24 +34,48 @@ class FormularioController {
             }
         });
     }
+    //este endpoint se ejecuta solo si crear o actualiza en el primer paso;
     static primerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { idUsuario, idFicha } = req.params;
+            const { idPacienteFront, idInvolucrado, idAcompanante } = req.query;
+            const { paciente, involucrado, acompanante } = req.body;
+            let idpasFront = parseInt(idPacienteFront);
+            let idInvolFront = parseInt(idInvolucrado);
+            let idAcomFront = parseInt(idAcompanante);
             try {
-                const { idUsuario, idFicha } = req.params;
-                const { paciente, involucrado, acompanante, fichas } = req.body;
-                fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
+                let fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
+                let estado = 1;
+                let nivel = 1;
                 const fichaTipada = paciente;
                 const primerPasoTipado = {
                     involucrado,
                     acompanante,
                 };
                 let objPrimerPaso = new primer_paso_model_1.FormularioPrimerPaso(primerPasoTipado, fichaTipada);
-                //si existe id de ficha  se  actualiza 
-                if (idFicha) {
+                if (idPacienteFront && idInvolucrado && idAcompanante) {
+                    objPrimerPaso.actulizarPaciente(idpasFront);
+                    objPrimerPaso.actualizarprimerPaso(idInvolFront, idAcomFront);
+                    objPrimerPaso.crearFicha(dicQuery_1.diccCrearFicha.insertPaso1, [
+                        fechaIngreso,
+                        estado,
+                        nivel,
+                        idpasFront,
+                        idInvolFront,
+                        idAcomFront
+                    ]);
                 }
+                const idPrimerPaso = yield objPrimerPaso.guardarPrimerPaso();
                 objPrimerPaso.comprobarVariables();
-                console.log(fichaTipada);
-                console.log(primerPasoTipado);
+                const idPaciente = yield objPrimerPaso.crearPaciente();
+                objPrimerPaso.crearFicha(dicQuery_1.diccCrearFicha.insertPaso1, [
+                    fechaIngreso,
+                    estado,
+                    nivel,
+                    idPaciente,
+                    idPrimerPaso.idInvolucrado,
+                    idPrimerPaso.idAcompanante,
+                ]);
                 return res.status(200).json("hola mundo");
             }
             catch (error) {
@@ -85,7 +109,7 @@ class FormularioController {
                         const idDbs = yield objSegundoPaso.crearPaciente();
                         idsPrimero = yield objSegundoPaso.guardarPrimerPaso();
                         yield objSegundoPaso.crearSegundoPaso(idDbs);
-                        const msj = yield objSegundoPaso.crearFicha(dicQuery_1.diccSegundoPaso.case1, [
+                        const msj = yield objSegundoPaso.crearFicha("diccSegundoPaso.case1", [
                             fichas.fechaIngreso,
                             fichas.estadoFicha,
                             fichas.borradoLogico,
@@ -98,7 +122,7 @@ class FormularioController {
                         return res.status(200).send(msj);
                     case "caso2":
                         objSegundoPaso.crearSegundoPaso(parseInt(idPaciente));
-                        const msj2 = yield objSegundoPaso.crearFicha(dicQuery_1.diccSegundoPaso.case2, [
+                        const msj2 = yield objSegundoPaso.crearFicha("", [
                             fichas.fechaIngreso,
                             fichas.nivel,
                             idFicha,
@@ -141,7 +165,7 @@ class FormularioController {
                         const idprimer = yield objTercer.guardarPrimerPaso();
                         yield objTercer.crearSegundoPaso(idPacient);
                         const idTercer = yield objTercer.crearTercerPaso(idPacient);
-                        const msj1 = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case1, [
+                        const msj1 = yield objTercer.crearFicha("diccTercerPaso.case1", [
                             fichas.fechaIngreso,
                             fichas.borradoLogico,
                             fichas.estadoFicha,
@@ -159,7 +183,7 @@ class FormularioController {
                         console.log("segundo caso");
                         objTercer.crearSegundoPaso(parseInt(idPaciente));
                         const idTercerPaso2 = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                        const msj2 = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case2, [
+                        const msj2 = yield objTercer.crearFicha("diccTercerPaso.case2", [
                             fichas.fechaIngreso,
                             fichas.nivel,
                             fichas.apoyoEscolar,
@@ -170,7 +194,7 @@ class FormularioController {
                         return res.status(201).json(msj2);
                     case "caso3":
                         const idTercerPaso = yield objTercer.crearTercerPaso(parseInt(idPaciente));
-                        const msj = yield objTercer.crearFicha(dicQuery_1.diccTercerPaso.case3, [
+                        const msj = yield objTercer.crearFicha("diccTercerPaso.case3", [
                             fichas.fechaIngreso,
                             fichas.nivel,
                             fichas.apoyoEscolar,
@@ -213,7 +237,7 @@ class FormularioController {
                             yield objCuarto.crearSegundoPaso(idsPaciente);
                             const idsTercerPaso = yield objCuarto.crearTercerPaso(idsPaciente);
                             const idsCuartoPaso = yield objCuarto.crearCuartoPaso();
-                            const msj4 = yield objCuarto.crearFicha(dicQuery_1.diccCuartoPaso.crearPrimerPaso, [
+                            const msj4 = yield objCuarto.crearFicha("diccCuartoPaso.crearPrimerPaso", [
                                 fichas.fechaIngreso,
                                 fichas.estadoFicha,
                                 fichas.nivel,

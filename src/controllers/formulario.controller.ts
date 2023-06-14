@@ -13,20 +13,18 @@ import { fechaExacta } from "../utils/espesificarFecha";
 import { FormularioSegundoPaso } from "../models/classes/formulario/segundo.paso.model";
 import { FormularioTercerPaso } from "../models/classes/formulario/tercer.paso.model";
 import { FormularioCuartoPaso } from "../models/classes/formulario/cuarto.paso.model";
-import {
-  diccCuartoPaso,
-  diccSegundoPaso,
-  diccTercerPaso,
-  primerPaso,
-} from "../consultas/dicQuery";
+
 import { EntidadPaciente } from "../models/classes/Pacientes";
 import { Fichas } from "../models/classes/fichas.model";
+import { diccCrearFicha } from "../consultas/dicQuery";
 
 const objFichas = new Fichas();
 
 export class FormularioController {
+
   static async buscarFichaPaciente(req: Request, res: Response) {
     try {
+      
       const { rutPaciente } = req.params;
       const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
 
@@ -39,15 +37,23 @@ export class FormularioController {
     }
   }
 
+  //este endpoint se ejecuta solo si crear o actualiza en el primer paso;
 
   static async primerPasoController(req: Request, res: Response) {
+    const { idUsuario, idFicha } = req.params;
+    const { idPacienteFront, idInvolucrado, idAcompanante } = req.query;
+    const { paciente, involucrado, acompanante } = req.body;
+
+
+    let idpasFront = parseInt(idPacienteFront as string);
+    let idInvolFront = parseInt(idInvolucrado as string);
+    let idAcomFront = parseInt(idAcompanante as string);
+
     try {
-      const { idUsuario, idFicha } = req.params;
+      let fechaIngreso = fechaExacta();
+      let estado = 1;
+      let nivel = 1;
 
-
-      const { paciente, involucrado, acompanante, fichas } = req.body;
-
-      fichas.fechaIngreso = fechaExacta();
       const fichaTipada: Pacientes = paciente;
 
       const primerPasoTipado: PrimerPaso = {
@@ -60,33 +66,52 @@ export class FormularioController {
         fichaTipada
       );
 
+      if (idPacienteFront && idInvolucrado && idAcompanante){
 
-        //si existe id de ficha  se  actualiza 
-        if(idFicha){
+        objPrimerPaso.actulizarPaciente(idpasFront);
 
-        } 
+        objPrimerPaso.actualizarprimerPaso(
+          idInvolFront,
+          idAcomFront
+        );
 
-        objPrimerPaso.comprobarVariables();
-   
-        console.log(fichaTipada);
-        console.log(primerPasoTipado);
+
+        objPrimerPaso.crearFicha(diccCrearFicha.insertPaso1, [
+          fechaIngreso,
+          estado,
+          nivel,
+          idpasFront, 
+          idInvolFront, 
+          idAcomFront
+         
+        ]);
+
+
+      }
+
+      const idPrimerPaso = await objPrimerPaso.guardarPrimerPaso();
+      objPrimerPaso.comprobarVariables();
+      const idPaciente = await objPrimerPaso.crearPaciente();
+
+      objPrimerPaso.crearFicha(diccCrearFicha.insertPaso1, [
+        fechaIngreso,
+        estado,
+        nivel,
+        idPaciente,
+        idPrimerPaso.idInvolucrado,
+        idPrimerPaso.idAcompanante,
+      ]);
 
       return res.status(200).json("hola mundo");
-
     } catch (error: any) {
       console.log(error);
       if (error.code == 100) {
         return res.status(400).json(error.msj);
       }
+
       return res.status(500).json("Error interno del servidor");
     }
   }
-
-
-
-
-
-
 
   static async segundoPasoController(req: Request, res: Response) {
     try {
@@ -124,7 +149,7 @@ export class FormularioController {
           idsPrimero = await objSegundoPaso.guardarPrimerPaso();
           await objSegundoPaso.crearSegundoPaso(idDbs);
 
-          const msj = await objSegundoPaso.crearFicha(diccSegundoPaso.case1, [
+          const msj = await objSegundoPaso.crearFicha("diccSegundoPaso.case1", [
             fichas.fechaIngreso,
             fichas.estadoFicha,
             fichas.borradoLogico,
@@ -140,7 +165,7 @@ export class FormularioController {
         case "caso2":
           objSegundoPaso.crearSegundoPaso(parseInt(idPaciente as string));
 
-          const msj2 = await objSegundoPaso.crearFicha(diccSegundoPaso.case2, [
+          const msj2 = await objSegundoPaso.crearFicha("", [
             fichas.fechaIngreso,
             fichas.nivel,
             idFicha,
@@ -210,7 +235,7 @@ export class FormularioController {
           const idprimer = await objTercer.guardarPrimerPaso();
           await objTercer.crearSegundoPaso(idPacient);
           const idTercer = await objTercer.crearTercerPaso(idPacient);
-          const msj1 = await objTercer.crearFicha(diccTercerPaso.case1, [
+          const msj1 = await objTercer.crearFicha("diccTercerPaso.case1", [
             fichas.fechaIngreso,
             fichas.borradoLogico,
             fichas.estadoFicha,
@@ -234,7 +259,7 @@ export class FormularioController {
             parseInt(idPaciente as string)
           );
 
-          const msj2 = await objTercer.crearFicha(diccTercerPaso.case2, [
+          const msj2 = await objTercer.crearFicha("diccTercerPaso.case2", [
             fichas.fechaIngreso,
             fichas.nivel,
             fichas.apoyoEscolar,
@@ -250,7 +275,7 @@ export class FormularioController {
             parseInt(idPaciente as string)
           );
 
-          const msj = await objTercer.crearFicha(diccTercerPaso.case3, [
+          const msj = await objTercer.crearFicha("diccTercerPaso.case3", [
             fichas.fechaIngreso,
             fichas.nivel,
             fichas.apoyoEscolar,
@@ -323,7 +348,7 @@ export class FormularioController {
             const idsCuartoPaso = await objCuarto.crearCuartoPaso();
 
             const msj4 = await objCuarto.crearFicha(
-              diccCuartoPaso.crearPrimerPaso,
+              "diccCuartoPaso.crearPrimerPaso",
               [
                 fichas.fechaIngreso,
                 fichas.estadoFicha,
