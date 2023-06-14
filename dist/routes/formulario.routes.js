@@ -4,6 +4,7 @@ const express_1 = require("express");
 const router = (0, express_1.Router)();
 const formulario_controller_1 = require("../controllers/formulario.controller");
 const extraccionId_1 = require("../middlewares/extraccionId");
+router.get('/listarPorRut/:rutPaciente', formulario_controller_1.FormularioController.buscarFichaPaciente);
 router.post('/paso1/:pasoDinamico/:idUsuario', formulario_controller_1.FormularioController.primerPasoController);
 router.post('/paso2/:pasoDinamico/:idUsuario', formulario_controller_1.FormularioController.segundoPasoController);
 router.post('/paso3/:pasoDinamico/:idUsuario', formulario_controller_1.FormularioController.tercerPasoController);

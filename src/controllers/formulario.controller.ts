@@ -20,11 +20,31 @@ import {
   primerPaso,
 } from "../consultas/dicQuery";
 import { EntidadPaciente } from "../models/classes/Pacientes";
+import { Fichas } from "../models/classes/fichas.model";
+
+const objFichas = new Fichas();
 
 export class FormularioController {
+  static async buscarFichaPaciente(req: Request, res: Response) {
+    try {
+      const { rutPaciente } = req.params;
+      const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
+
+      res.status(400).json(dataFicha);
+    } catch (err) {
+      res.status(400).json({
+        err,
+        msj: "Error interno del servidor",
+      });
+    }
+  }
+
+
   static async primerPasoController(req: Request, res: Response) {
     try {
-      const { idUsuario } = req.params;
+      const { idUsuario, idFicha } = req.params;
+
+
       const { paciente, involucrado, acompanante, fichas } = req.body;
 
       fichas.fechaIngreso = fechaExacta();
@@ -40,23 +60,19 @@ export class FormularioController {
         fichaTipada
       );
 
-      objPrimerPaso.comprobarVariables();
 
-      const idPrimerPaso = await objPrimerPaso.guardarPrimerPaso();
+        //si existe id de ficha  se  actualiza 
+        if(idFicha){
 
-      const idPaciente = await objPrimerPaso.crearPaciente();
-      const ficha: any = await objPrimerPaso.crearFicha(primerPaso, [
-        fichas.fechaIngreso,
-        fichas.estadoFicha,
-        fichas.borradoLogico,
-        fichas.nivel,
-        idPaciente,
-        idUsuario,
-        idPrimerPaso.idInvolucrado,
-        idPrimerPaso.idAcompanante,
-      ]);
+        } 
 
-      return res.status(200).json(ficha);
+        objPrimerPaso.comprobarVariables();
+   
+        console.log(fichaTipada);
+        console.log(primerPasoTipado);
+
+      return res.status(200).json("hola mundo");
+
     } catch (error: any) {
       console.log(error);
       if (error.code == 100) {
@@ -65,6 +81,12 @@ export class FormularioController {
       return res.status(500).json("Error interno del servidor");
     }
   }
+
+
+
+
+
+
 
   static async segundoPasoController(req: Request, res: Response) {
     try {
@@ -264,7 +286,6 @@ export class FormularioController {
     } = req.body;
 
     fichas.fechaIngreso = fechaExacta();
-
 
     const historiaGeneroTipada: HistoriaGenero = genero;
     const areaPsiquicaTipada: AreaPsiquica = areaPsiquica;

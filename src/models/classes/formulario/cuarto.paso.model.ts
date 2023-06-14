@@ -54,7 +54,7 @@ export class FormularioCuartoPaso
 
   async crearCuartoPaso() {
     const conexion = await mysqlConnexion;
-    const query: string = `INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?,?)`;
+    const query: string = `INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?,?)`; 
 
     try {
       const [setHeaderAntecedente]: any = await conexion?.query(query, [
@@ -108,4 +108,6 @@ export class FormularioCuartoPaso
     }
 
   }
+
+
 }

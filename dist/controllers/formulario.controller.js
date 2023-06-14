@@ -16,11 +16,28 @@ const segundo_paso_model_1 = require("../models/classes/formulario/segundo.paso.
 const tercer_paso_model_1 = require("../models/classes/formulario/tercer.paso.model");
 const cuarto_paso_model_1 = require("../models/classes/formulario/cuarto.paso.model");
 const dicQuery_1 = require("../consultas/dicQuery");
+const fichas_model_1 = require("../models/classes/fichas.model");
+const objFichas = new fichas_model_1.Fichas();
 class FormularioController {
+    static buscarFichaPaciente(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { rutPaciente } = req.params;
+                const dataFicha = yield objFichas.listarInformacionPaciente(rutPaciente);
+                res.status(400).json(dataFicha);
+            }
+            catch (err) {
+                res.status(400).json({
+                    err,
+                    msj: "Error interno del servidor",
+                });
+            }
+        });
+    }
     static primerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idUsuario } = req.params;
+                const { idUsuario, idFicha } = req.params;
                 const { paciente, involucrado, acompanante, fichas } = req.body;
                 fichas.fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
                 const fichaTipada = paciente;
@@ -29,20 +46,13 @@ class FormularioController {
                     acompanante,
                 };
                 let objPrimerPaso = new primer_paso_model_1.FormularioPrimerPaso(primerPasoTipado, fichaTipada);
+                //si existe id de ficha  se  actualiza 
+                if (idFicha) {
+                }
                 objPrimerPaso.comprobarVariables();
-                const idPrimerPaso = yield objPrimerPaso.guardarPrimerPaso();
-                const idPaciente = yield objPrimerPaso.crearPaciente();
-                const ficha = yield objPrimerPaso.crearFicha(dicQuery_1.primerPaso, [
-                    fichas.fechaIngreso,
-                    fichas.estadoFicha,
-                    fichas.borradoLogico,
-                    fichas.nivel,
-                    idPaciente,
-                    idUsuario,
-                    idPrimerPaso.idInvolucrado,
-                    idPrimerPaso.idAcompanante,
-                ]);
-                return res.status(200).json(ficha);
+                console.log(fichaTipada);
+                console.log(primerPasoTipado);
+                return res.status(200).json("hola mundo");
             }
             catch (error) {
                 console.log(error);
