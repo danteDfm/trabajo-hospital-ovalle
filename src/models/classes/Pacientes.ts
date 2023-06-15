@@ -60,6 +60,7 @@ export class EntidadPaciente implements Pacientes {
       ]);
 
       idPaciente = (setHeaderPaciente as OkPacket).insertId;
+      
       return idPaciente;
     } catch (err) {
       console.log(err);

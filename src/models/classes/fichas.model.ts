@@ -55,6 +55,7 @@ export class Fichas{
     WHERE rut_paciente = ?)
     ORDER BY fecha_ingreso desc 
     `;
+
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
@@ -69,8 +70,8 @@ export class Fichas{
     where fk_paciente = ?)
     `;
     const queryIdentidad: string = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
-    WHERE fk_paciente = 5 and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
-    WHERE fk_paciente = 5)`;
+    WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
+    WHERE fk_paciente = ?)`;
     const queryPrenda: string = `select * from SELECCION_PRENDA where fk_historia_genero = ?`;
 
     let idPaciente: number;
@@ -136,6 +137,7 @@ export class Fichas{
         idPaciente,
         idPaciente,
       ]);
+      console.log(dataHistoria);
       idHistoria = dataHistoria[0].id_historia_identidad_genero;
 
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);

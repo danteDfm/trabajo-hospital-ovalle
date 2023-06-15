@@ -80,12 +80,16 @@ export class FormularioCuartoPaso
     const conexion = await mysqlConnexion;
     const query:string = `UPDATE HISTORIAS_CLINICAS
     SET  detalles_antecedente_perinatales = ?, detalles_antecedentes_hospitalizaciones  = ?,
-    detalles_antecedentes_quirurgicos =?, detalles_antecedentes_alergicos = ?, detalles_antecedentes_pni =  ?, detalles_funcionalidad_genita = ? WHERE id_historia_clinica = ? `;
+    detalles_antecedentes_quirurgicos =?,
+    detalles_antecedentes_alergicos = ?,
+    detalles_antecedentes_pni =  ?,
+    detalles_funcionalidad_genital = ?
+    WHERE id_historia_clinica = ? `;
 
 
     try{
 
-
+      console.log(idAntecedentes);
       await conexion?.query(query, [
 
         this.antecedentePerinatales, 

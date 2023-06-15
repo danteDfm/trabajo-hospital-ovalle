@@ -26,8 +26,10 @@ export class FormularioTercerPaso
 
   constructor(
     areaPsiquica: AreaPsiquica,
+    
     usoDroga: boolean | null,
     detallesDroga: string | null,
+
     dieta: string | null,
     genero: HistoriaGenero,
     primerPaso: PrimerPaso,
@@ -55,11 +57,15 @@ export class FormularioTercerPaso
     const conexion = await mysqlConnexion;
     const query: string =
       "INSERT INTO AREAS_PSIQUICAS VALUES (NULL, ?,?,?,?,?,?)";
+
     const query1: string =
       "INSERT INTO HABITOS_ALIMENTICIOS VALUES (NULL, ?,?)";
+
     const query3: string = "INSERT INTO HISTORIAL_DROGAS VALUES (NULL, ?,?,?)";
 
     try {
+
+
       await conexion?.beginTransaction();
       const [headDataPsico]: any = await conexion?.query(query, [
         this.controlEquipoSaludMental,

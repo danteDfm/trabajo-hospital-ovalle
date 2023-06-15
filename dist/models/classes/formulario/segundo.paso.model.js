@@ -63,8 +63,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
             }
         });
     }
-    actualizarSegundoPaso(idHistoria, idPrenda) {
-        var _a;
+    actualizarSegundoPaso(idHistoria) {
         return __awaiter(this, void 0, void 0, function* () {
             const objConexion = yield __1.mysqlConnexion;
             const queryHistoria = `UPDATE HISTORIAS_IDENTIDADES_GENEROS
@@ -82,9 +81,9 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
                     this.detallesDiforia,
                     idHistoria
                 ]));
-                (_a = this.tipoPrenda) === null || _a === void 0 ? void 0 : _a.map((prendas) => __awaiter(this, void 0, void 0, function* () {
-                    yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryPrenda, [prendas, idPrenda]));
-                }));
+                // this.tipoPrenda?.map(async (prendas) =>{
+                //   await objConexion?.query(queryPrenda, [prendas, idPrenda]);
+                // });
                 return "Los datos han sido actualizados: segundo paso";
             }
             catch (err) {

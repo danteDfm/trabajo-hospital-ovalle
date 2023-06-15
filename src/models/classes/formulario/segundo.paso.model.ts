@@ -96,7 +96,7 @@ export class FormularioSegundoPaso
       };
     }
   }
-  async actualizarSegundoPaso(idHistoria:number, idPrenda:number){
+  async actualizarSegundoPaso(idHistoria:number){
     const objConexion = await mysqlConnexion;
     const queryHistoria = `UPDATE HISTORIAS_IDENTIDADES_GENEROS
     SET identidad_genero  = ?, orientacion_sexual= ?, autopercepcion = ? ,tiempo_latencia  = ?,apoyo_nucleo_familiar= ?, uso_prenda  = ?, presencia_disforia = ?, detalles_diforia = ? WHERE id_historia_identidad_genero = ?`;
@@ -117,9 +117,11 @@ export class FormularioSegundoPaso
         idHistoria
       ]);
   
-      this.tipoPrenda?.map(async (prendas) =>{
-        await objConexion?.query(queryPrenda, [prendas, idPrenda]);
-      });
+      // this.tipoPrenda?.map(async (prendas) =>{
+
+      //   await objConexion?.query(queryPrenda, [prendas, idPrenda]);
+
+      // });
       
     
         return "Los datos han sido actualizados: segundo paso";

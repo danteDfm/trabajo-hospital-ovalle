@@ -11,7 +11,6 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
 
   //datos involucrados
   public involucrado: {
-
     rutInvolucrado: string | null;
     nombreInvolucrado: string | null;
     apellidoPInvolucrado: string | null;
@@ -101,16 +100,19 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
   }
 
   async actualizarprimerPaso(idPeronsaInvo:number, idPersonaAcom:number){
+
+     
     const query:string =  `UPDATE PERSONAS_INVOLUCRADAS_TRANSICION 
-    SET   nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
-    parentesco_persona_involucrada = ?, telefono_persona_involucrada = ?, 
-    domicilio_persona_involucrada  = ? WHERE id_profesional_salud = ?
+    SET nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
+    parentesco_persona_involucrada = ?,
+    telefono_persona_involucrada = ?, 
+    domicilio_persona_involucrada  = ?
+    WHERE id_persona_involucrada_transicion  = ?
     `;
     
    try{ 
 
-    const objConexion = await mysqlConnexion;
-    await objConexion?.query(query, [
+    await consultasGenerales(query, [
       this.involucrado.nombreInvolucrado,
       this.involucrado.apellidoPInvolucrado,
       this.involucrado.apellidoMInvolucrado,
@@ -120,8 +122,7 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
       idPeronsaInvo
     ]);
 
-    await objConexion?.query(query, [
-      this.acompanante.rutInvolucrado,
+    await consultasGenerales(query, [
       this.acompanante.nombreInvolucrado,
       this.acompanante.apellidoPInvolucrado,
       this.acompanante.apellidoMInvolucrado,

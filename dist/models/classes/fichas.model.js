@@ -81,8 +81,8 @@ class Fichas {
     where fk_paciente = ?)
     `;
             const queryIdentidad = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
-    WHERE fk_paciente = 5 and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
-    WHERE fk_paciente = 5)`;
+    WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
+    WHERE fk_paciente = ?)`;
             const queryPrenda = `select * from SELECCION_PRENDA where fk_historia_genero = ?`;
             let idPaciente;
             let idFichaTecnica;
@@ -137,6 +137,7 @@ class Fichas {
                     idPaciente,
                     idPaciente,
                 ]);
+                console.log(dataHistoria);
                 idHistoria = dataHistoria[0].id_historia_identidad_genero;
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
                 return {

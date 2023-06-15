@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioPrimerPaso = void 0;
 const __1 = require("../../..");
 const pacientes_1 = require("../pacientes");
+const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     constructor(primerPaso, fichaTecncica) {
         super(fichaTecncica);
@@ -66,13 +67,14 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     actualizarprimerPaso(idPeronsaInvo, idPersonaAcom) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `UPDATE PERSONAS_INVOLUCRADAS_TRANSICION 
-    SET   nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
-    parentesco_persona_involucrada = ?, telefono_persona_involucrada = ?, 
-    domicilio_persona_involucrada  = ? WHERE id_profesional_salud = ?
+    SET nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
+    parentesco_persona_involucrada = ?,
+    telefono_persona_involucrada = ?, 
+    domicilio_persona_involucrada  = ?
+    WHERE id_persona_involucrada_transicion  = ?
     `;
             try {
-                const objConexion = yield __1.mysqlConnexion;
-                yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(query, [
+                yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.involucrado.nombreInvolucrado,
                     this.involucrado.apellidoPInvolucrado,
                     this.involucrado.apellidoMInvolucrado,
@@ -80,9 +82,8 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                     this.involucrado.telefonoInvolucrado,
                     this.involucrado.domicilioInvolucrado,
                     idPeronsaInvo
-                ]));
-                yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(query, [
-                    this.acompanante.rutInvolucrado,
+                ]);
+                yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.acompanante.nombreInvolucrado,
                     this.acompanante.apellidoPInvolucrado,
                     this.acompanante.apellidoMInvolucrado,
@@ -90,7 +91,7 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                     this.acompanante.telefonoInvolucrado,
                     this.acompanante.domicilioInvolucrado,
                     idPersonaAcom
-                ]));
+                ]);
                 return "Los datos han sido actualizados: primer paso";
             }
             catch (err) {

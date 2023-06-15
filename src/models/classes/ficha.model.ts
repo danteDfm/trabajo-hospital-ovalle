@@ -1,7 +1,8 @@
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Ficha {
-  fechaIngreso?: string;
+  fechaIngreso: string;
+  estado:boolean;
   nivelFormulario?: number;
   apoyoEscolar?: boolean;
   judicializacion?: boolean;
@@ -15,7 +16,8 @@ export class Ficha {
   fkAcompanante?: number;
 
   constructor(
-    fechaIngreso?: string,  
+    fechaIngreso: string,  
+    estado:boolean,
     nivelFormulario?: number,
     apoyoEscolar?: boolean,
     judicializacion?: boolean,
@@ -29,7 +31,8 @@ export class Ficha {
     fkAcompanante?: number
   ) {
 
-    this.fechaIngreso = fechaIngreso;
+    this.fechaIngreso = fechaIngreso; 
+    this.estado = estado;
     this.nivelFormulario = nivelFormulario;
     this.apoyoEscolar = apoyoEscolar;
     this.judicializacion = judicializacion;
@@ -43,68 +46,10 @@ export class Ficha {
     this.fkAcompanante = fkAcompanante;
   }
 
-  constructo(
-    fechaIngreso?: string,
-    nivelFormulario?: number,
-    fkPaciente?: number,
-    fkUsuario?: number,
-    fkeEncargada?: number,
-    fkAcompanante?: number
-  ) {
-    this.fechaIngreso = fechaIngreso;
-    this.nivelFormulario = nivelFormulario;
-    this.fkPaciente = fkPaciente;
-    this.fkUsuario = fkUsuario;
-    this.fkeEncargada = fkeEncargada;
-    this.fkAcompanante = fkAcompanante;
-  }
-
-  async crearFicha() {
-    const query = `
-        insert into fichas_tecnicas
-        (fecha_ingreso,
-        nivelFormulario,
-        fk_paciente,
-        fk_profesional_usuario,
-        fk_persona_involucrada_encargada,
-        fk_persona_involucrada_acompanante)
-        VALUES (?,?,?,?,?,?)`;
-
-    try {
-      await consultasGenerales(query, [
-        this.fechaIngreso,
-        this.nivelFormulario,
-        this.fkPaciente,
-        this.fkUsuario,
-        this.fkeEncargada,
-        this.fkAcompanante,
-      ]);
-
-      return `Ficha ha sido creada correctamente`;
-    } catch (err: any) {
-      throw new Error(err);
-    }
-  }
-
-  async actualizarFicha(fechaIngreso: string, nivel: number, idFicha: number) {
-    const query: string = `UPDATE fichas_tecnicas 
-    SET fecha_ingreso = ?, nivelFormulario = ? 
-    WHERE  id_ficha_tecnica = ?
-    `;
-
-    try {
-      await consultasGenerales(query, [fechaIngreso, nivel, idFicha]);
-
-      return "La ficha ha sido actulizada con los nuevos datos correctamente";
-    } catch (err: any) {
-      throw new Error(err);
-    }
-  }
-
 
   
 
-  async crearFichaTecnica(estado:boolean){
+  async crearFichaTecnica(){
     const query: string = `INSERT INTO fichas_tecnicas(
         fecha_ingreso,
         estado_ficha,
@@ -126,7 +71,7 @@ export class Ficha {
       
       await consultasGenerales(query, [
         this.fechaIngreso,
-        estado,
+        this.estado,
         this.nivelFormulario,
         this.apoyoEscolar,
         this.judicializacion,
@@ -146,44 +91,37 @@ export class Ficha {
     }
   }
 
+ static async estatusFicha(rutPaciente:string){
 
+      const query:string = `select estado_ficha,
+      id_ficha_tecnica,
+      nivelFormulario, id_paciente
+      from fichas_tecnicas AS ft
+      left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+      WHERE rut_paciente  = ?  AND estado_ficha = 1`;
 
+      try{
 
-  async verificarEstado(rutPaciente: string) {
-    const query: string = `select estado_ficha, id_ficha_tecnica from fichas_tecnicas as ft
-    left join PACIENTES as pa on ft.fk_paciente = pa.id_paciente
-    where rut_paciente  = ?  AND estado_ficha = 1
-    `;
+        const estadoFicha=await consultasGenerales(query, [
+          rutPaciente
+        ]);
 
-    const queryUpdate = `update fichas_tecnicas set estado_ficha = 0,
-    nivelFormulario  = 0
-    where id_ficha_tecnica = ?`;
+        if(!estadoFicha){
 
-    let estado;
-    let idFicha;
-    let idPaciente;
+          return false;
 
-    console.log(idFicha);
+        };
 
-    try {
-      let estadioFicha = await consultasGenerales(query, [rutPaciente]);
+   
+        return true;
 
-      if (!estadioFicha[0]) return 0;
+      }catch(err:any){
 
-      estado = estadioFicha[0].estado_ficha;
-      idFicha = estadioFicha[0].id_ficha_tecnica;
-      idPaciente = estadioFicha[0].id_paciente;
+        throw new Error(err);
 
-      if (estado == 1) {
-        console.log(idFicha);
-        consultasGenerales(queryUpdate, [idFicha]);
-        return idPaciente;
       }
+        
 
-      return 0;
-    } catch (err: any) {
-      console.log(err);
-      throw new Error(err);
-    }
   }
+
 }

@@ -69,6 +69,8 @@ fk_paciente INT,
 foreign key (fk_paciente) references PACIENTES (id_paciente)
 );
 
+
+
 CREATE TABLE HABITOS_ALIMENTICIOS(
 id_habito_alimenticio INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 detalle_habito_alimenticio VARCHAR (255), 
@@ -134,7 +136,7 @@ create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
 fecha_ingreso DATETIME not NULL,
 fecha_finalizacion DATETIME, 
-estado_ficha BOOLEAN, 
+estado_ficha BOOLEAN default false, 
 nivelFormulario int not null, 
 apoyo_escolar BOOLEAN,
 judicializacion BOOLEAN,
@@ -142,7 +144,7 @@ detalles_apoyo_es VARCHAR (255),
 detalles_judicializacion VARCHAR(255),
 fk_paciente INT NOT NULL, 
 fk_profesional_usuario INT NOT NULL,
-fk_area_psiquica int,   
+fk_area_psiquica int,  
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
@@ -157,7 +159,3 @@ FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADA
 insert into CENTROS_SALUD values (NULL, "Antonio Tirado Lanas", "Coquimbo", "/pruebas");
 insert into PRENDAS_DISCONFORMIDAD values (null, "packing"), (null, "binder"), (null, "tucking");
 
-
-
-
-      

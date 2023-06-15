@@ -51,8 +51,13 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
             const conexion = yield __1.mysqlConnexion;
             const query = `UPDATE HISTORIAS_CLINICAS
     SET  detalles_antecedente_perinatales = ?, detalles_antecedentes_hospitalizaciones  = ?,
-    detalles_antecedentes_quirurgicos =?, detalles_antecedentes_alergicos = ?, detalles_antecedentes_pni =  ?, detalles_funcionalidad_genita = ? WHERE id_historia_clinica = ? `;
+    detalles_antecedentes_quirurgicos =?,
+    detalles_antecedentes_alergicos = ?,
+    detalles_antecedentes_pni =  ?,
+    detalles_funcionalidad_genital = ?
+    WHERE id_historia_clinica = ? `;
             try {
+                console.log(idAntecedentes);
                 yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query, [
                     this.antecedentePerinatales,
                     this.antecedenteHospitalizaciones,
