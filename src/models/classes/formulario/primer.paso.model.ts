@@ -2,7 +2,7 @@ import { mysqlConnexion } from "../../..";
 import { OkPacket } from "mysql2";
 import { PrimerPaso } from "../../interfaces/tipos.entidades";
 import { Pacientes } from "../../interfaces/tipos.entidades";
-import { EntidadPaciente } from "../Pacientes";
+import { EntidadPaciente } from "../pacientes";
 import { consultasGenerales } from "../../../consultas/consultasGenerales";
 
 export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso {

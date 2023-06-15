@@ -56,34 +56,6 @@ class EntidadPaciente {
             }
         });
     }
-    comprobarVariables() {
-        try {
-            if (!this.rutPaciente ||
-                !this.nombrePaciente ||
-                !this.fechaNacimientoPa) {
-                throw 100;
-            }
-        }
-        catch (err) {
-            throw {
-                code: err,
-                status: "failure",
-                msj: "Error, estas variables no pueden venir vacias, rutPaciente, nombrePaciente, fechaNacimiento",
-            };
-        }
-    }
-    crearFicha(query, datos) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const data = yield (0, consultasGenerales_1.consultasGenerales)(query, datos);
-                const idFicha = data.insertId;
-                return "La operacion fue llevada con exito";
-            }
-            catch (err) {
-                throw "Error en crear la ficha tecnica";
-            }
-        });
-    }
     actulizarPaciente(idPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

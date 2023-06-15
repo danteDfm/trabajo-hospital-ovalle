@@ -21,10 +21,8 @@ export async function buscarRut(
     next();
   } catch (err) {
     res.status(500).json({
-
       ok: false,
       err,
-      
     });
   }
 }

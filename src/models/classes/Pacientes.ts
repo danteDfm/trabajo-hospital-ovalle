@@ -30,10 +30,11 @@ export class EntidadPaciente implements Pacientes {
   async crearPaciente(): Promise<number>{
 
     try {
+      
       let idPaciente: number;
-  
       const consulta: string =
         "SELECT id_paciente FROM PACIENTES WHERE rut_paciente = ?";
+
       const creacion: string =
         "INSERT INTO PACIENTES VALUES (NULL, ?,?,?,?,?,?,?,?,?)";
 
@@ -64,35 +65,6 @@ export class EntidadPaciente implements Pacientes {
       console.log(err);
 
       throw "Error al ejecutar la consulta";
-    }
-  }
-
-  comprobarVariables() {
-    try {
-      if (
-        !this.rutPaciente ||
-        !this.nombrePaciente ||
-        !this.fechaNacimientoPa
-      ) {
-        throw 100;
-      }
-    } catch (err) {
-      throw {
-        code: err,
-        status: "failure",
-        msj: "Error, estas variables no pueden venir vacias, rutPaciente, nombrePaciente, fechaNacimiento",
-      };
-    }
-  }
-
-  async crearFicha(query: string, datos: (string | number | Date | null | undefined)[]){
-    try {
-
-      const data: any = await consultasGenerales(query, datos);
-      const idFicha = (data as OkPacket).insertId;
-      return "La operacion fue llevada con exito";
-    } catch (err) {
-      throw "Error en crear la ficha tecnica";
     }
   }
 

@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioPrimerPaso = void 0;
 const __1 = require("../../..");
-const Pacientes_1 = require("../Pacientes");
-class FormularioPrimerPaso extends Pacientes_1.EntidadPaciente {
+const pacientes_1 = require("../pacientes");
+class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     constructor(primerPaso, fichaTecncica) {
         super(fichaTecncica);
         //
