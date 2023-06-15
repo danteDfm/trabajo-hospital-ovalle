@@ -39,9 +39,10 @@ class FormularioController {
     static primerPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { idUsuario } = req.params;
-            const { paciente, involucrado, acompanante } = req.body;
+            const { paciente, involucrado, acompanante, ficha } = req.body;
             let idParsUsuario = parseInt(idUsuario);
             try {
+                //verifica en que nivel esta el paciente
                 let rutPaciente = paciente.rutPaciente;
                 yield objFicha.verificarEstado(rutPaciente);
                 let fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
@@ -62,20 +63,22 @@ class FormularioController {
                 console.log(error);
                 return res.status(500).json({
                     error,
-                    msj: "Error interno del servidro"
+                    msj: "Error interno del servidro",
                 });
             }
         });
     }
     static segundoPasoController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { genero, involucrado, acompanante, paciente, prendas } = req.body;
+            const { genero, involucrado, acompanante, paciente, prendas, ficha } = req.body;
             const { idUsuario } = req.params;
-            const { idPaciente, idFicha } = req.query;
-            let idsPrimero;
+            const { idFicha, idPaciente } = req.query;
             let fechaIngreso;
-            let estadoFicha = 1;
             let nivel = 2;
+            let idPrimero;
+            let idParsUsuario = parseInt(idUsuario);
+            let idParsFicha = parseInt(idFicha);
+            let idParsPaciente = parseInt(idPaciente);
             try {
                 fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
                 const historiaGeneroTipada = genero;
@@ -85,15 +88,20 @@ class FormularioController {
                 };
                 const fichaTipada = paciente;
                 const objSegundoPaso = new segundo_paso_model_1.FormularioSegundoPaso(historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
-                if (!paciente && !acompanante && !involucrado) {
-                    let idPacientePars = parseInt(idPaciente);
-                    objSegundoPaso.crearSegundoPaso(idPacientePars);
-                    return res.status(201).json();
+                if (idFicha && idParsPaciente > 0) {
+                    yield objSegundoPaso.crearSegundoPaso(idParsPaciente);
+                    objFicha.constructo(fechaIngreso, nivel);
+                    const msj = yield objFicha.actualizarFicha(fechaIngreso, nivel, idParsFicha);
+                    return res.status(200).send(msj);
                 }
-                const idsPaciente = yield objSegundoPaso.crearPaciente();
-                idsPrimero = yield objSegundoPaso.guardarPrimerPaso();
-                yield objSegundoPaso.crearSegundoPaso(1);
-                return res.status(200).send();
+                let rutPaciente = paciente.rutPaciente;
+                yield objFicha.verificarEstado(rutPaciente);
+                const idPaciente = yield objSegundoPaso.crearPaciente();
+                idPrimero = yield objSegundoPaso.guardarPrimerPaso();
+                yield objSegundoPaso.crearSegundoPaso(idPaciente);
+                objFicha.constructo(fechaIngreso, nivel, idPaciente, idParsUsuario, idPrimero.idInvolucrado, idPrimero.idAcompanante);
+                const msj = yield objFicha.crearFicha();
+                return res.status(200).send(msj);
             }
             catch (error) {
                 console.log(error);
@@ -166,6 +174,43 @@ class FormularioController {
             }
             catch (err) {
                 return res.status(500).json("Error interno del servidor");
+            }
+        });
+    }
+    static crearFichaTecnica(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { fichas, paciente, dieta, antecedentes, involucrado, acompanante, areaPsiquica, historialDrogas, genero, prendas, } = req.body;
+            const nivel = parseInt(req.query.nivel);
+            const idUsuario = parseInt(req.params.idUsuario);
+            let fechaIngreso;
+            let estado = true;
+            fechaIngreso = (0, espesificarFecha_1.fechaExacta)();
+            const historiaGeneroTipada = genero;
+            const areaPsiquicaTipada = areaPsiquica;
+            const antecedentesTipado = antecedentes;
+            const primerPasoTipado = {
+                involucrado,
+                acompanante,
+            };
+            const fichaTipada = paciente;
+            const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDroga, historialDrogas.detallesDroga, dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas);
+            console.log(fechaIngreso);
+            try {
+                const idPaciente = yield objCuarto.crearPaciente();
+                const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
+                objCuarto.crearSegundoPaso(idPaciente);
+                const idTecerPaso = yield objCuarto.crearTercerPaso(idPaciente);
+                const idCuartoPaso = yield objCuarto.crearCuartoPaso();
+                console.log(fichas);
+                const objFichas = new ficha_model_1.Ficha(fechaIngreso, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion, idPaciente, idUsuario, idTecerPaso.idAreaPsiquica, idCuartoPaso, idPrimerPaso.idInvolucrado, idPrimerPaso.idAcompanante);
+                const msj = yield objFichas.crearFichaTecnica(true);
+                res.status(201).json(msj);
+            }
+            catch (err) {
+                res.status(201).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
             }
         });
     }
