@@ -137,7 +137,7 @@ export class Fichas{
         idPaciente,
         idPaciente,
       ]);
-      console.log(dataHistoria);
+     
       idHistoria = dataHistoria[0].id_historia_identidad_genero;
 
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);

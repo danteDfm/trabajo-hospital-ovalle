@@ -89,7 +89,7 @@ export class FormularioCuartoPaso
 
     try{
 
-      console.log(idAntecedentes);
+  
       await conexion?.query(query, [
 
         this.antecedentePerinatales, 

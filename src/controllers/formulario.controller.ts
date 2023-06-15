@@ -84,7 +84,6 @@ export class FormularioController {
 
       const  verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
-
       //update en caso de existir el paciente
       if(verificacionFicha){  
 
@@ -92,7 +91,20 @@ export class FormularioController {
         objCuarto.actualizarSegundoPaso(genero.idGenero);
         objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
         objCuarto.actualizarCuartoPaso(antecedentes.idAntecedente);
-         return res.send("hola mundo");
+
+        const objFichas = new Ficha(
+          fechaIngreso,
+          estado,
+          nivel, 
+          fichas.apoyoEscolar,
+          fichas.judicializacion, 
+          fichas.detallesApoyo,
+          fichas.detallesJudicializacion
+        );
+
+        const msj =await objFichas.actulizarFicha(fichas.idFicha);
+
+         return res.status(201).json(msj);
 
       }
 

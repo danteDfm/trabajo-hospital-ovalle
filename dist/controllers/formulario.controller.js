@@ -56,7 +56,9 @@ class FormularioController {
                     objCuarto.actualizarSegundoPaso(genero.idGenero);
                     objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
                     objCuarto.actualizarCuartoPaso(antecedentes.idAntecedente);
-                    return res.send("hola mundo");
+                    const objFichas = new ficha_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion);
+                    const msj = yield objFichas.actulizarFicha(fichas.idFicha);
+                    return res.status(201).json(msj);
                 }
                 const idPaciente = yield objCuarto.crearPaciente();
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();

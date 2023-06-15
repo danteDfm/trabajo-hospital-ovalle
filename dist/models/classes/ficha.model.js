@@ -76,14 +76,41 @@ class Ficha {
       left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
       WHERE rut_paciente  = ?  AND estado_ficha = 1`;
             try {
-                const estadoFicha = yield (0, consultasGenerales_1.consultasGenerales)(query, [
-                    rutPaciente
-                ]);
-                if (!estadoFicha) {
+                const estadoFicha = yield (0, consultasGenerales_1.consultasGenerales)(query, [rutPaciente]);
+                if (!estadoFicha[0]) {
                     return false;
                 }
-                ;
                 return true;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+        });
+    }
+    actulizarFicha(idFicha) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+      UPDATE fichas_tecnicas SET 
+      fecha_ingreso=?,
+      nivelFormulario=?, 
+      apoyo_escolar=?,
+      judicializacion=?,
+      detalles_apoyo_es=?,
+      detalles_judicializacion=?
+      WHERE id_ficha_tecnica  = ?
+    `;
+            try {
+                console.log(idFicha);
+                yield (0, consultasGenerales_1.consultasGenerales)(query, [
+                    this.fechaIngreso,
+                    this.nivelFormulario,
+                    this.apoyoEscolar,
+                    this.judicializacion,
+                    this.detallesApoyo,
+                    this.detallesJudicializacion,
+                    idFicha
+                ]);
+                return 'La ficha ha sido actulizada';
             }
             catch (err) {
                 throw new Error(err);

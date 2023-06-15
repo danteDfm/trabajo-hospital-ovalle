@@ -57,7 +57,6 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
     detalles_funcionalidad_genital = ?
     WHERE id_historia_clinica = ? `;
             try {
-                console.log(idAntecedentes);
                 yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query, [
                     this.antecedentePerinatales,
                     this.antecedenteHospitalizaciones,

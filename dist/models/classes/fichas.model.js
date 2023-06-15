@@ -137,7 +137,6 @@ class Fichas {
                     idPaciente,
                     idPaciente,
                 ]);
-                console.log(dataHistoria);
                 idHistoria = dataHistoria[0].id_historia_identidad_genero;
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
                 return {

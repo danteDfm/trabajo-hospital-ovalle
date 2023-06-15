@@ -2,7 +2,7 @@ import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Ficha {
   fechaIngreso: string;
-  estado:boolean;
+  estado: boolean;
   nivelFormulario?: number;
   apoyoEscolar?: boolean;
   judicializacion?: boolean;
@@ -15,9 +15,10 @@ export class Ficha {
   fkeEncargada?: number;
   fkAcompanante?: number;
 
+ 
   constructor(
-    fechaIngreso: string,  
-    estado:boolean,
+    fechaIngreso: string,
+    estado: boolean,
     nivelFormulario?: number,
     apoyoEscolar?: boolean,
     judicializacion?: boolean,
@@ -30,8 +31,7 @@ export class Ficha {
     fkeEncargada?: number,
     fkAcompanante?: number
   ) {
-
-    this.fechaIngreso = fechaIngreso; 
+    this.fechaIngreso = fechaIngreso;
     this.estado = estado;
     this.nivelFormulario = nivelFormulario;
     this.apoyoEscolar = apoyoEscolar;
@@ -46,10 +46,7 @@ export class Ficha {
     this.fkAcompanante = fkAcompanante;
   }
 
-
-  
-
-  async crearFichaTecnica(){
+  async crearFichaTecnica() {
     const query: string = `INSERT INTO fichas_tecnicas(
         fecha_ingreso,
         estado_ficha,
@@ -67,8 +64,6 @@ export class Ficha {
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     try {
-
-      
       await consultasGenerales(query, [
         this.fechaIngreso,
         this.estado,
@@ -91,37 +86,57 @@ export class Ficha {
     }
   }
 
- static async estatusFicha(rutPaciente:string){
-
-      const query:string = `select estado_ficha,
+  static async estatusFicha(rutPaciente: string) {
+    const query: string = `select estado_ficha,
       id_ficha_tecnica,
       nivelFormulario, id_paciente
       from fichas_tecnicas AS ft
       left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
       WHERE rut_paciente  = ?  AND estado_ficha = 1`;
 
-      try{
+    try {
+      const estadoFicha = await consultasGenerales(query, [rutPaciente]);
 
-        const estadoFicha=await consultasGenerales(query, [
-          rutPaciente
-        ]);
-
-        if(!estadoFicha){
-
-          return false;
-
-        };
-
-   
-        return true;
-
-      }catch(err:any){
-
-        throw new Error(err);
-
+      if (!estadoFicha[0]) {
+        return false;
       }
-        
 
+      return true;
+    } catch (err: any) {
+      throw new Error(err);
+    }
   }
 
+  async actulizarFicha(idFicha: number) {
+    const query: string = `
+      UPDATE fichas_tecnicas SET 
+      fecha_ingreso=?,
+      nivelFormulario=?, 
+      apoyo_escolar=?,
+      judicializacion=?,
+      detalles_apoyo_es=?,
+      detalles_judicializacion=?
+      WHERE id_ficha_tecnica  = ?
+    `;
+
+    try { 
+
+      console.log(idFicha);
+
+      await consultasGenerales(query, [
+        this.fechaIngreso, 
+        this.nivelFormulario, 
+        this.apoyoEscolar, 
+        this.judicializacion, 
+        this.detallesApoyo, 
+        this.detallesJudicializacion, 
+        idFicha
+      ]);
+
+      return 'La ficha ha sido actulizada'
+
+    } catch (err: any) {
+      throw new Error(err);
+    }
+  }
 }
