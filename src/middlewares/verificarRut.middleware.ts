@@ -10,9 +10,8 @@ export async function buscarRut(
   const query: string = `SELECT id_paciente FROM PACIENTES where rut_paciente = ?`;
 
   try {
+    
     const data = await consultasGenerales(query, [rutPaciente]);
-
-    console.log(data[0]);
 
     if (!data[0]){
 

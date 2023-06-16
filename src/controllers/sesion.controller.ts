@@ -4,13 +4,18 @@ import { Sesion } from "../models/classes/sesion.model";
 const objSesion = new Sesion();
 
 export class SessionController {
+
+
   static async sesion(req: Request, res: Response) {
     try {
       const { emailUsuario, contrasenaUsuario } = req.body;
+
+
       objSesion.setEmail(emailUsuario);
       objSesion.setContrasena(contrasenaUsuario);
 
       const token = await objSesion.login();
+
       res.set("Content-Type", "application/json");
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({ message: "peticion llevada a cabo" });
@@ -24,8 +29,10 @@ export class SessionController {
     }
   }
 
+
   
   static async verificarToken(req: Request, res: Response) {
+    
     const header = req.headers;
     try {
       if (header.authorization == "Bearer null") throw { ok: false };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { FormularioPrimerPaso } from "../models/classes/formulario/primer.paso.model";
+
 import {
   AntecedentesClinicos,
   PrimerPaso,

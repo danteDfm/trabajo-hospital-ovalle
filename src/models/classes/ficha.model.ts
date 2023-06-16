@@ -1,8 +1,8 @@
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Ficha {
-  fechaIngreso: string;
-  estado: boolean;
+  fechaIngreso?: string;
+  estado?: boolean;
   nivelFormulario?: number;
   apoyoEscolar?: boolean;
   judicializacion?: boolean;
@@ -17,8 +17,8 @@ export class Ficha {
 
  
   constructor(
-    fechaIngreso: string,
-    estado: boolean,
+    fechaIngreso?: string,
+    estado?: boolean,
     nivelFormulario?: number,
     apoyoEscolar?: boolean,
     judicializacion?: boolean,
@@ -110,9 +110,8 @@ export class Ficha {
   async actulizarFicha(idFicha: number) {
     const query: string = `
       UPDATE fichas_tecnicas SET 
-      fecha_ingreso = ?,
       nivelFormulario = ?, 
-      apoyo_escolar = ?,
+      apoyo_escolar = ?, 
       judicializacion = ?,
       detalles_apoyo_es = ?,
       detalles_judicializacion=?
@@ -123,7 +122,6 @@ export class Ficha {
       console.log(idFicha);
 
       await consultasGenerales(query, [
-        this.fechaIngreso, 
         this.nivelFormulario, 
         this.apoyoEscolar, 
         this.judicializacion, 

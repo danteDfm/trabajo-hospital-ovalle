@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Fichas = void 0;
 const consultasGenerales_1 = require("../../consultas/consultasGenerales");
+const dicQuery_1 = require("../../consultas/dicQuery");
 class Fichas {
     listarFichaActiva(idFicha) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,12 +62,6 @@ class Fichas {
     }
     listarInformacionPaciente(rutPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
-            const queryFichaTecnica = `SELECT * FROM Pacientes AS pa
-    JOIN fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 
-    WHERE rut_paciente = ? AND id_ficha_tecnica = (SELECT max(id_ficha_tecnica) FROM Pacientes AS pa join fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 
-    WHERE rut_paciente = ?)
-    ORDER BY fecha_ingreso desc 
-    `;
             const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
             const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
@@ -100,11 +95,15 @@ class Fichas {
             let dataHistoria;
             let dataPrenda;
             try {
-                const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(queryFichaTecnica, [
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.diccionarioConsultas.paciente, [
                     rutPaciente,
                     rutPaciente,
                 ]);
-                idPaciente = dataFicha[0].id_paciente;
+                const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.diccionarioConsultas.ficha, [
+                    rutPaciente,
+                    rutPaciente,
+                ]);
+                idPaciente = dataPaciente[0].id_paciente;
                 fkAreaPsiquica = dataFicha[0].fk_area_psiquica;
                 fkHistoriaClinica = dataFicha[0].fk_historia_clinica;
                 fkEncargada = dataFicha[0].fk_persona_involucrada_encargada;
@@ -140,6 +139,7 @@ class Fichas {
                 idHistoria = dataHistoria[0].id_historia_identidad_genero;
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
                 return {
+                    paciente: dataPaciente[0],
                     ficha: dataFicha[0],
                     antecedentes: dataAntecedentes[0],
                     involucrado: dataInvolucrado[0],

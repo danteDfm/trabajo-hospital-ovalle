@@ -5,7 +5,6 @@ function vericarDataUsuario(req, res, next) {
     let { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
     try {
         if (!rutProfesional || !emailProfesional || !contrasenaProfesional || !nombreProfesional || !centroProfesional || !cargoProfesional || !rolProfesional) {
-            console.log("hola mundo");
             throw ({
                 msj: 'Los datos no deben estar vacios'
             });

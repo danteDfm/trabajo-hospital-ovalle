@@ -1,6 +1,7 @@
 import { consultasGenerales } from "../../consultas/consultasGenerales";
+import { diccionarioConsultas } from "../../consultas/dicQuery";
 
-export class Fichas{
+export class Fichas {
   async listarFichaActiva(idFicha: number) {
     const query: string = `
         select 
@@ -46,17 +47,7 @@ export class Fichas{
     }
   }
 
-
-  
-
-  async listarInformacionPaciente(rutPaciente: string){
-
-    const queryFichaTecnica = `SELECT * FROM Pacientes AS pa
-    JOIN fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 
-    WHERE rut_paciente = ? AND id_ficha_tecnica = (SELECT max(id_ficha_tecnica) FROM Pacientes AS pa join fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 
-    WHERE rut_paciente = ?)
-    ORDER BY fecha_ingreso desc 
-    `;
+  async listarInformacionPaciente(rutPaciente: string) {
 
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
@@ -93,12 +84,19 @@ export class Fichas{
     let dataPrenda;
 
     try {
-      const dataFicha = await consultasGenerales(queryFichaTecnica, [
+
+      const dataPaciente = await consultasGenerales(diccionarioConsultas.paciente, [
         rutPaciente,
         rutPaciente,
       ]);
 
-      idPaciente = dataFicha[0].id_paciente;
+      const dataFicha = await consultasGenerales(diccionarioConsultas.ficha, [
+        rutPaciente,
+        rutPaciente,
+      ]);
+
+      idPaciente = dataPaciente[0].id_paciente;
+
       fkAreaPsiquica = dataFicha[0].fk_area_psiquica;
       fkHistoriaClinica = dataFicha[0].fk_historia_clinica;
       fkEncargada = dataFicha[0].fk_persona_involucrada_encargada;
@@ -139,12 +137,13 @@ export class Fichas{
         idPaciente,
         idPaciente,
       ]);
-     
+
       idHistoria = dataHistoria[0].id_historia_identidad_genero;
 
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);
 
       return {
+        paciente: dataPaciente[0],
         ficha: dataFicha[0],
         antecedentes: dataAntecedentes[0],
         involucrado: dataInvolucrado[0],

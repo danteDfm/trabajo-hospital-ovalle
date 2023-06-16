@@ -15,6 +15,7 @@ export class Token {
     this.payload = {};
     this.token = "";
     this.dataToken = {};
+
   }
 
   formarPayload(idUser: number, roleUser: string) {
