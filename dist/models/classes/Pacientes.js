@@ -62,6 +62,8 @@ class EntidadPaciente {
                 const query = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
         WHERE id_paciente  = ?
         `;
+                console.log("hol");
+                console.log(this.nombrePaciente);
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.nombrePaciente,
                     this.apellidoPaternoPa,
@@ -75,6 +77,7 @@ class EntidadPaciente {
                 return "Los datos han sido actualizados";
             }
             catch (err) {
+                console.log(err);
                 throw new Error(err);
             }
         });

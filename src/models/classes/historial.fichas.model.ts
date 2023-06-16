@@ -46,9 +46,11 @@ export class Fichas{
     }
   }
 
+
+  
+
   async listarInformacionPaciente(rutPaciente: string){
 
-    
     const queryFichaTecnica = `SELECT * FROM Pacientes AS pa
     JOIN fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 
     WHERE rut_paciente = ? AND id_ficha_tecnica = (SELECT max(id_ficha_tecnica) FROM Pacientes AS pa join fichas_tecnicas AS ft ON pa.id_paciente = ft.fk_paciente 

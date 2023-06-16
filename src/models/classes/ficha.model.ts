@@ -110,14 +110,13 @@ export class Ficha {
   async actulizarFicha(idFicha: number) {
     const query: string = `
       UPDATE fichas_tecnicas SET 
-      fecha_ingreso=?,
-      nivelFormulario=?, 
-      apoyo_escolar=?,
-      judicializacion=?,
-      detalles_apoyo_es=?,
+      fecha_ingreso = ?,
+      nivelFormulario = ?, 
+      apoyo_escolar = ?,
+      judicializacion = ?,
+      detalles_apoyo_es = ?,
       detalles_judicializacion=?
-      WHERE id_ficha_tecnica  = ?
-    `;
+      WHERE id_ficha_tecnica  = ?`;
 
     try { 
 

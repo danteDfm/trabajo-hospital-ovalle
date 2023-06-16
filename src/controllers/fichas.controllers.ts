@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Fichas } from "../models/classes/fichas.model";
+import { Fichas } from "../models/classes/historial.fichas.model";
 
 const objFicha = new Fichas();
 export class FichasController {

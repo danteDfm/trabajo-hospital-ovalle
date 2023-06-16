@@ -91,14 +91,13 @@ class Ficha {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
       UPDATE fichas_tecnicas SET 
-      fecha_ingreso=?,
-      nivelFormulario=?, 
-      apoyo_escolar=?,
-      judicializacion=?,
-      detalles_apoyo_es=?,
+      fecha_ingreso = ?,
+      nivelFormulario = ?, 
+      apoyo_escolar = ?,
+      judicializacion = ?,
+      detalles_apoyo_es = ?,
       detalles_judicializacion=?
-      WHERE id_ficha_tecnica  = ?
-    `;
+      WHERE id_ficha_tecnica  = ?`;
             try {
                 console.log(idFicha);
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [

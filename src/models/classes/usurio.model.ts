@@ -66,6 +66,8 @@ export class Usuario {
       fk_centro_salud = ?
       WHERE id_profesional_salud = ?`;
 
+
+      
       consultasGenerales(query, [
         this.rutProfesional,
         this.nombreProfesional,

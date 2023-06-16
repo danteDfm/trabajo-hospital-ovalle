@@ -12,7 +12,7 @@ import {
 import { fechaExacta } from "../utils/espesificarFecha";
 import { FormularioCuartoPaso } from "../models/classes/formulario/cuarto.paso.model";
 import { Ficha } from "../models/classes/ficha.model";
-import { Fichas } from "../models/classes/fichas.model";
+import { Fichas } from "../models/classes/historial.fichas.model";
 
 const objFichas = new Fichas();
 
@@ -87,6 +87,7 @@ export class FormularioController {
       //update en caso de existir el paciente
       if(verificacionFicha){  
 
+        objCuarto.actulizarPaciente(paciente.idPaciente);
         objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);
         objCuarto.actualizarSegundoPaso(genero.idGenero);
         objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
@@ -103,10 +104,10 @@ export class FormularioController {
         );
 
         const msj =await objFichas.actulizarFicha(fichas.idFicha);
-
-         return res.status(201).json(msj);
+        return res.status(201).json(msj);
 
       }
+
 
       const idPaciente = await objCuarto.crearPaciente();
       const idPrimerPaso=await objCuarto.guardarPrimerPaso();

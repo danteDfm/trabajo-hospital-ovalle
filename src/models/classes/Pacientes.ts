@@ -76,7 +76,10 @@ export class EntidadPaciente implements Pacientes {
 
       const query: string = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
         WHERE id_paciente  = ?
-        `;
+        `;  
+
+        console.log("hol");
+        console.log(this.nombrePaciente);
 
       await consultasGenerales(query, [
         this.nombrePaciente,
@@ -92,6 +95,7 @@ export class EntidadPaciente implements Pacientes {
       return "Los datos han sido actualizados";
 
     } catch (err: any) {
+      console.log(err)
       throw new Error(err);
     }
   }

@@ -13,8 +13,8 @@ exports.FormularioController = void 0;
 const espesificarFecha_1 = require("../utils/espesificarFecha");
 const cuarto_paso_model_1 = require("../models/classes/formulario/cuarto.paso.model");
 const ficha_model_1 = require("../models/classes/ficha.model");
-const fichas_model_1 = require("../models/classes/fichas.model");
-const objFichas = new fichas_model_1.Fichas();
+const historial_fichas_model_1 = require("../models/classes/historial.fichas.model");
+const objFichas = new historial_fichas_model_1.Fichas();
 class FormularioController {
     static buscarFichaPaciente(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,6 +52,7 @@ class FormularioController {
                 const verificacionFicha = yield ficha_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha) {
+                    objCuarto.actulizarPaciente(paciente.idPaciente);
                     objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);
                     objCuarto.actualizarSegundoPaso(genero.idGenero);
                     objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
