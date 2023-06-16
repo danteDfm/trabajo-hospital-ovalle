@@ -72,15 +72,15 @@ export class EntidadPaciente implements Pacientes {
 
 
   async actulizarPaciente(idPaciente: number) {
+
+    const query: string = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
+    WHERE id_paciente  = ?
+    `;  
+
     try {
 
-      const query: string = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
-        WHERE id_paciente  = ?
-        `;  
-
-        console.log("hol");
-        console.log(this.nombrePaciente);
-
+      if(!idPaciente) return 0;
+    
       await consultasGenerales(query, [
         this.nombrePaciente,
         this.apellidoPaternoPa,

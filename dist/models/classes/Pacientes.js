@@ -58,12 +58,12 @@ class EntidadPaciente {
     }
     actulizarPaciente(idPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
+            const query = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
+    WHERE id_paciente  = ?
+    `;
             try {
-                const query = `UPDATE PACIENTES SET nombre_paciente = ?, apellido_paterno_paciente = ?, apellido_materno_paciente = ?, domicilio_paciente  = ?, telefono_paciente = ?,  pronombre = ?,  nombre_social = ?
-        WHERE id_paciente  = ?
-        `;
-                console.log("hol");
-                console.log(this.nombrePaciente);
+                if (!idPaciente)
+                    return 0;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.nombrePaciente,
                     this.apellidoPaternoPa,

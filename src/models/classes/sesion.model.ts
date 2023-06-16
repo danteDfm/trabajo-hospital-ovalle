@@ -1,5 +1,4 @@
 import { consultasGenerales } from "../../consultas/consultasGenerales";
-import { compararContrasena } from "../../utils/bcrypt/hash.contrasena";
 import { Token } from "../../utils/jwt/generarToken";
 
 export class Sesion {
@@ -13,46 +12,13 @@ export class Sesion {
     this.objToken = new Token();
   }
 
-
-  async login() {
-    const query: string = `
-    SELECT email_profesional_salud, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
-    WHERE email_profesional_salud = ?`;
-
+  async login(idProfesional:number, rol:string){
+ 
     try {
-      if (!this.email || !this.contrasena) {
-        throw {
-          error: "Los datos no puede estar vacios",
-          code: 101,
-        };
-      }
-
-      const result = await consultasGenerales(query, [this.email]);
-
-      if (!result[0]) {
-        throw {
-          error: "EL email no se encuentra en la base de datos",
-          code: 102,
-        };
-      }
-
-      const verificacion = await compararContrasena(
-        this.contrasena,
-        result[0].contrasena
-      );
-
-   
-
-      if (!verificacion) {
-        throw {
-          error: "Contraseña es invalida",
-          code: 103,
-        };
-      }
 
       this.objToken.formarPayload(
-        result[0].id_profesional_salud,
-        result[0].roles
+        idProfesional,
+        rol
       );
 
       const tokenJwt = this.objToken.generarToken();
@@ -62,10 +28,6 @@ export class Sesion {
       throw err;
     }
   }
-  
-
-
-
 
   verificarToken(token: string) {
     try {
@@ -80,7 +42,6 @@ export class Sesion {
   }
 
   async seleccionarUsuario(idUser: number) {
-
     const query: string = `
     select id_profesional_salud, nombre_profesional_salud, cargo_profesional_salud,
     roles, comuna_centro_atencion, nombre_centro_salud ,logo  from PROFESIONALES_USUARIOS_SALUD as ps
@@ -89,7 +50,6 @@ export class Sesion {
     `;
 
     try {
-
       if (!idUser) throw "id vacio";
       const dataUsuario = await consultasGenerales(query, [idUser]);
       return dataUsuario[0];

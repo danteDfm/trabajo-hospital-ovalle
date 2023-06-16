@@ -74,6 +74,8 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     WHERE id_persona_involucrada_transicion  = ?
     `;
             try {
+                if (!idPeronsaInvo)
+                    return 0;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.involucrado.nombreInvolucrado,
                     this.involucrado.apellidoPInvolucrado,
@@ -83,6 +85,8 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                     this.involucrado.domicilioInvolucrado,
                     idPeronsaInvo
                 ]);
+                if (!idPersonaAcom)
+                    return 0;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.acompanante.nombreInvolucrado,
                     this.acompanante.apellidoPInvolucrado,

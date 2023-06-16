@@ -77,6 +77,8 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
     evaluacion_psiquica= ?,  diagnostico_psiquiatrico = ?, utilizacion_farmaco = ?, detalles_farmacos = ? WHERE id_area_psiquica = ?`;
             const queryHabitos = `UPDATE HABITOS_ALIMENTICIOS SET detalle_habito_alimenticio = ? WHERE id_habito_alimenticio = ?`;
             try {
+                if (!idAreaPsiquica)
+                    return 0;
                 yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryAreaPsique, [
                     this.controlEquipoSaludMental,
                     this.psicoterapia,
@@ -86,6 +88,8 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
                     this.detallesFarmacos,
                     idAreaPsiquica
                 ]));
+                if (!idDieta)
+                    return 0;
                 yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryHabitos, [this.dieta, idDieta]));
                 return "Los datos han sido actualizados: tercer paso";
             }

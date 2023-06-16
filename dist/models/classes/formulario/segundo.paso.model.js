@@ -70,6 +70,8 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
     SET identidad_genero  = ?, orientacion_sexual= ?, autopercepcion = ? ,tiempo_latencia  = ?,apoyo_nucleo_familiar= ?, uso_prenda  = ?, presencia_disforia = ?, detalles_diforia = ? WHERE id_historia_identidad_genero = ?`;
             const queryPrenda = `UPDATE SELECCION_PRENDA SET fk_prenda_disconformidad  =  ? WHERE id_prenda_n_n = ?`;
             try {
+                if (!idHistoria)
+                    return 0;
                 yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryHistoria, [
                     this.identidadGenero,
                     this.orientacionSexual,

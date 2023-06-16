@@ -105,6 +105,7 @@ export class FormularioSegundoPaso
 
     try{
 
+      if(!idHistoria) return 0;
       await objConexion?.query(queryHistoria,[
         this.identidadGenero, 
         this.orientacionSexual, 

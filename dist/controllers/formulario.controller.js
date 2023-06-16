@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioController = void 0;
 const espesificarFecha_1 = require("../utils/espesificarFecha");
 const cuarto_paso_model_1 = require("../models/classes/formulario/cuarto.paso.model");
-const ficha_model_1 = require("../models/classes/ficha.model");
+const fichaTecnica_model_1 = require("../models/classes/fichaTecnica.model");
 const historial_fichas_model_1 = require("../models/classes/historial.fichas.model");
 const objFichas = new historial_fichas_model_1.Fichas();
 class FormularioController {
@@ -49,16 +49,16 @@ class FormularioController {
             const fichaTipada = paciente;
             const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
-                const verificacionFicha = yield ficha_model_1.Ficha.estatusFicha(paciente.rutPaciente);
+                const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
-                if (verificacionFicha && paciente.idPaciente) {
-                    objCuarto.actulizarPaciente(paciente.idPaciente);
-                    objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);
-                    objCuarto.actualizarSegundoPaso(genero.idGenero);
-                    objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
-                    objCuarto.actualizarCuartoPaso(antecedentes.idAntecedente);
-                    const objFichas = new ficha_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion);
-                    const msj = yield objFichas.actulizarFicha(fichas.idFicha);
+                if (verificacionFicha && req.idTablas.idPaciente) {
+                    objCuarto.actulizarPaciente(req.idTablas.idPaciente);
+                    objCuarto.actualizarprimerPaso(req.idTablas.involucrado, req.idTablas.acompanante);
+                    objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+                    objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta);
+                    objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
+                    const objFichas = new fichaTecnica_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion);
+                    const msj = yield objFichas.actulizarFicha(req.idTablas.idFicha);
                     return res.status(201).json(msj);
                 }
                 const idPaciente = yield objCuarto.crearPaciente();
@@ -66,7 +66,7 @@ class FormularioController {
                 objCuarto.crearSegundoPaso(idPaciente);
                 const idTecerPaso = yield objCuarto.crearTercerPaso(idPaciente);
                 const idCuartoPaso = yield objCuarto.crearCuartoPaso();
-                const objFichas = new ficha_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion, idPaciente, idUsuario, idTecerPaso.idAreaPsiquica, idCuartoPaso, idPrimerPaso.idInvolucrado, idPrimerPaso.idAcompanante);
+                const objFichas = new fichaTecnica_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion, idPaciente, idUsuario, idTecerPaso.idAreaPsiquica, idCuartoPaso, idPrimerPaso.idInvolucrado, idPrimerPaso.idAcompanante);
                 const msj = yield objFichas.crearFichaTecnica();
                 res.status(201).json(msj);
             }

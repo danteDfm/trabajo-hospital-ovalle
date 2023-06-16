@@ -110,7 +110,9 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
     WHERE id_persona_involucrada_transicion  = ?
     `;
     
-   try{ 
+   try{   
+
+    if(!idPeronsaInvo) return 0;
 
     await consultasGenerales(query, [
       this.involucrado.nombreInvolucrado,
@@ -120,7 +122,9 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
       this.involucrado.telefonoInvolucrado,
       this.involucrado.domicilioInvolucrado,
       idPeronsaInvo
-    ]);
+    ]); 
+
+    if(!idPersonaAcom) return 0;
 
     await consultasGenerales(query, [
       this.acompanante.nombreInvolucrado,

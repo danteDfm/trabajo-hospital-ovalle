@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sesion = void 0;
 const consultasGenerales_1 = require("../../consultas/consultasGenerales");
-const hash_contrasena_1 = require("../../utils/bcrypt/hash.contrasena");
 const generarToken_1 = require("../../utils/jwt/generarToken");
 class Sesion {
     constructor(email, contrasena) {
@@ -19,33 +18,10 @@ class Sesion {
         this.contrasena = contrasena;
         this.objToken = new generarToken_1.Token();
     }
-    login() {
+    login(idProfesional, rol) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `
-    SELECT email_profesional_salud, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
-    WHERE email_profesional_salud = ?`;
             try {
-                if (!this.email || !this.contrasena) {
-                    throw {
-                        error: "Los datos no puede estar vacios",
-                        code: 101,
-                    };
-                }
-                const result = yield (0, consultasGenerales_1.consultasGenerales)(query, [this.email]);
-                if (!result[0]) {
-                    throw {
-                        error: "EL email no se encuentra en la base de datos",
-                        code: 102,
-                    };
-                }
-                const verificacion = yield (0, hash_contrasena_1.compararContrasena)(this.contrasena, result[0].contrasena);
-                if (!verificacion) {
-                    throw {
-                        error: "Contraseña es invalida",
-                        code: 103,
-                    };
-                }
-                this.objToken.formarPayload(result[0].id_profesional_salud, result[0].roles);
+                this.objToken.formarPayload(idProfesional, rol);
                 const tokenJwt = this.objToken.generarToken();
                 return tokenJwt;
             }

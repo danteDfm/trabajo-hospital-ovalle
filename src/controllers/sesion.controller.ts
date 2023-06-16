@@ -6,28 +6,27 @@ const objSesion = new Sesion();
 export class SessionController {
 
 
-  static async sesion(req: Request, res: Response) {
+
+  static async sesion(req: any, res: Response) {
     try {
-      const { emailUsuario, contrasenaUsuario } = req.body;
+      const {idProfesional , rol } = req.dataUsuario;
+   
 
-
-      objSesion.setEmail(emailUsuario);
-      objSesion.setContrasena(contrasenaUsuario);
-
-      const token = await objSesion.login();
+      const token = await objSesion.login(idProfesional, rol);
 
       res.set("Content-Type", "application/json");
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({ message: "peticion llevada a cabo" });
-    } catch (err: any) {
-      if (err.code == 103 || err.code == 101 || err.code == 102) {
-        return res.status(400).json(err.error);
-      }
 
+
+
+    } catch (err: any) {
       console.log(err);
       return res.status(500).json("Error interno del servidor");
     }
   }
+
+
 
 
   

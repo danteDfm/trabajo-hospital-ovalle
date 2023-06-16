@@ -29,10 +29,3 @@ export function vericarDataUsuario(req: Request, res: Response, next: NextFuncti
   }
 }   
 
-// "rutProfesional": "196676672",
-// "nombreProfesional": "Dante Flores",
-// "cargoProfesional": "programador",
-// "contrasenaProfesional": "dante569",
-// "emailProfesional": "dante@gmail.com",
-// "rolProfesional": "adminUser",
-// "centroProfesional": 1

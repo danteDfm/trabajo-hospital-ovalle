@@ -16,18 +16,13 @@ class SessionController {
     static sesion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { emailUsuario, contrasenaUsuario } = req.body;
-                objSesion.setEmail(emailUsuario);
-                objSesion.setContrasena(contrasenaUsuario);
-                const token = yield objSesion.login();
+                const { idProfesional, rol } = req.dataUsuario;
+                const token = yield objSesion.login(idProfesional, rol);
                 res.set("Content-Type", "application/json");
                 res.setHeader("Authorization", `Bearer ${token}`);
                 res.status(200).json({ message: "peticion llevada a cabo" });
             }
             catch (err) {
-                if (err.code == 103 || err.code == 101 || err.code == 102) {
-                    return res.status(400).json(err.error);
-                }
                 console.log(err);
                 return res.status(500).json("Error interno del servidor");
             }

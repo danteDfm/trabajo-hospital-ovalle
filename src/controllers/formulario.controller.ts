@@ -11,7 +11,7 @@ import {
 } from "../models/interfaces/tipos.entidades";
 import { fechaExacta } from "../utils/espesificarFecha";
 import { FormularioCuartoPaso } from "../models/classes/formulario/cuarto.paso.model";
-import { Ficha } from "../models/classes/ficha.model";
+import { Ficha } from "../models/classes/fichaTecnica.model";
 import { Fichas } from "../models/classes/historial.fichas.model";
 
 const objFichas = new Fichas();
@@ -23,7 +23,6 @@ export class FormularioController {
     try {
       const { rutPaciente } = req.params;
       const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
-
       res.status(400).json(dataFicha);
     } catch (err) {
       res.status(400).json({
@@ -33,7 +32,7 @@ export class FormularioController {
     }
   }
 
-  static async crearFichaTecnica(req:Request, res:Response){
+  static async crearFichaTecnica(req: any, res:Response){
 
     const {
       fichas,
@@ -81,17 +80,18 @@ export class FormularioController {
 
     try{
 
+    
 
       const  verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
       //update en caso de existir el paciente
-      if(verificacionFicha && paciente.idPaciente){  
+      if(verificacionFicha && req.idTablas.idPaciente){  
 
-        objCuarto.actulizarPaciente(paciente.idPaciente);
-        objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);
-        objCuarto.actualizarSegundoPaso(genero.idGenero);
-        objCuarto.actulizarTercerPaso(areaPsiquica.idAreaPsiquica, habitos.idDieta);
-        objCuarto.actualizarCuartoPaso(antecedentes.idAntecedente);
+        objCuarto.actulizarPaciente(req.idTablas.idPaciente);
+        objCuarto.actualizarprimerPaso(req.idTablas.involucrado, req.idTablas.acompanante);
+        objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+        objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta);
+        objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
 
         const objFichas = new Ficha(
           fechaIngreso,
@@ -103,7 +103,7 @@ export class FormularioController {
           fichas.detallesJudicializacion
         );
 
-        const msj =await objFichas.actulizarFicha(fichas.idFicha);
+        const msj =await objFichas.actulizarFicha(req.idTablas.idFicha);
         return res.status(201).json(msj);
 
       }

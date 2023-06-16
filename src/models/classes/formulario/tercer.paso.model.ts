@@ -113,7 +113,9 @@ export class FormularioTercerPaso
     evaluacion_psiquica= ?,  diagnostico_psiquiatrico = ?, utilizacion_farmaco = ?, detalles_farmacos = ? WHERE id_area_psiquica = ?`;
 
     const queryHabitos:string = `UPDATE HABITOS_ALIMENTICIOS SET detalle_habito_alimenticio = ? WHERE id_habito_alimenticio = ?`;
-    try{
+    try{  
+
+      if(!idAreaPsiquica) return 0;
 
       await objConexion?.query(queryAreaPsique, [
         this.controlEquipoSaludMental, 
@@ -124,6 +126,8 @@ export class FormularioTercerPaso
         this.detallesFarmacos,
         idAreaPsiquica
       ]);
+
+      if(!idDieta) return 0;
 
       await objConexion?.query(queryHabitos, [this.dieta, idDieta]);
       return "Los datos han sido actualizados: tercer paso";

@@ -119,7 +119,7 @@ export class Ficha {
 
     try { 
 
-      console.log(idFicha);
+      if(!idFicha) return 0;
 
       await consultasGenerales(query, [
         this.nivelFormulario, 

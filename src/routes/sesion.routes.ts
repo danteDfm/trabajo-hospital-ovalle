@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { SessionController } from "../controllers/sesion.controller";
+import { verficarSesion } from "../middlewares/sesion.middleware";
 const router = Router();
 
-router.post('/credenciales', SessionController.sesion);
+router.post('/credenciales', verficarSesion ,SessionController.sesion);
 router.get('/verificar', SessionController.verificarToken);
 
 export default router;

@@ -2,7 +2,8 @@ import { consultasGenerales } from "../../consultas/consultasGenerales";
 import { diccionarioConsultas } from "../../consultas/dicQuery";
 
 export class Fichas {
-  async listarFichaActiva(idFicha: number) {
+  async listarFichaActiva(idPaciente: number) {
+
     const query: string = `
         select 
         nombre_paciente, 
@@ -14,11 +15,11 @@ export class Fichas {
         nivelFormulario
         from fichas_tecnicas as ft
         join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-        WHERE  estado_ficha = 1 and id_ficha_tecnica = ?
+        WHERE id_paciente = ? AND estado_ficha = 1 
         `;
 
     try {
-      const fichaActiva = await consultasGenerales(query, [idFicha]);
+      const fichaActiva = await consultasGenerales(query, [idPaciente]);
       return fichaActiva;
     } catch (err: any) {
       throw new Error(err);
@@ -36,7 +37,7 @@ export class Fichas {
     nivelFormulario
     from fichas_tecnicas as ft
     join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-    WHERE fk_paciente = 1 
+    WHERE id_paciente = ? AND  estado_ficha = 0
     order by fecha_ingreso desc `;
 
     try {

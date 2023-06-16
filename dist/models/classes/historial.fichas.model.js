@@ -13,7 +13,7 @@ exports.Fichas = void 0;
 const consultasGenerales_1 = require("../../consultas/consultasGenerales");
 const dicQuery_1 = require("../../consultas/dicQuery");
 class Fichas {
-    listarFichaActiva(idFicha) {
+    listarFichaActiva(idPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
         select 
@@ -26,10 +26,10 @@ class Fichas {
         nivelFormulario
         from fichas_tecnicas as ft
         join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-        WHERE  estado_ficha = 1 and id_ficha_tecnica = ?
+        WHERE id_paciente = ? AND estado_ficha = 1 
         `;
             try {
-                const fichaActiva = yield (0, consultasGenerales_1.consultasGenerales)(query, [idFicha]);
+                const fichaActiva = yield (0, consultasGenerales_1.consultasGenerales)(query, [idPaciente]);
                 return fichaActiva;
             }
             catch (err) {
@@ -49,7 +49,7 @@ class Fichas {
     nivelFormulario
     from fichas_tecnicas as ft
     join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-    WHERE fk_paciente = 1 
+    WHERE id_paciente = ? AND  estado_ficha = 0
     order by fecha_ingreso desc `;
             try {
                 const fichasInactivas = (0, consultasGenerales_1.consultasGenerales)(query, [idPaciente]);

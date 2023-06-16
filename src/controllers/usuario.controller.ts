@@ -17,8 +17,6 @@ export class UsuarioController {
         centroProfesional,
         rolProfesional,
       } = req.body;
-
-      
         
    
         existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
@@ -47,6 +45,7 @@ export class UsuarioController {
     }
   }
 
+
   static async listaUsuarios(req: Request, res: Response) {
     try {
       const resultListar = await objUsuario.listarUsuarios();
@@ -58,6 +57,7 @@ export class UsuarioController {
       });
     }
   }
+
 
   static async actualizarUsuario(req: Request, res: Response) {
     try {

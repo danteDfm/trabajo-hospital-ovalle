@@ -3,10 +3,11 @@ import { Fichas } from "../models/classes/historial.fichas.model";
 
 const objFicha = new Fichas();
 export class FichasController {
+
   static async fichaActiva(req: Request, res: Response) {
-    const { idFicha } = req.params;
+    const { idPaciente } = req.params;
     try {
-      const fichaActiva = await objFicha.listarFichaActiva(parseInt(idFicha));
+      const fichaActiva = await objFicha.listarFichaActiva(parseInt(idPaciente));
       return res.status(201).json({
         fichaActiva,
       });
