@@ -78,11 +78,11 @@ class Usuario {
             try {
                 const rolApartado = "administrador";
                 const query = `
-    SELECT id_profesional_salud,
-    rut_profesional_salud,
-    nombre_profesional_salud, email_profesional_salud,
-    cargo_profesional_salud,  
-    fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
+        SELECT id_profesional_salud,
+        rut_profesional_salud,
+        nombre_profesional_salud, email_profesional_salud,
+        cargo_profesional_salud,  
+        fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
                 const listUsuarios = yield (0, consultasGenerales_1.consultasGenerales)(query, [rolApartado]);
                 return listUsuarios;
             }

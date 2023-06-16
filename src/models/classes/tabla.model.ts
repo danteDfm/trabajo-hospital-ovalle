@@ -15,7 +15,7 @@ export class Tabla {
 
       const dataPaciente = await consultasGenerales(query);
 
-      console.log(dataPaciente);
+  
 
       return dataPaciente;
     } catch (err: any) {

@@ -42,7 +42,7 @@ export class SessionController {
       );
 
       const resultData = await objSesion.seleccionarUsuario(data.sub);
-
+        console.log(resultData);
       res.status(200).json({
         ok: true,
         resultData,

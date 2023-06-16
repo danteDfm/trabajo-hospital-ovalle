@@ -24,7 +24,6 @@ class Tabla {
             order by fecha_ingreso desc 
         `;
                 const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query);
-                console.log(dataPaciente);
                 return dataPaciente;
             }
             catch (err) {

@@ -15,7 +15,6 @@ class TablaController {
     static listarPaciente(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("hola");
                 const objTable = new tabla_model_1.Tabla();
                 const dataPaciente = yield objTable.listarPacientes();
                 return res.status(200).json(dataPaciente);

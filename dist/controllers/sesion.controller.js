@@ -36,6 +36,7 @@ class SessionController {
                     throw { ok: false };
                 const data = objSesion.verificarToken(header.authorization);
                 const resultData = yield objSesion.seleccionarUsuario(data.sub);
+                console.log(resultData);
                 res.status(200).json({
                     ok: true,
                     resultData,

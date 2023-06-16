@@ -19,6 +19,8 @@ export class MainController{
            generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
        }    
 
+       
+
        await estadisticasFicha.estadisticaAreaPsiquica();
        
          res.status(201).json({
