@@ -28,7 +28,7 @@ class SessionController {
             }
         });
     }
-    static verificarToken(req, res) {
+    static datosUsuarioSesion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const header = req.headers;
             try {

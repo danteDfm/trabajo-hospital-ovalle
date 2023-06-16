@@ -30,11 +30,13 @@ export class SessionController {
 
 
   
-  static async verificarToken(req: Request, res: Response) {
+  static async datosUsuarioSesion(req: Request, res: Response) {
     
     const header = req.headers;
     try {
+
       if (header.authorization == "Bearer null") throw { ok: false };
+
       const data: any = objSesion.verificarToken(
         header.authorization as string
       );

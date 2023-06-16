@@ -25,6 +25,7 @@ class MainController {
             for (let i = 0; i < long; i++) {
                 generos.push(yield estadisticasFicha.cantidadGeneros(gen[i]));
             }
+            yield estadisticasFicha.estadisticaAreaPsiquica();
             res.status(201).json({
                 generos,
                 totalPacientes,

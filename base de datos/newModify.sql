@@ -17,7 +17,7 @@ detalles_funcionalidad_genital VARCHAR (255),
 detalles_antecedentes_familia  varchar (255)
 );
 
-	
+	select * from  HISTORIAS_CLINICAS
 
 CREATE TABLE PERSONAS_INVOLUCRADAS_TRANSICION(
 id_persona_involucrada_transicion INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -32,7 +32,7 @@ domicilio_persona_involucrada VARCHAR (30)
 );
 
 
-
+select * from PERSONAS_INVOLUCRADAS_TRANSICION
 
 create table AREAS_PSIQUICAS(
 id_area_psiquica int not null auto_increment primary KEY,
@@ -78,7 +78,7 @@ fk_paciente INT,
 foreign key (fk_paciente) references PACIENTES (id_paciente)
 );
 
-
+SELECT * FROM  HABITOS_ALIMENTICIOS
 
 create table HISTORIAS_IDENTIDADES_GENEROS(
 id_historia_identidad_genero int not null auto_increment primary key, 
@@ -131,6 +131,17 @@ FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 );
 
 
+CREATE  TABLE PROFESIONALES_USUARIOS_SALUD(
+id_profesional_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+rut_profesional_salud VARCHAR (12) NOT NULL, 
+nombre_usuario VARCHAR (50) NOT NULL,  
+cargo_profesional_salud VARCHAR (20) NOT NULL, 
+contrasena VARCHAR (200) NOT NULL,
+roles VARCHAR (15) NOT NULL, 
+fk_centro_salud INT, 
+FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
+);
+select * from  CENTROS_SALUD
 
 create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
@@ -159,3 +170,7 @@ FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADA
 insert into CENTROS_SALUD values (NULL, "Antonio Tirado Lanas", "Coquimbo", "/pruebas");
 insert into PRENDAS_DISCONFORMIDAD values (null, "packing"), (null, "binder"), (null, "tucking");
 
+
+ SELECT email_profesional_salud, contrasena, id_profesional_salud, roles, nombre_centro_salud  FROM profesionales_usuarios_salud
+    join  CENTROS_SALUD as cs on id_centro_salud  = fk_centro_salud 
+   WHERE email_profesional_salud = "dante@gmail.com"

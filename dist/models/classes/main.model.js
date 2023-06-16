@@ -32,5 +32,21 @@ class PaginaPrincipal {
             return result[0];
         });
     }
+    estadisticaAreaPsiquica() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+        select 
+        control_equipo_salud_mental
+        from AREAS_PSIQUICAS where control_equipo_salud_mental = 1 `;
+            const total = `
+        select 
+        control_equipo_salud_mental
+        from AREAS_PSIQUICAS`;
+            const dataAreaPsiquica = yield (0, consultasGenerales_1.consultasGenerales)(query);
+            //personas que usan drogas/total de personas
+            console.log((25 / 25) * 100);
+            console.log(dataAreaPsiquica.length);
+        });
+    }
 }
 exports.PaginaPrincipal = PaginaPrincipal;

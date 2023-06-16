@@ -23,7 +23,27 @@ export class PaginaPrincipal{
         return result[0];
 
     }
+    async estadisticaAreaPsiquica(){
 
-   
+        const query:string = `
+        select 
+        control_equipo_salud_mental
+        from AREAS_PSIQUICAS where control_equipo_salud_mental = 1 `;
+
+        const total:string = `
+        select 
+        control_equipo_salud_mental
+        from AREAS_PSIQUICAS`;
+     
+
+        const dataAreaPsiquica = await consultasGenerales(query);
+
+        //personas que usan drogas/total de personas
+        console.log((25/25)*100);
+
+        console.log(dataAreaPsiquica.length);
+    }
+
+
 
 } 

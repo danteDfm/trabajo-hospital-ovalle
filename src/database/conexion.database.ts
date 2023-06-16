@@ -33,7 +33,7 @@ class ConexionDatabase {
     }
   }
 
-  getConnection(){
+  async getConnection(){
 
     if (!this.sqlConexion) {
       throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");

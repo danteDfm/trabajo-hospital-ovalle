@@ -20,24 +20,15 @@ function verficarSesion(req, res, next) {
         const { emailUsuario, contrasenaUsuario } = req.body;
         try {
             if (!emailUsuario || !contrasenaUsuario) {
-                throw {
-                    error: "Los datos no puede estar vacios",
-                    code: 101,
-                };
+                throw ("Los datos no puede estar vacios");
             }
             const result = yield (0, consultasGenerales_1.consultasGenerales)(query, [emailUsuario]);
             if (!result[0]) {
-                throw {
-                    error: "EL email no se encuentra en la base de datos",
-                    code: 102,
-                };
+                throw ("EL email no se encuentra en la base de datos");
             }
             const verificacion = yield (0, hash_contrasena_1.compararContrasena)(contrasenaUsuario, result[0].contrasena);
             if (!verificacion) {
-                throw {
-                    error: "Contraseña es invalida",
-                    code: 103,
-                };
+                throw ("Contraseña es invalida");
             }
             req.dataUsuario = {
                 idProfesional: result[0].id_profesional_salud,
@@ -46,9 +37,7 @@ function verficarSesion(req, res, next) {
             next();
         }
         catch (err) {
-            return res.status(400).json({
-                err,
-            });
+            return res.status(400).json(err);
         }
     });
 }

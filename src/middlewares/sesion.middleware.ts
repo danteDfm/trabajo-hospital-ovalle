@@ -17,19 +17,15 @@ export async function verficarSesion(
 
 
     if (!emailUsuario || !contrasenaUsuario) {
-      throw {
-        error: "Los datos no puede estar vacios",
-        code: 101,
-      };
+      throw ("Los datos no puede estar vacios");
+  
     }
 
     const result = await consultasGenerales(query, [emailUsuario]);
 
     if (!result[0]) {
-      throw {
-        error: "EL email no se encuentra en la base de datos",
-        code: 102,
-      };
+      throw ("EL email no se encuentra en la base de datos");
+     
     }
 
     const verificacion = await compararContrasena(
@@ -38,10 +34,8 @@ export async function verficarSesion(
     );
 
     if (!verificacion) {
-      throw {
-        error: "Contraseña es invalida",
-        code: 103,
-      };
+      throw ("Contraseña es invalida");
+    
     }
   
     req.dataUsuario = {
@@ -51,8 +45,7 @@ export async function verficarSesion(
 
     next();
   } catch (err) {
-    return res.status(400).json({
-      err,
-    });
+    return res.status(400).json(err);
+    
   }
 }

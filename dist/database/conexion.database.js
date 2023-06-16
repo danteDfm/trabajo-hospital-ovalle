@@ -36,10 +36,12 @@ class ConexionDatabase {
         });
     }
     getConnection() {
-        if (!this.sqlConexion) {
-            throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
-        }
-        return this.sqlConexion;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.sqlConexion) {
+                throw new Error("LA CONEXION AUN NO SE HA ESTABLECIDO");
+            }
+            return this.sqlConexion;
+        });
     }
 }
 exports.default = ConexionDatabase;

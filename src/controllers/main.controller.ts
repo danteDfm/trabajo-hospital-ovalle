@@ -17,7 +17,9 @@ export class MainController{
        totalPacientes =  await estadisticasFicha.TotalPacientes();
        for(let i=0; i<long; i++){
            generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
-       }
+       }    
+
+       await estadisticasFicha.estadisticaAreaPsiquica();
        
          res.status(201).json({
             generos,

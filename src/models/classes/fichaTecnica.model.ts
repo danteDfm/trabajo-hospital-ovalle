@@ -1,3 +1,4 @@
+import { mysqlConnexion } from "../..";
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Ficha {
@@ -99,7 +100,8 @@ export class Ficha {
 
       if (!estadoFicha[0]) {
         return false;
-      }
+      } 
+
 
       return true;
     } catch (err: any) {
@@ -119,6 +121,7 @@ export class Ficha {
 
     try { 
 
+    
       if(!idFicha) return 0;
 
       await consultasGenerales(query, [
