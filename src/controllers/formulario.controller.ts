@@ -85,7 +85,7 @@ export class FormularioController {
       const  verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
       //update en caso de existir el paciente
-      if(verificacionFicha){  
+      if(verificacionFicha && paciente.idPaciente){  
 
         objCuarto.actulizarPaciente(paciente.idPaciente);
         objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);

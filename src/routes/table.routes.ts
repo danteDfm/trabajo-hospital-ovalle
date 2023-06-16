@@ -1,4 +1,4 @@
-import { TablaController } from "../controllers/dataTable.controller";
+import { TablaController } from "../controllers/tabla.controller";
 import { Router } from "express";
 const router = Router();
 

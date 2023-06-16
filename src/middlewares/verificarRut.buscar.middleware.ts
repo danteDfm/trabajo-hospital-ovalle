@@ -14,8 +14,10 @@ export async function buscarRut(
 
     console.log(data[0]);
 
-    if (!data[0]) {
+    if (!data[0]){
+
       throw "paciente no existe en la base de datos";
+      
     }
 
     next();

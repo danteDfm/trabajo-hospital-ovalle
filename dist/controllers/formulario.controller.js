@@ -51,7 +51,7 @@ class FormularioController {
             try {
                 const verificacionFicha = yield ficha_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
-                if (verificacionFicha) {
+                if (verificacionFicha && paciente.idPaciente) {
                     objCuarto.actulizarPaciente(paciente.idPaciente);
                     objCuarto.actualizarprimerPaso(involucrado.idInvolucrado, acompanante.idAcompanante);
                     objCuarto.actualizarSegundoPaso(genero.idGenero);
