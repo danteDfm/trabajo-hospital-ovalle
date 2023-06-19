@@ -6,4 +6,5 @@ const fichas_controllers_1 = require("../controllers/fichas.controllers");
 const historial_ficha_middleware_1 = require("../middlewares/historial.ficha.middleware");
 router.get('/activa/:idPaciente', historial_ficha_middleware_1.verificarId, fichas_controllers_1.FichasController.fichaActiva);
 router.get('/inactivas/:idPaciente', historial_ficha_middleware_1.verificarId, fichas_controllers_1.FichasController.fichaInactiva);
+router.get('/listar/:idFicha', fichas_controllers_1.FichasController.listarFichaId);
 exports.default = router;

@@ -45,5 +45,12 @@ class FichasController {
             }
         });
     }
+    static listarFichaId(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idFicha } = req.params;
+            const dataFicha = yield objFicha.listarPorIdFicha(parseInt(idFicha));
+            res.json(dataFicha);
+        });
+    }
 }
 exports.FichasController = FichasController;

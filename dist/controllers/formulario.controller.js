@@ -74,7 +74,7 @@ class FormularioController {
             catch (err) {
                 res.status(201).json({
                     err,
-                    msj: "Error interno del servidor"
+                    msj: "Error interno del servidor",
                 });
             }
         });

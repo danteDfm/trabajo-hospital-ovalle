@@ -11,11 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainController = void 0;
 const main_model_1 = require("../models/classes/main.model");
-const estadisticasFicha = new main_model_1.PaginaPrincipal;
+const estadisticasFicha = new main_model_1.PaginaPrincipal();
 class MainController {
     static estadisticas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const gen = ["masculino", "femenino", "genero fluido", "agenero", "biogenero"];
+            const gen = [
+                "masculino",
+                "femenino",
+                "genero fluido",
+                "agenero",
+                "biogenero",
+            ];
             let ingresosDia;
             let generos = [];
             let totalPacientes = 0;
@@ -29,7 +35,7 @@ class MainController {
             res.status(201).json({
                 generos,
                 totalPacientes,
-                ingresosDia
+                ingresosDia,
             });
         });
     }

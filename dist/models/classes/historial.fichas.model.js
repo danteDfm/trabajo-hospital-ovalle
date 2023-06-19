@@ -62,6 +62,104 @@ class Fichas {
             }
         });
     }
+    listarPorIdFicha(idFicha) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryFicha = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
+            const queryPaciente = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
+            const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS
+    WHERE id_historia_clinica = ?`;
+            const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
+    WHERE id_persona_involucrada_transicion = ?
+    `;
+            const queryPsique = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
+            const queryDdrogas = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
+    join pacientes as pa on fk_paciente = id_paciente
+    where id_historial_droga = ?
+    `;
+            const queryDieta = `SELECT detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
+    join pacientes as pa on ha.fk_paciente = pa.id_paciente
+    where id_habito_alimenticio = ?
+    `;
+            const queryIdentidad = `SELECT 
+    id_historia_identidad_genero,
+    identidad_genero, 
+    orientacion_sexual, 
+    autopercepcion, 
+    inicio_transicion_sexual, 
+    tiempo_latencia, 
+    apoyo_nucleo_familiar,
+    uso_prenda, 
+    presencia_disforia,
+    detalles_diforia
+    FROM HISTORIAS_IDENTIDADES_GENEROS as ig
+    join pacientes as pa on ig.fk_paciente = pa.id_paciente
+    WHERE id_historia_identidad_genero = 1`;
+            const queryPrenda = `select 
+    fk_prenda_disconformidad
+    from SELECCION_PRENDA as sp
+    join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
+    WHERE id_historia_identidad_genero = ?`;
+            let idHistoria;
+            let dataAntecedentes;
+            let dataInvolucrado;
+            let dataAcompanante;
+            let dataPsique;
+            let dataDroga;
+            let dataDieta;
+            let dataHistoria;
+            let dataPrenda;
+            try {
+                const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(queryFicha, [
+                    idFicha
+                ]);
+                const idPaciente = dataFicha[0].fk_paciente;
+                const idpsiquica = dataFicha[0].fk_area_psiquica;
+                const idHistoriaClinica = dataFicha[0].fk_historia_clinica;
+                const idInvolucrado = dataFicha[0].fk_persona_involucrada_encargada;
+                const idAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(queryPaciente, [
+                    idPaciente
+                ]);
+                dataAntecedentes = yield (0, consultasGenerales_1.consultasGenerales)(queryAntecedentes, [
+                    idHistoriaClinica
+                ]);
+                dataInvolucrado = yield (0, consultasGenerales_1.consultasGenerales)(queryInvolucrada, [
+                    idInvolucrado
+                ]);
+                dataAcompanante = yield (0, consultasGenerales_1.consultasGenerales)(queryInvolucrada, [
+                    idAcompanante
+                ]);
+                dataPsique = yield (0, consultasGenerales_1.consultasGenerales)(queryPsique, [idpsiquica]);
+                dataDroga = yield (0, consultasGenerales_1.consultasGenerales)(queryDdrogas, [
+                    idPaciente,
+                ]);
+                dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [
+                    idPaciente,
+                ]);
+                dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [
+                    idPaciente,
+                ]);
+                idHistoria = yield dataHistoria[0].id_historia_identidad_genero;
+                dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
+                return {
+                    paciente: dataPaciente[0],
+                    ficha: dataFicha[0],
+                    antecedentes: dataAntecedentes[0],
+                    involucrado: dataInvolucrado[0],
+                    acompanante: dataAcompanante[0],
+                    areaPsiquica: dataPsique[0],
+                    historialDrogas: dataDroga[0],
+                    habitosAlimenticios: dataDieta[0],
+                    historiaGenero: dataHistoria[0],
+                    dataPrenda,
+                };
+            }
+            catch (err) {
+                console.log(err);
+                throw new Error(err);
+            }
+        });
+    }
     listarInformacionPaciente(rutPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS

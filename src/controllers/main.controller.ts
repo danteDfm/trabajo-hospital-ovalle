@@ -1,35 +1,33 @@
 import { PaginaPrincipal } from "../models/classes/main.model";
 import { Request, Response } from "express";
 
-const estadisticasFicha = new PaginaPrincipal;
+const estadisticasFicha = new PaginaPrincipal();
 
-export class MainController{
+export class MainController {
+  static async estadisticas(req: Request, res: Response) {
+    const gen = [
+      "masculino",
+      "femenino",
+      "genero fluido",
+      "agenero",
+      "biogenero",
+    ];
+    let ingresosDia;
+    let generos: Array<number> = [];
+    let totalPacientes: number = 0;
+    let long = gen.length;
 
-    static async estadisticas(req:Request, res:Response){
-
-        const gen = ["masculino", "femenino", "genero fluido", "agenero", "biogenero"];
-        let ingresosDia 
-        let generos:Array<number> = [];
-        let totalPacientes:number = 0;
-        let long = gen.length;
-
-       ingresosDia = await estadisticasFicha.ingresosDelDia();
-       totalPacientes =  await estadisticasFicha.TotalPacientes();
-       for(let i=0; i<long; i++){
-           generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
-       }    
-
-       
-
-       await estadisticasFicha.estadisticaAreaPsiquica();
-       
-         res.status(201).json({
-            generos,
-            totalPacientes,
-            ingresosDia
-         });
-
+    ingresosDia = await estadisticasFicha.ingresosDelDia();
+    totalPacientes = await estadisticasFicha.TotalPacientes();
+    for (let i = 0; i < long; i++) {
+      generos.push(await estadisticasFicha.cantidadGeneros(gen[i]));
     }
 
-
+    await estadisticasFicha.estadisticaAreaPsiquica();
+    res.status(201).json({
+      generos,
+      totalPacientes,
+      ingresosDia,
+    });
+  }
 }

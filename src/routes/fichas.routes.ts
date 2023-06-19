@@ -6,5 +6,6 @@ import { verificarId } from "../middlewares/historial.ficha.middleware";
 
 router.get('/activa/:idPaciente', verificarId,FichasController.fichaActiva);
 router.get('/inactivas/:idPaciente', verificarId,FichasController.fichaInactiva);
+router.get('/listar/:idFicha', FichasController.listarFichaId);
 
 export default router;

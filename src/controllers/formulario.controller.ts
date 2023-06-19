@@ -17,8 +17,6 @@ import { Fichas } from "../models/classes/historial.fichas.model";
 const objFichas = new Fichas();
 
 export class FormularioController {
-
-
   static async buscarFichaPaciente(req: Request, res: Response) {
     try {
       const { rutPaciente } = req.params;
@@ -32,8 +30,7 @@ export class FormularioController {
     }
   }
 
-  static async crearFichaTecnica(req: any, res:Response){
-
+  static async crearFichaTecnica(req: any, res: Response) {
     const {
       fichas,
       paciente,
@@ -47,12 +44,11 @@ export class FormularioController {
       prendas,
     } = req.body;
 
-
     const nivel = parseInt(req.query.nivel as string);
     const idUsuario = parseInt(req.params.idUsuario as string);
 
     let fechaIngreso;
-    let estado: boolean | undefined = true ;
+    let estado: boolean | undefined = true;
 
     fechaIngreso = fechaExacta();
 
@@ -64,7 +60,6 @@ export class FormularioController {
       acompanante,
     };
     const fichaTipada: Pacientes = paciente;
-
 
     const objCuarto = new FormularioCuartoPaso(
       antecedentesTipado,
@@ -78,84 +73,70 @@ export class FormularioController {
       prendas.prenda
     );
 
-
-
-    try{
-
-  
+    try {
       console.log(historialDrogas);
-      const  verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
+
+      const verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
       //update en caso de existir el paciente
-      if(verificacionFicha && req.idTablas.idPaciente){  
+      if (verificacionFicha && req.idTablas.idPaciente) {
+        await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
+        await objCuarto.actualizarprimerPaso(
+          req.idTablas.idInvolucrado,
+          req.idTablas.idAcompanante
+        );
+        await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+        await objCuarto.actulizarTercerPaso(
+          req.idTablas.idAreaPsiquica,
+          req.idTablas.idDieta,
+          req.idTablas.idDrogas
+        );
+        await objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
 
-          await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
-          await objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
-          await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
-          await objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta, req.idTablas.idDrogas);
-          await objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
+        const objFichas = new Ficha(
+          fechaIngreso,
+          estado,
+          nivel,
+          fichas.apoyoEscolar,
+          fichas.judicializacion,
+          fichas.detallesApoyo,
+          fichas.detallesJudicializacion
+        );
 
-          const objFichas = new Ficha(
-            fechaIngreso,
-            estado,
-            nivel, 
-            fichas.apoyoEscolar,
-            fichas.judicializacion, 
-            fichas.detallesApoyo,
-            fichas.detallesJudicializacion
-          );
-
-          const msj =await objFichas.actulizarFicha(req.idTablas.idFicha);
-          return res.status(201).json(msj);
-
+        const msj = await objFichas.actulizarFicha(req.idTablas.idFicha);
+        return res.status(201).json(msj);
       }
 
-
       const idPaciente = await objCuarto.crearPaciente();
-      const idPrimerPaso=await objCuarto.guardarPrimerPaso();
+      const idPrimerPaso = await objCuarto.guardarPrimerPaso();
       objCuarto.crearSegundoPaso(idPaciente);
-      const idTecerPaso=await objCuarto.crearTercerPaso(idPaciente);
-      const idCuartoPaso= await objCuarto.crearCuartoPaso();
+      const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);
+      const idCuartoPaso = await objCuarto.crearCuartoPaso();
 
-
-    
       const objFichas = new Ficha(
         fechaIngreso,
         estado,
-        nivel, 
+        nivel,
         fichas.apoyoEscolar,
-        fichas.judicializacion, 
+        fichas.judicializacion,
         fichas.detallesApoyo,
         fichas.detallesJudicializacion,
-        idPaciente, 
-        idUsuario, 
+        idPaciente,
+        idUsuario,
         idTecerPaso.idAreaPsiquica,
         idCuartoPaso,
         idPrimerPaso.idInvolucrado,
         idPrimerPaso.idAcompanante
       );
 
-      const msj=await objFichas.crearFichaTecnica();
+      const msj = await objFichas.crearFichaTecnica();
 
-
-
-
-    res.status(201).json(msj);
-
-    }catch(err:any){
-
+      res.status(201).json(msj);
+    } catch (err: any) {
       res.status(201).json({
-
-        err, 
-        msj: "Error interno del servidor"
-
+        err,
+        msj: "Error interno del servidor",
       });
-
     }
-  
   }
-
-
-
-
 }

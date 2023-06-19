@@ -32,4 +32,21 @@ export class FichasController {
       });
     }
   }
+
+
+  static async listarFichaId(req:Request, res:Response){
+
+    const {idFicha} = req.params;
+
+
+     const  dataFicha= await  objFicha.listarPorIdFicha(parseInt(idFicha));
+
+  
+
+    
+
+    res.json(dataFicha);
+
+  }
+  
 }

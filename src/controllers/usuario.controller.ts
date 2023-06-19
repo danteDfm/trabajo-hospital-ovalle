@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { Usuario } from "../models/classes/usurio.model";
-import { compararContrasena, hashContrasena } from "../utils/bcrypt/hash.contrasena";
+import {
+  compararContrasena,
+  hashContrasena,
+} from "../utils/bcrypt/hash.contrasena";
 
 let objUsuario = new Usuario();
 export class UsuarioController {
@@ -8,7 +11,7 @@ export class UsuarioController {
     try {
       let existenciaUser: boolean;
       let contrasenaHasheada: string;
-      let  {
+      let {
         rutProfesional,
         nombreProfesional,
         contrasenaProfesional,
@@ -16,13 +19,11 @@ export class UsuarioController {
         centroProfesional,
         rolProfesional,
       } = req.body;
-        
-   
-        existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
+
+      existenciaUser = await objUsuario.exitenciaUsuario(rutProfesional);
       if (existenciaUser) throw "Usuario ya existe en la base de datos";
 
       contrasenaHasheada = await hashContrasena(contrasenaProfesional);
-      
 
       objUsuario.setRutProfesional(rutProfesional);
       objUsuario.setNombreProfesional(nombreProfesional);
@@ -34,7 +35,6 @@ export class UsuarioController {
       const msjCrearUser = await objUsuario.ingresarUsuario();
       res.status(201).json(msjCrearUser);
     } catch (err) {
-
       console.log(err);
       res.status(500).json({
         err,
@@ -42,7 +42,6 @@ export class UsuarioController {
       });
     }
   }
-
 
   static async listaUsuarios(req: Request, res: Response) {
     try {
@@ -56,12 +55,11 @@ export class UsuarioController {
     }
   }
 
-
   static async actualizarUsuario(req: Request, res: Response) {
     try {
       const { idUsuario } = req.params;
       let contrasenaHasheada: string;
-    
+
       const {
         rutProfesional,
         nombreProfesional,
@@ -72,7 +70,6 @@ export class UsuarioController {
       } = req.body;
 
       contrasenaHasheada = await hashContrasena(contrasenaProfesional);
-
 
       objUsuario.setRutProfesional(rutProfesional);
       objUsuario.setNombreProfesional(nombreProfesional);
