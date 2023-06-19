@@ -54,7 +54,8 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
     detalles_antecedentes_quirurgicos =?,
     detalles_antecedentes_alergicos = ?,
     detalles_antecedentes_pni =  ?,
-    detalles_funcionalidad_genital = ?
+    detalles_funcionalidad_genital = ?,
+    detalles_antecedentes_familia = ?
     WHERE id_historia_clinica = ? `;
             try {
                 if (!idAntecedentes)
@@ -66,11 +67,13 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
                     this.antecedentesAlergicos,
                     this.antecedentesPni,
                     this.funcionalidadGenital,
+                    this.antecedentesFamilia,
                     idAntecedentes
                 ]));
                 return "Los datos han sido actualizados: cuarto paso";
             }
             catch (err) {
+                console.log(err);
                 throw new Error(err);
             }
         });

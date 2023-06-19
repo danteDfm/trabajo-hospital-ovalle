@@ -11,9 +11,8 @@ export class UsuarioController {
       let  {
         rutProfesional,
         nombreProfesional,
-        cargoProfesional,
         contrasenaProfesional,
-        emailProfesional,
+        cargoProfesional,
         centroProfesional,
         rolProfesional,
       } = req.body;
@@ -29,7 +28,6 @@ export class UsuarioController {
       objUsuario.setNombreProfesional(nombreProfesional);
       objUsuario.setCargoProfesional(cargoProfesional);
       objUsuario.setContrasenaProfesional(contrasenaHasheada);
-      objUsuario.SetEmailProfesional(emailProfesional);
       objUsuario.setCentroProfesional(centroProfesional);
       objUsuario.setRolProfesional(rolProfesional);
 
@@ -80,7 +78,6 @@ export class UsuarioController {
       objUsuario.setNombreProfesional(nombreProfesional);
       objUsuario.setCargoProfesional(cargoProfesional);
       objUsuario.setContrasenaProfesional(contrasenaHasheada);
-      objUsuario.SetEmailProfesional(emailProfesional);
       objUsuario.setCentroProfesional(centroProfesional);
 
       const msjActualizarUsuario: string = await objUsuario.actualizarUsuario(

@@ -2,13 +2,13 @@ import Query from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 
 export class Usuario {
+
   private rutProfesional?: string;
   private nombreProfesional?: string;
-  private cargoProfesional?: string;
   private contrasenaProfesional?: string;
-  private emailProfesional?: string;
-  private centroProfesional?: number;
+  private cargoProfesional?: string;
   private rolProfesional?: string;
+  private centroProfesional?: number;
 
   //admin
   //commonUser
@@ -16,31 +16,30 @@ export class Usuario {
   constructor(
     rutProfesional?: string,
     nombreProfesional?: string,
-    cargoProfesional?: string,
     contrasenaProfesional?: string,
-    emailProfesional?: string,
+    cargoProfesional?: string,
+    rolProfesional?: string,
     centroProfesional?: number,
-    rolProfesional?: string
   ) {
+
     this.rutProfesional = rutProfesional;
     this.nombreProfesional = nombreProfesional;
-    this.emailProfesional = cargoProfesional;
-    this.cargoProfesional = contrasenaProfesional;
-    this.contrasenaProfesional = emailProfesional;
-    this.centroProfesional = centroProfesional;
+    this.contrasenaProfesional = contrasenaProfesional;
+    this.cargoProfesional = cargoProfesional;
     this.rolProfesional = rolProfesional;
+    this.centroProfesional = centroProfesional;
+   
   }
 
   async ingresarUsuario() {
     try {
-      const query: string = `INSERT INTO PROFESIONALES_USUARIOS_SALUD VALUES (NULL, ?,?,?,?,?,?,?)`;
+      const query: string = `INSERT INTO PROFESIONALES_USUARIOS_SALUD VALUES (NULL,?,?,?,?,?,?)`;
 
       await consultasGenerales(query, [
         this.rutProfesional,
         this.nombreProfesional,
-        this.emailProfesional,
-        this.cargoProfesional,
         this.contrasenaProfesional,
+        this.cargoProfesional,
         this.rolProfesional,
         this.centroProfesional
       ]);
@@ -59,10 +58,9 @@ export class Usuario {
         const query: string = `
       UPDATE PROFESIONALES_USUARIOS_SALUD SET
       rut_profesional_salud = ?, 
-      nombre_profesional_salud = ?,
-      email_profesional_salud = ?,
-      cargo_profesional_salud  = ?,
+      nombre_usuario = ?,
       contrasena = ?,
+      cargo_profesional_salud  = ?,
       fk_centro_salud = ?
       WHERE id_profesional_salud = ?`;
 
@@ -71,9 +69,8 @@ export class Usuario {
       consultasGenerales(query, [
         this.rutProfesional,
         this.nombreProfesional,
-        this.emailProfesional,
-        this.cargoProfesional,
         this.contrasenaProfesional,
+        this.cargoProfesional,
         this.centroProfesional,
         idProfesionalSalud,
       ]);
@@ -89,10 +86,11 @@ export class Usuario {
     try {
       
       const rolApartado = "administrador";
+
       const query: string = `
         SELECT id_profesional_salud,
         rut_profesional_salud,
-        nombre_profesional_salud, email_profesional_salud,
+        nombre_usuario,
         cargo_profesional_salud,  
         fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
 
@@ -130,9 +128,6 @@ export class Usuario {
     this.contrasenaProfesional = contrasenaProfesional;
   }
 
-  public SetEmailProfesional(emailProfesional: string): void {
-    this.emailProfesional = emailProfesional;
-  }
   public setCentroProfesional(centroProfesional: number): void {
     this.centroProfesional = centroProfesional;
   }

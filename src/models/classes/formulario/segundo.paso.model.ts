@@ -17,9 +17,9 @@ export class FormularioSegundoPaso
   public autopercepcion: number | null;
   public inicioTransicioSexual: Date | null;
   public tiempoLatencia: Date | null;
-  public apoyoFamiliar: boolean | null;
-  public usoPrenda: boolean | null;
-  public presenciaDisforia: boolean | null;
+  public apoyoFamiliar: boolean;
+  public usoPrenda: boolean;
+  public presenciaDisforia: boolean;
   public detallesDiforia: string | null;
 
 
@@ -40,9 +40,9 @@ export class FormularioSegundoPaso
       this.autopercepcion = genero.autopercepcion|| null;
       (this.inicioTransicioSexual = genero.inicioTransicioSexual || null),
       (this.tiempoLatencia = genero.tiempoLatencia || null),
-      (this.apoyoFamiliar = genero.apoyoFamiliar || null),
-      (this.usoPrenda = genero.usoPrenda || null),
-      (this.presenciaDisforia = genero.presenciaDisforia || null),
+      (this.apoyoFamiliar = genero.apoyoFamiliar),
+      (this.usoPrenda = genero.usoPrenda),
+      (this.presenciaDisforia = genero.presenciaDisforia),
       (this.detallesDiforia = genero.detallesDiforia || null);
     
 

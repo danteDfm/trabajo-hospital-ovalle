@@ -6,6 +6,8 @@ export class Fichas {
 
     const query: string = `
         select 
+        rut_paciente,
+        nombre_social,
         nombre_paciente, 
         apellido_paterno_paciente, 
         id_ficha_tecnica, 
@@ -52,6 +54,8 @@ export class Fichas {
 
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
+
+
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?
     `;

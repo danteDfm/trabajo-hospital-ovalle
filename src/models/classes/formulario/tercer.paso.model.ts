@@ -12,24 +12,22 @@ export class FormularioTercerPaso
   extends FormularioSegundoPaso
   implements AreaPsiquica
 {
-  controlEquipoSaludMental?: boolean | null;
-  psicoterapia?: boolean | null;
-  evaluacionPsiquica?: boolean | null;
-  diagnosticoPsiquiatrico?: boolean | null;
-  utilizacionFarmaco?: boolean | null;
+  controlEquipoSaludMental?: boolean;
+  psicoterapia?: boolean;
+  evaluacionPsiquica?: boolean;
+  diagnosticoPsiquiatrico?: boolean;
+  utilizacionFarmaco?: boolean;
   detallesFarmacos?: string | null;
 
-  public usoDroga: boolean | null;
+  public usoDroga: boolean;
   public detallesDroga: string | null;
 
   public dieta: string | null;
 
   constructor(
     areaPsiquica: AreaPsiquica,
-    
-    usoDroga: boolean | null,
+    usoDroga: boolean,
     detallesDroga: string | null,
-
     dieta: string | null,
     genero: HistoriaGenero,
     primerPaso: PrimerPaso,
@@ -38,16 +36,18 @@ export class FormularioTercerPaso
   ) {
     super(genero, primerPaso, pacientes, prendas);
 
-    (this.controlEquipoSaludMental =
-      areaPsiquica.controlEquipoSaludMental || null),
-      (this.psicoterapia = areaPsiquica.psicoterapia || null),
-      (this.evaluacionPsiquica = areaPsiquica.evaluacionPsiquica || null),
+     (this.controlEquipoSaludMental =
+      areaPsiquica.controlEquipoSaludMental),
+      (this.psicoterapia = areaPsiquica.psicoterapia),
+      (this.evaluacionPsiquica = areaPsiquica.evaluacionPsiquica),
       (this.diagnosticoPsiquiatrico =
-        areaPsiquica.diagnosticoPsiquiatrico || null),
-      (this.utilizacionFarmaco = areaPsiquica.utilizacionFarmaco || null),
+        areaPsiquica.diagnosticoPsiquiatrico ),
+      (this.utilizacionFarmaco = areaPsiquica.utilizacionFarmaco),
       (this.detallesFarmacos = areaPsiquica.detallesFarmacos || null);
 
-      this.usoDroga = usoDroga || null;
+      this.usoDroga = usoDroga;
+
+     
       this.detallesDroga = detallesDroga || null;
 
       this.dieta = dieta || null;
@@ -105,7 +105,7 @@ export class FormularioTercerPaso
     }
   }
 
-  async actulizarTercerPaso(idAreaPsiquica:number, idDieta:number){
+  async actulizarTercerPaso(idAreaPsiquica:number, idDieta:number, idDrogas:Number){
 
     const objConexion = await mysqlConnexion;
     const queryAreaPsique: string = `UPDATE AREAS_PSIQUICAS SET
@@ -113,6 +113,12 @@ export class FormularioTercerPaso
     evaluacion_psiquica= ?,  diagnostico_psiquiatrico = ?, utilizacion_farmaco = ?, detalles_farmacos = ? WHERE id_area_psiquica = ?`;
 
     const queryHabitos:string = `UPDATE HABITOS_ALIMENTICIOS SET detalle_habito_alimenticio = ? WHERE id_habito_alimenticio = ?`;
+
+    const queryDrogas:string = `UPDATE HISTORIAL_DROGAS
+    SET uso_droga = ?, 
+    detalles_uso_droga = ?
+    WHERE id_historial_droga = ?
+    `;
     try{  
 
       if(!idAreaPsiquica) return 0;
@@ -130,6 +136,15 @@ export class FormularioTercerPaso
       if(!idDieta) return 0;
 
       await objConexion?.query(queryHabitos, [this.dieta, idDieta]);
+
+      if(!idDrogas) return 0;
+ 
+      await objConexion?.query(queryDrogas, [
+        this.usoDroga, 
+        this.detallesDroga,
+        idDrogas
+      ]);
+
       return "Los datos han sido actualizados: tercer paso";
 
     }catch(err:any){

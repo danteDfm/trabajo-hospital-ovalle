@@ -47,6 +47,7 @@ export class FormularioController {
       prendas,
     } = req.body;
 
+
     const nivel = parseInt(req.query.nivel as string);
     const idUsuario = parseInt(req.params.idUsuario as string);
 
@@ -64,6 +65,7 @@ export class FormularioController {
     };
     const fichaTipada: Pacientes = paciente;
 
+
     const objCuarto = new FormularioCuartoPaso(
       antecedentesTipado,
       areaPsiquicaTipada,
@@ -80,31 +82,31 @@ export class FormularioController {
 
     try{
 
-    
-
+  
+      console.log(historialDrogas);
       const  verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
       //update en caso de existir el paciente
       if(verificacionFicha && req.idTablas.idPaciente){  
 
-        objCuarto.actulizarPaciente(req.idTablas.idPaciente);
-        objCuarto.actualizarprimerPaso(req.idTablas.involucrado, req.idTablas.acompanante);
-        objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
-        objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta);
-        objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
+          await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
+          await objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
+          await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+          await objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta, req.idTablas.idDrogas);
+          await objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
 
-        const objFichas = new Ficha(
-          fechaIngreso,
-          estado,
-          nivel, 
-          fichas.apoyoEscolar,
-          fichas.judicializacion, 
-          fichas.detallesApoyo,
-          fichas.detallesJudicializacion
-        );
+          const objFichas = new Ficha(
+            fechaIngreso,
+            estado,
+            nivel, 
+            fichas.apoyoEscolar,
+            fichas.judicializacion, 
+            fichas.detallesApoyo,
+            fichas.detallesJudicializacion
+          );
 
-        const msj =await objFichas.actulizarFicha(req.idTablas.idFicha);
-        return res.status(201).json(msj);
+          const msj =await objFichas.actulizarFicha(req.idTablas.idFicha);
+          return res.status(201).json(msj);
 
       }
 
@@ -129,7 +131,7 @@ export class FormularioController {
         idUsuario, 
         idTecerPaso.idAreaPsiquica,
         idCuartoPaso,
-        idPrimerPaso.idInvolucrado, 
+        idPrimerPaso.idInvolucrado,
         idPrimerPaso.idAcompanante
       );
 

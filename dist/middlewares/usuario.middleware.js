@@ -4,7 +4,7 @@ exports.vericarDataUsuario = void 0;
 function vericarDataUsuario(req, res, next) {
     let { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
     try {
-        if (!rutProfesional || !emailProfesional || !contrasenaProfesional || !nombreProfesional || !centroProfesional || !cargoProfesional || !rolProfesional) {
+        if (!rutProfesional || !contrasenaProfesional || !nombreProfesional || !centroProfesional || !cargoProfesional || !rolProfesional) {
             throw ({
                 msj: 'Los datos no deben estar vacios'
             });

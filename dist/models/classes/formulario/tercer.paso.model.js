@@ -16,14 +16,14 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
     constructor(areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas) {
         super(genero, primerPaso, pacientes, prendas);
         (this.controlEquipoSaludMental =
-            areaPsiquica.controlEquipoSaludMental || null),
-            (this.psicoterapia = areaPsiquica.psicoterapia || null),
-            (this.evaluacionPsiquica = areaPsiquica.evaluacionPsiquica || null),
+            areaPsiquica.controlEquipoSaludMental),
+            (this.psicoterapia = areaPsiquica.psicoterapia),
+            (this.evaluacionPsiquica = areaPsiquica.evaluacionPsiquica),
             (this.diagnosticoPsiquiatrico =
-                areaPsiquica.diagnosticoPsiquiatrico || null),
-            (this.utilizacionFarmaco = areaPsiquica.utilizacionFarmaco || null),
+                areaPsiquica.diagnosticoPsiquiatrico),
+            (this.utilizacionFarmaco = areaPsiquica.utilizacionFarmaco),
             (this.detallesFarmacos = areaPsiquica.detallesFarmacos || null);
-        this.usoDroga = usoDroga || null;
+        this.usoDroga = usoDroga;
         this.detallesDroga = detallesDroga || null;
         this.dieta = dieta || null;
     }
@@ -69,13 +69,18 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
             }
         });
     }
-    actulizarTercerPaso(idAreaPsiquica, idDieta) {
+    actulizarTercerPaso(idAreaPsiquica, idDieta, idDrogas) {
         return __awaiter(this, void 0, void 0, function* () {
             const objConexion = yield __1.mysqlConnexion;
             const queryAreaPsique = `UPDATE AREAS_PSIQUICAS SET
     control_equipo_salud_mental = ?, psicoterapia  = ?,
     evaluacion_psiquica= ?,  diagnostico_psiquiatrico = ?, utilizacion_farmaco = ?, detalles_farmacos = ? WHERE id_area_psiquica = ?`;
             const queryHabitos = `UPDATE HABITOS_ALIMENTICIOS SET detalle_habito_alimenticio = ? WHERE id_habito_alimenticio = ?`;
+            const queryDrogas = `UPDATE HISTORIAL_DROGAS
+    SET uso_droga = ?, 
+    detalles_uso_droga = ?
+    WHERE id_historial_droga = ?
+    `;
             try {
                 if (!idAreaPsiquica)
                     return 0;
@@ -91,6 +96,13 @@ class FormularioTercerPaso extends segundo_paso_model_1.FormularioSegundoPaso {
                 if (!idDieta)
                     return 0;
                 yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryHabitos, [this.dieta, idDieta]));
+                if (!idDrogas)
+                    return 0;
+                yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryDrogas, [
+                    this.usoDroga,
+                    this.detallesDroga,
+                    idDrogas
+                ]));
                 return "Los datos han sido actualizados: tercer paso";
             }
             catch (err) {

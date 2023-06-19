@@ -49,14 +49,15 @@ class FormularioController {
             const fichaTipada = paciente;
             const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
+                console.log(historialDrogas);
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {
-                    objCuarto.actulizarPaciente(req.idTablas.idPaciente);
-                    objCuarto.actualizarprimerPaso(req.idTablas.involucrado, req.idTablas.acompanante);
-                    objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
-                    objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta);
-                    objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
+                    yield objCuarto.actulizarPaciente(req.idTablas.idPaciente);
+                    yield objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
+                    yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+                    yield objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta, req.idTablas.idDrogas);
+                    yield objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
                     const objFichas = new fichaTecnica_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion);
                     const msj = yield objFichas.actulizarFicha(req.idTablas.idFicha);
                     return res.status(201).json(msj);

@@ -19,7 +19,7 @@ class UsuarioController {
             try {
                 let existenciaUser;
                 let contrasenaHasheada;
-                let { rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional, } = req.body;
+                let { rutProfesional, nombreProfesional, contrasenaProfesional, cargoProfesional, centroProfesional, rolProfesional, } = req.body;
                 existenciaUser = yield objUsuario.exitenciaUsuario(rutProfesional);
                 if (existenciaUser)
                     throw "Usuario ya existe en la base de datos";
@@ -28,7 +28,6 @@ class UsuarioController {
                 objUsuario.setNombreProfesional(nombreProfesional);
                 objUsuario.setCargoProfesional(cargoProfesional);
                 objUsuario.setContrasenaProfesional(contrasenaHasheada);
-                objUsuario.SetEmailProfesional(emailProfesional);
                 objUsuario.setCentroProfesional(centroProfesional);
                 objUsuario.setRolProfesional(rolProfesional);
                 const msjCrearUser = yield objUsuario.ingresarUsuario();
@@ -68,7 +67,6 @@ class UsuarioController {
                 objUsuario.setNombreProfesional(nombreProfesional);
                 objUsuario.setCargoProfesional(cargoProfesional);
                 objUsuario.setContrasenaProfesional(contrasenaHasheada);
-                objUsuario.SetEmailProfesional(emailProfesional);
                 objUsuario.setCentroProfesional(centroProfesional);
                 const msjActualizarUsuario = yield objUsuario.actualizarUsuario(parseInt(idUsuario));
                 res.status(201).json(msjActualizarUsuario);

@@ -24,7 +24,7 @@ export class FormularioCuartoPaso
   constructor(
     antecedentes: AntecedentesClinicos,
     areaPsiquica: AreaPsiquica,
-    usoDroga: boolean | null,
+    usoDroga: boolean,
     detallesDroga: string | null,
     dieta: string,
     genero: HistoriaGenero,
@@ -50,6 +50,7 @@ export class FormularioCuartoPaso
     this.antecedentesPni = antecedentes.antecedentesPni;
     this.funcionalidadGenital = antecedentes.funcionalidadGenital;
     this.antecedentesFamilia = antecedentes.antecedentesFamilia;
+
   }
 
   async crearCuartoPaso() {
@@ -83,7 +84,8 @@ export class FormularioCuartoPaso
     detalles_antecedentes_quirurgicos =?,
     detalles_antecedentes_alergicos = ?,
     detalles_antecedentes_pni =  ?,
-    detalles_funcionalidad_genital = ?
+    detalles_funcionalidad_genital = ?,
+    detalles_antecedentes_familia = ?
     WHERE id_historia_clinica = ? `;
 
 
@@ -99,6 +101,7 @@ export class FormularioCuartoPaso
         this.antecedentesAlergicos, 
         this.antecedentesPni, 
         this.funcionalidadGenital,
+        this.antecedentesFamilia,
         idAntecedentes
 
       ]);
@@ -107,7 +110,7 @@ export class FormularioCuartoPaso
 
     }catch(err:any){
 
-
+      console.log(err);
       throw new Error(err);
 
     }

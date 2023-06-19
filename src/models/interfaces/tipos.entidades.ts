@@ -8,7 +8,7 @@
       apellidoMaternoPa: string | null;
       pronombre: string | null;
       nombreSocial: string | null;
-      fechaNacimientoPa: Date;
+      fechaNacimientoPa: string| null;
       domicilioPaciente: string | null;
       telefonoPaciente: string | null;
     }
@@ -30,11 +30,11 @@ export interface AntecedentesClinicos {
 
 
 export interface AreaPsiquica {
-  controlEquipoSaludMental?: boolean | null;
-  psicoterapia?: boolean | null;
-  evaluacionPsiquica?: boolean | null;
-  diagnosticoPsiquiatrico?: boolean | null;
-  utilizacionFarmaco?: boolean | null;
+  controlEquipoSaludMental?: boolean;
+  psicoterapia?: boolean;
+  evaluacionPsiquica?: boolean;
+  diagnosticoPsiquiatrico?: boolean;
+  utilizacionFarmaco?: boolean;
   detallesFarmacos?: string | null;
 }
 
@@ -89,9 +89,9 @@ export interface HistoriaGenero {
     autopercepcion: number | null;
     inicioTransicioSexual: Date | null;
     tiempoLatencia: Date | null;
-    apoyoFamiliar: boolean | null;
-    usoPrenda: boolean | null;
-    presenciaDisforia: boolean | null;
+    apoyoFamiliar: boolean;
+    usoPrenda: boolean;
+    presenciaDisforia: boolean;
     detallesDiforia: string | null;
    
 

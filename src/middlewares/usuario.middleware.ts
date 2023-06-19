@@ -13,7 +13,7 @@ export function vericarDataUsuario(req: Request, res: Response, next: NextFuncti
 
   try{
 
-    if(!rutProfesional || !emailProfesional || !contrasenaProfesional || !nombreProfesional || !centroProfesional || !cargoProfesional || !rolProfesional){
+    if(!rutProfesional || !contrasenaProfesional || !nombreProfesional || !centroProfesional || !cargoProfesional || !rolProfesional){
        
         throw({
             msj: 'Los datos no deben estar vacios'

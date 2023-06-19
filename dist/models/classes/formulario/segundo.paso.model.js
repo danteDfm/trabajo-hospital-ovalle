@@ -20,9 +20,9 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
             this.autopercepcion = genero.autopercepcion || null;
         (this.inicioTransicioSexual = genero.inicioTransicioSexual || null),
             (this.tiempoLatencia = genero.tiempoLatencia || null),
-            (this.apoyoFamiliar = genero.apoyoFamiliar || null),
-            (this.usoPrenda = genero.usoPrenda || null),
-            (this.presenciaDisforia = genero.presenciaDisforia || null),
+            (this.apoyoFamiliar = genero.apoyoFamiliar),
+            (this.usoPrenda = genero.usoPrenda),
+            (this.presenciaDisforia = genero.presenciaDisforia),
             (this.detallesDiforia = genero.detallesDiforia || null);
         this.tipoPrenda = prendas || null;
     }

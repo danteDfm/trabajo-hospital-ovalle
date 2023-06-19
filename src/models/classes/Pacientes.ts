@@ -11,7 +11,7 @@ export class EntidadPaciente implements Pacientes {
   apellidoMaternoPa: string | null;
   pronombre: string | null;
   nombreSocial: string | null;
-  fechaNacimientoPa: Date;
+  fechaNacimientoPa: string| null;
   domicilioPaciente: string | null;
   telefonoPaciente: string | null;
 

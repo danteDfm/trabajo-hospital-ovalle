@@ -17,6 +17,8 @@ class Fichas {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
         select 
+        rut_paciente,
+        nombre_social,
         nombre_paciente, 
         apellido_paterno_paciente, 
         id_ficha_tecnica, 

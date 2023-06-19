@@ -14,25 +14,23 @@ const consultasGenerales_1 = require("../../consultas/consultasGenerales");
 class Usuario {
     //admin
     //commonUser
-    constructor(rutProfesional, nombreProfesional, cargoProfesional, contrasenaProfesional, emailProfesional, centroProfesional, rolProfesional) {
+    constructor(rutProfesional, nombreProfesional, contrasenaProfesional, cargoProfesional, rolProfesional, centroProfesional) {
         this.rutProfesional = rutProfesional;
         this.nombreProfesional = nombreProfesional;
-        this.emailProfesional = cargoProfesional;
-        this.cargoProfesional = contrasenaProfesional;
-        this.contrasenaProfesional = emailProfesional;
-        this.centroProfesional = centroProfesional;
+        this.contrasenaProfesional = contrasenaProfesional;
+        this.cargoProfesional = cargoProfesional;
         this.rolProfesional = rolProfesional;
+        this.centroProfesional = centroProfesional;
     }
     ingresarUsuario() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `INSERT INTO PROFESIONALES_USUARIOS_SALUD VALUES (NULL, ?,?,?,?,?,?,?)`;
+                const query = `INSERT INTO PROFESIONALES_USUARIOS_SALUD VALUES (NULL,?,?,?,?,?,?)`;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.rutProfesional,
                     this.nombreProfesional,
-                    this.emailProfesional,
-                    this.cargoProfesional,
                     this.contrasenaProfesional,
+                    this.cargoProfesional,
                     this.rolProfesional,
                     this.centroProfesional
                 ]);
@@ -50,18 +48,16 @@ class Usuario {
                 const query = `
       UPDATE PROFESIONALES_USUARIOS_SALUD SET
       rut_profesional_salud = ?, 
-      nombre_profesional_salud = ?,
-      email_profesional_salud = ?,
-      cargo_profesional_salud  = ?,
+      nombre_usuario = ?,
       contrasena = ?,
+      cargo_profesional_salud  = ?,
       fk_centro_salud = ?
       WHERE id_profesional_salud = ?`;
                 (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.rutProfesional,
                     this.nombreProfesional,
-                    this.emailProfesional,
-                    this.cargoProfesional,
                     this.contrasenaProfesional,
+                    this.cargoProfesional,
                     this.centroProfesional,
                     idProfesionalSalud,
                 ]);
@@ -80,7 +76,7 @@ class Usuario {
                 const query = `
         SELECT id_profesional_salud,
         rut_profesional_salud,
-        nombre_profesional_salud, email_profesional_salud,
+        nombre_usuario,
         cargo_profesional_salud,  
         fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
                 const listUsuarios = yield (0, consultasGenerales_1.consultasGenerales)(query, [rolApartado]);
@@ -116,9 +112,6 @@ class Usuario {
     }
     setContrasenaProfesional(contrasenaProfesional) {
         this.contrasenaProfesional = contrasenaProfesional;
-    }
-    SetEmailProfesional(emailProfesional) {
-        this.emailProfesional = emailProfesional;
     }
     setCentroProfesional(centroProfesional) {
         this.centroProfesional = centroProfesional;

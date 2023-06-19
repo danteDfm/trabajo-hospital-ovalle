@@ -33,7 +33,7 @@ export function extraccId(req:any, res:Response, next:NextFunction){
 
 
       }
-      
+
       delete fichas.idFicha,
       delete paciente.idPaciente,
       delete antecedentes.idAntecedente,
@@ -44,6 +44,8 @@ export function extraccId(req:any, res:Response, next:NextFunction){
       delete historialDrogas.idDrogas,
       delete genero.idGenero,
       delete prendas.idPrenda
+
+      
 
       next();
 
