@@ -49,7 +49,6 @@ class FormularioController {
             const fichaTipada = paciente;
             const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
-                console.log(historialDrogas);
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {

@@ -21,6 +21,8 @@ export class Fichas {
 
     try {
       const fichaActiva = await consultasGenerales(query, [idPaciente]);
+
+      if(fichaActiva.length < 1) return 0;
       return fichaActiva;
     } catch (err: any) {
       throw new Error(err);
@@ -42,7 +44,10 @@ export class Fichas {
     order by fecha_ingreso desc `;
 
     try {
-      const fichasInactivas = consultasGenerales(query, [idPaciente]);
+      
+      const fichasInactivas = await consultasGenerales(query, [idPaciente]);
+
+      if(fichasInactivas.length < 1) return 0;
       return fichasInactivas;
     } catch (err: any) {
       throw new Error(err);
@@ -50,27 +55,21 @@ export class Fichas {
   }
 
   async listarPorIdFicha(idFicha: number) {
+
     const queryFicha: string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
-
     const queryPaciente: string = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
-
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
-
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
-    WHERE id_persona_involucrada_transicion = ?
-    `;
+    WHERE id_persona_involucrada_transicion = ?`;
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-
     const queryDdrogas: string = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where id_historial_droga = ?
-    `;
+    where id_historial_droga = ?`;
     const queryDieta: string = `SELECT detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
     where id_habito_alimenticio = ?
     `;
-
     const queryIdentidad: string = `SELECT 
     id_historia_identidad_genero,
     identidad_genero, 
@@ -85,7 +84,6 @@ export class Fichas {
     FROM HISTORIAS_IDENTIDADES_GENEROS as ig
     join pacientes as pa on ig.fk_paciente = pa.id_paciente
     WHERE id_historia_identidad_genero = 1`;
-
     const queryPrenda: string = `select 
     fk_prenda_disconformidad
     from SELECCION_PRENDA as sp
@@ -104,25 +102,20 @@ export class Fichas {
 
     try {
       const dataFicha = await consultasGenerales(queryFicha, [idFicha]);
-
       const idPaciente = dataFicha[0].fk_paciente;
       const idpsiquica = dataFicha[0].fk_area_psiquica;
       const idHistoriaClinica = dataFicha[0].fk_historia_clinica;
       const idInvolucrado = dataFicha[0].fk_persona_involucrada_encargada;
       const idAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
-
       const dataPaciente = await consultasGenerales(queryPaciente, [
         idPaciente,
       ]);
-
       dataAntecedentes = await consultasGenerales(queryAntecedentes, [
         idHistoriaClinica,
       ]);
-
       dataInvolucrado = await consultasGenerales(queryInvolucrada, [
         idInvolucrado,
       ]);
-
       dataAcompanante = await consultasGenerales(queryInvolucrada, [
         idAcompanante,
       ]);
@@ -146,6 +139,7 @@ export class Fichas {
         historiaGenero: dataHistoria[0],
         dataPrenda,
       };
+
     } catch (err: any) {
       console.log(err);
       throw new Error(err);
@@ -155,24 +149,17 @@ export class Fichas {
   async listarInformacionPaciente(rutPaciente: string) {
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
-
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
-    WHERE id_persona_involucrada_transicion = ?
-    `;
+    WHERE id_persona_involucrada_transicion = ?`;
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-
     const queryDdrogas: string = `select * from HISTORIAL_DROGAS
-    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS WHERE fk_paciente  = ?)
-    `;
+    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS WHERE fk_paciente  = ?)`;
     const queryDieta: string = `SELECT * FROM HABITOS_ALIMENTICIOS
     where fk_paciente  = ? and id_habito_alimenticio = (SELECT MAX(id_habito_alimenticio) FROM HABITOS_ALIMENTICIOS
-    where fk_paciente = ?)
-    `;
-
+    where fk_paciente = ?) `;
     const queryIdentidad: string = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ?)`;
-
     const queryPrenda: string = `select * from SELECCION_PRENDA where fk_historia_genero = ?`;
 
     let idPaciente: number;
@@ -196,19 +183,15 @@ export class Fichas {
         diccionarioConsultas.paciente,
         [rutPaciente, rutPaciente]
       );
-
       const dataFicha = await consultasGenerales(diccionarioConsultas.ficha, [
         rutPaciente,
         rutPaciente,
       ]);
-
       idPaciente = dataPaciente[0].id_paciente;
-
       fkAreaPsiquica = dataFicha[0].fk_area_psiquica;
       fkHistoriaClinica = dataFicha[0].fk_historia_clinica;
       fkEncargada = dataFicha[0].fk_persona_involucrada_encargada;
       fkAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
-
       delete dataFicha[0].fk_profesional_usuario;
       delete dataFicha[0].fk_paciente;
       delete dataFicha[0].fk_area_psiquica;
@@ -219,34 +202,27 @@ export class Fichas {
       dataAntecedentes = await consultasGenerales(queryAntecedentes, [
         fkHistoriaClinica,
       ]);
-
       dataInvolucrado = await consultasGenerales(queryInvolucrada, [
         fkEncargada,
       ]);
-
       dataAcompanante = await consultasGenerales(queryInvolucrada, [
         fkAcompanante,
       ]);
-
       dataPsique = await consultasGenerales(queryPsique, [fkAreaPsiquica]);
-
       dataDroga = await consultasGenerales(queryDdrogas, [
         idPaciente,
         idPaciente,
       ]);
-
       dataDieta = await consultasGenerales(queryDieta, [
         idPaciente,
         idPaciente,
       ]);
-
       dataHistoria = await consultasGenerales(queryIdentidad, [
         idPaciente,
         idPaciente,
       ]);
 
       idHistoria = dataHistoria[0].id_historia_identidad_genero;
-
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);
 
       return {

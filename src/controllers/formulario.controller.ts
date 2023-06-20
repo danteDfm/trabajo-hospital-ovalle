@@ -74,12 +74,13 @@ export class FormularioController {
     );
 
     try {
-      console.log(historialDrogas);
+      
 
       const verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
       //update en caso de existir el paciente
       if (verificacionFicha && req.idTablas.idPaciente) {
+
         await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
         await objCuarto.actualizarprimerPaso(
           req.idTablas.idInvolucrado,

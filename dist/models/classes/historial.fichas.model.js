@@ -32,6 +32,8 @@ class Fichas {
         `;
             try {
                 const fichaActiva = yield (0, consultasGenerales_1.consultasGenerales)(query, [idPaciente]);
+                if (fichaActiva.length < 1)
+                    return 0;
                 return fichaActiva;
             }
             catch (err) {
@@ -54,7 +56,9 @@ class Fichas {
     WHERE id_paciente = ? AND  estado_ficha = 0
     order by fecha_ingreso desc `;
             try {
-                const fichasInactivas = (0, consultasGenerales_1.consultasGenerales)(query, [idPaciente]);
+                const fichasInactivas = yield (0, consultasGenerales_1.consultasGenerales)(query, [idPaciente]);
+                if (fichasInactivas.length < 1)
+                    return 0;
                 return fichasInactivas;
             }
             catch (err) {
@@ -69,13 +73,11 @@ class Fichas {
             const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
             const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
-    WHERE id_persona_involucrada_transicion = ?
-    `;
+    WHERE id_persona_involucrada_transicion = ?`;
             const queryPsique = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
             const queryDdrogas = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where id_historial_droga = ?
-    `;
+    where id_historial_droga = ?`;
             const queryDieta = `SELECT detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
     where id_habito_alimenticio = ?
@@ -157,16 +159,13 @@ class Fichas {
             const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
             const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
-    WHERE id_persona_involucrada_transicion = ?
-    `;
+    WHERE id_persona_involucrada_transicion = ?`;
             const queryPsique = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
             const queryDdrogas = `select * from HISTORIAL_DROGAS
-    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS WHERE fk_paciente  = ?)
-    `;
+    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS WHERE fk_paciente  = ?)`;
             const queryDieta = `SELECT * FROM HABITOS_ALIMENTICIOS
     where fk_paciente  = ? and id_habito_alimenticio = (SELECT MAX(id_habito_alimenticio) FROM HABITOS_ALIMENTICIOS
-    where fk_paciente = ?)
-    `;
+    where fk_paciente = ?) `;
             const queryIdentidad = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ?)`;

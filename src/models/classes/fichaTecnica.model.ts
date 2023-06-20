@@ -112,6 +112,7 @@ export class Ficha {
   async actulizarFicha(idFicha: number) {
     const query: string = `
       UPDATE fichas_tecnicas SET 
+      fecha_ingreso = ?,
       nivelFormulario = ?, 
       apoyo_escolar = ?, 
       judicializacion = ?,
@@ -125,6 +126,7 @@ export class Ficha {
       if(!idFicha) return 0;
 
       await consultasGenerales(query, [
+        this.fechaIngreso,
         this.nivelFormulario, 
         this.apoyoEscolar, 
         this.judicializacion, 
