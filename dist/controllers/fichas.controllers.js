@@ -15,9 +15,9 @@ const objFicha = new historial_fichas_model_1.Fichas();
 class FichasController {
     static fichaActiva(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idPaciente } = req.params;
+            const { rutPaciente } = req.params;
             try {
-                const fichaActiva = yield objFicha.listarFichaActiva(parseInt(idPaciente));
+                const fichaActiva = yield objFicha.listarFichaActiva(rutPaciente);
                 return res.status(201).json({
                     fichaActiva,
                 });
@@ -32,9 +32,9 @@ class FichasController {
     }
     static fichaInactiva(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idPaciente } = req.params;
+            const { rutPaciente } = req.params;
             try {
-                const fichasInactivas = yield objFicha.listarFichasInactivas(parseInt(idPaciente));
+                const fichasInactivas = yield objFicha.listarFichasInactivas(rutPaciente);
                 return res.status(201).json(fichasInactivas);
             }
             catch (err) {

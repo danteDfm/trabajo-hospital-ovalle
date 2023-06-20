@@ -2,7 +2,7 @@ import { consultasGenerales } from "../../consultas/consultasGenerales";
 import { diccionarioConsultas } from "../../consultas/dicQuery";
 
 export class Fichas {
-  async listarFichaActiva(idPaciente: number) {
+  async listarFichaActiva(rutPaciente:string) {
     const query: string = `
         select 
         rut_paciente,
@@ -16,11 +16,11 @@ export class Fichas {
         nivelFormulario
         from fichas_tecnicas as ft
         join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-        WHERE id_paciente = ? AND estado_ficha = 1 
+        WHERE rut_paciente  = ? AND estado_ficha = 1 
         `;
 
     try {
-      const fichaActiva = await consultasGenerales(query, [idPaciente]);
+      const fichaActiva = await consultasGenerales(query, [rutPaciente]);
 
       if(fichaActiva.length < 1) return 0;
       return fichaActiva;
@@ -29,7 +29,7 @@ export class Fichas {
     }
   }
 
-  async listarFichasInactivas(idPaciente: number) {
+  async listarFichasInactivas(rutPaciente:string) {
     const query: string = `select 
     nombre_paciente, 
     apellido_paterno_paciente, 
@@ -40,12 +40,12 @@ export class Fichas {
     nivelFormulario
     from fichas_tecnicas as ft
     join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-    WHERE id_paciente = ? AND  estado_ficha = 0
+    WHERE rut_paciente = ? AND  estado_ficha = 0
     order by fecha_ingreso desc `;
 
     try {
       
-      const fichasInactivas = await consultasGenerales(query, [idPaciente]);
+      const fichasInactivas = await consultasGenerales(query, [rutPaciente]);
 
       if(fichasInactivas.length < 1) return 0;
       return fichasInactivas;

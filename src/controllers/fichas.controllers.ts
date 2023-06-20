@@ -3,14 +3,19 @@ import { Fichas } from "../models/classes/historial.fichas.model";
 
 const objFicha = new Fichas();
 export class FichasController {
+  
 
   static async fichaActiva(req: Request, res: Response) {
-    const { idPaciente } = req.params;
+    const { rutPaciente } = req.params;
     try {
-      const fichaActiva = await objFicha.listarFichaActiva(parseInt(idPaciente));
+
+
+      const fichaActiva = await objFicha.listarFichaActiva(rutPaciente);
       return res.status(201).json({
         fichaActiva,
       });
+
+
     } catch (err: any) {
       return res.status(500).json({
         err,
@@ -19,10 +24,10 @@ export class FichasController {
     }
   }
   static async fichaInactiva(req: Request, res: Response) {
-    const { idPaciente } = req.params;
+    const { rutPaciente } = req.params;
     try {
       const fichasInactivas = await objFicha.listarFichasInactivas(
-        parseInt(idPaciente)
+        rutPaciente
       );
       return res.status(201).json(fichasInactivas);
     } catch (err) {
