@@ -43,7 +43,7 @@ export class Sesion {
 
   async seleccionarUsuario(idUser: number) {
     const query: string = `
-    select id_profesional_salud, nombre_profesional_salud, cargo_profesional_salud,
+    select id_profesional_salud, nombre_usuario, cargo_profesional_salud,
     roles, comuna_centro_atencion, nombre_centro_salud ,logo  from PROFESIONALES_USUARIOS_SALUD as ps
     left join CENTROS_SALUD as cs on ps.fk_centro_salud = cs.id_centro_salud
     where id_profesional_salud  = ?;

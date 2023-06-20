@@ -3,7 +3,6 @@ import { diccionarioConsultas } from "../../consultas/dicQuery";
 
 export class Fichas {
   async listarFichaActiva(idPaciente: number) {
-
     const query: string = `
         select 
         rut_paciente,
@@ -50,25 +49,18 @@ export class Fichas {
     }
   }
 
+  async listarPorIdFicha(idFicha: number) {
+    const queryFicha: string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
 
-
-  async listarPorIdFicha(idFicha:number){
-
-    const queryFicha:string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
-
-
-    const queryPaciente:string = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
+    const queryPaciente: string = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
 
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
-
 
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?
     `;
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-
-
 
     const queryDdrogas: string = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
@@ -100,7 +92,6 @@ export class Fichas {
     join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
     WHERE id_historia_identidad_genero = ?`;
 
-
     let idHistoria: number;
     let dataAntecedentes;
     let dataInvolucrado;
@@ -111,62 +102,36 @@ export class Fichas {
     let dataHistoria;
     let dataPrenda;
 
-    try { 
-
-      const dataFicha = await consultasGenerales(queryFicha, [
-        idFicha
-      ]); 
-
-     
+    try {
+      const dataFicha = await consultasGenerales(queryFicha, [idFicha]);
 
       const idPaciente = dataFicha[0].fk_paciente;
       const idpsiquica = dataFicha[0].fk_area_psiquica;
       const idHistoriaClinica = dataFicha[0].fk_historia_clinica;
       const idInvolucrado = dataFicha[0].fk_persona_involucrada_encargada;
       const idAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
-  
-  
-  
 
       const dataPaciente = await consultasGenerales(queryPaciente, [
-        idPaciente
+        idPaciente,
       ]);
 
-
-
       dataAntecedentes = await consultasGenerales(queryAntecedentes, [
-        idHistoriaClinica
+        idHistoriaClinica,
       ]);
 
       dataInvolucrado = await consultasGenerales(queryInvolucrada, [
-        idInvolucrado
+        idInvolucrado,
       ]);
 
       dataAcompanante = await consultasGenerales(queryInvolucrada, [
-        idAcompanante
+        idAcompanante,
       ]);
 
       dataPsique = await consultasGenerales(queryPsique, [idpsiquica]);
-
-
-      dataDroga = await consultasGenerales(queryDdrogas, [
-        idPaciente,
-      
-      ]);
-
-      dataDieta = await consultasGenerales(queryDieta, [
-        idPaciente,
-      
-      ]);
-
-      dataHistoria = await consultasGenerales(queryIdentidad, [
-        idPaciente,
-      ]);
-
+      dataDroga = await consultasGenerales(queryDdrogas, [idPaciente]);
+      dataDieta = await consultasGenerales(queryDieta, [idPaciente]);
+      dataHistoria = await consultasGenerales(queryIdentidad, [idPaciente]);
       idHistoria = await dataHistoria[0].id_historia_identidad_genero;
-
-      
-
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);
 
       return {
@@ -185,15 +150,11 @@ export class Fichas {
       console.log(err);
       throw new Error(err);
     }
-
-
   }
 
   async listarInformacionPaciente(rutPaciente: string) {
-
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
-
 
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?
@@ -231,11 +192,10 @@ export class Fichas {
     let dataPrenda;
 
     try {
-
-      const dataPaciente = await consultasGenerales(diccionarioConsultas.paciente, [
-        rutPaciente,
-        rutPaciente,
-      ]);
+      const dataPaciente = await consultasGenerales(
+        diccionarioConsultas.paciente,
+        [rutPaciente, rutPaciente]
+      );
 
       const dataFicha = await consultasGenerales(diccionarioConsultas.ficha, [
         rutPaciente,

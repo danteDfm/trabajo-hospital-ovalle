@@ -15,8 +15,8 @@ const hash_contrasena_1 = require("../utils/bcrypt/hash.contrasena");
 function verficarSesion(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const query = `
-    SELECT email_profesional_salud, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
-    WHERE email_profesional_salud = ?`;
+    SELECT nombre_usuario, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
+    WHERE nombre_usuario = ?`;
         const { emailUsuario, contrasenaUsuario } = req.body;
         try {
             if (!emailUsuario || !contrasenaUsuario) {
@@ -24,7 +24,7 @@ function verficarSesion(req, res, next) {
             }
             const result = yield (0, consultasGenerales_1.consultasGenerales)(query, [emailUsuario]);
             if (!result[0]) {
-                throw ("EL email no se encuentra en la base de datos");
+                throw ("EL usuario no se encuentra en la base de datos");
             }
             const verificacion = yield (0, hash_contrasena_1.compararContrasena)(contrasenaUsuario, result[0].contrasena);
             if (!verificacion) {

@@ -8,12 +8,11 @@ export async function verficarSesion(
   next: NextFunction
 ) {
   const query: string = `
-    SELECT email_profesional_salud, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
-    WHERE email_profesional_salud = ?`;
+    SELECT nombre_usuario, contrasena, id_profesional_salud, roles FROM profesionales_usuarios_salud
+    WHERE nombre_usuario = ?`;
 
   const { emailUsuario, contrasenaUsuario } = req.body;
   try {
-
 
 
     if (!emailUsuario || !contrasenaUsuario) {
@@ -24,7 +23,7 @@ export async function verficarSesion(
     const result = await consultasGenerales(query, [emailUsuario]);
 
     if (!result[0]) {
-      throw ("EL email no se encuentra en la base de datos");
+      throw ("EL usuario no se encuentra en la base de datos");
      
     }
 

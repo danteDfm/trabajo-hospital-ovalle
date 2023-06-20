@@ -109,36 +109,28 @@ class Fichas {
             let dataHistoria;
             let dataPrenda;
             try {
-                const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(queryFicha, [
-                    idFicha
-                ]);
+                const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(queryFicha, [idFicha]);
                 const idPaciente = dataFicha[0].fk_paciente;
                 const idpsiquica = dataFicha[0].fk_area_psiquica;
                 const idHistoriaClinica = dataFicha[0].fk_historia_clinica;
                 const idInvolucrado = dataFicha[0].fk_persona_involucrada_encargada;
                 const idAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
                 const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(queryPaciente, [
-                    idPaciente
+                    idPaciente,
                 ]);
                 dataAntecedentes = yield (0, consultasGenerales_1.consultasGenerales)(queryAntecedentes, [
-                    idHistoriaClinica
+                    idHistoriaClinica,
                 ]);
                 dataInvolucrado = yield (0, consultasGenerales_1.consultasGenerales)(queryInvolucrada, [
-                    idInvolucrado
+                    idInvolucrado,
                 ]);
                 dataAcompanante = yield (0, consultasGenerales_1.consultasGenerales)(queryInvolucrada, [
-                    idAcompanante
+                    idAcompanante,
                 ]);
                 dataPsique = yield (0, consultasGenerales_1.consultasGenerales)(queryPsique, [idpsiquica]);
-                dataDroga = yield (0, consultasGenerales_1.consultasGenerales)(queryDdrogas, [
-                    idPaciente,
-                ]);
-                dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [
-                    idPaciente,
-                ]);
-                dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [
-                    idPaciente,
-                ]);
+                dataDroga = yield (0, consultasGenerales_1.consultasGenerales)(queryDdrogas, [idPaciente]);
+                dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [idPaciente]);
+                dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [idPaciente]);
                 idHistoria = yield dataHistoria[0].id_historia_identidad_genero;
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
                 return {
@@ -195,10 +187,7 @@ class Fichas {
             let dataHistoria;
             let dataPrenda;
             try {
-                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.diccionarioConsultas.paciente, [
-                    rutPaciente,
-                    rutPaciente,
-                ]);
+                const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.diccionarioConsultas.paciente, [rutPaciente, rutPaciente]);
                 const dataFicha = yield (0, consultasGenerales_1.consultasGenerales)(dicQuery_1.diccionarioConsultas.ficha, [
                     rutPaciente,
                     rutPaciente,
