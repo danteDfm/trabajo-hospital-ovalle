@@ -12,14 +12,9 @@ export class Sesion {
     this.objToken = new Token();
   }
 
-  async login(idProfesional:number, rol:string){
- 
+  async login(idProfesional: number, rol: string) {
     try {
-
-      this.objToken.formarPayload(
-        idProfesional,
-        rol
-      );
+      this.objToken.formarPayload(idProfesional, rol);
 
       const tokenJwt = this.objToken.generarToken();
 

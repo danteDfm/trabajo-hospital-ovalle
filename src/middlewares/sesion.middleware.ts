@@ -13,18 +13,14 @@ export async function verficarSesion(
 
   const { emailUsuario, contrasenaUsuario } = req.body;
   try {
-
-
     if (!emailUsuario || !contrasenaUsuario) {
-      throw ("Los datos no puede estar vacios");
-  
+      throw "Los datos no puede estar vacios";
     }
 
     const result = await consultasGenerales(query, [emailUsuario]);
 
     if (!result[0]) {
-      throw ("EL usuario no se encuentra en la base de datos");
-     
+      throw "EL usuario no se encuentra en la base de datos";
     }
 
     const verificacion = await compararContrasena(
@@ -33,10 +29,9 @@ export async function verficarSesion(
     );
 
     if (!verificacion) {
-      throw ("Contraseña es invalida");
-    
+      throw "Contraseña es invalida";
     }
-  
+
     req.dataUsuario = {
       idProfesional: result[0].id_profesional_salud,
       rol: result[0].roles,
@@ -45,6 +40,5 @@ export async function verficarSesion(
     next();
   } catch (err) {
     return res.status(400).json(err);
-    
   }
 }

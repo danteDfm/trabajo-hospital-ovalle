@@ -103,7 +103,12 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
 
      
     const query:string =  `UPDATE PERSONAS_INVOLUCRADAS_TRANSICION 
-    SET nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
+    SET
+    rut_persona_involucrada  = ?,
+    nombres_persona_involucrada = ?,
+    apellido_paterno_persona_involucrada  = ?,
+    apellido_materno_persona_involucrada = ?,
+    fecha_nacimiento_persona_involucrada = ?, 
     parentesco_persona_involucrada = ?,
     telefono_persona_involucrada = ?, 
     domicilio_persona_involucrada  = ?
@@ -112,16 +117,13 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
     
    try{     
 
-  
-
-
-    if(!idPeronsaInvo) return 0;
-
-   
+    if(!idPeronsaInvo) return 0;   
     await consultasGenerales(query, [
+      this.involucrado.rutInvolucrado, 
       this.involucrado.nombreInvolucrado,
       this.involucrado.apellidoPInvolucrado,
       this.involucrado.apellidoMInvolucrado,
+      this.involucrado.fechaNacimiento,
       this.involucrado.parentescoInvolucrado,
       this.involucrado.telefonoInvolucrado,
       this.involucrado.domicilioInvolucrado,
@@ -129,11 +131,12 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
     ]); 
 
     if(!idPersonaAcom) return 0;
-
     await consultasGenerales(query, [
+      this.acompanante.rutInvolucrado, 
       this.acompanante.nombreInvolucrado,
       this.acompanante.apellidoPInvolucrado,
       this.acompanante.apellidoMInvolucrado,
+      this.acompanante.fechaNacimiento,
       this.acompanante.parentescoInvolucrado,
       this.acompanante.telefonoInvolucrado,
       this.acompanante.domicilioInvolucrado,

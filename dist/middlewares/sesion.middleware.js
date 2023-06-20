@@ -20,15 +20,15 @@ function verficarSesion(req, res, next) {
         const { emailUsuario, contrasenaUsuario } = req.body;
         try {
             if (!emailUsuario || !contrasenaUsuario) {
-                throw ("Los datos no puede estar vacios");
+                throw "Los datos no puede estar vacios";
             }
             const result = yield (0, consultasGenerales_1.consultasGenerales)(query, [emailUsuario]);
             if (!result[0]) {
-                throw ("EL usuario no se encuentra en la base de datos");
+                throw "EL usuario no se encuentra en la base de datos";
             }
             const verificacion = yield (0, hash_contrasena_1.compararContrasena)(contrasenaUsuario, result[0].contrasena);
             if (!verificacion) {
-                throw ("Contraseña es invalida");
+                throw "Contraseña es invalida";
             }
             req.dataUsuario = {
                 idProfesional: result[0].id_profesional_salud,

@@ -67,7 +67,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
         return __awaiter(this, void 0, void 0, function* () {
             const objConexion = yield __1.mysqlConnexion;
             const queryHistoria = `UPDATE HISTORIAS_IDENTIDADES_GENEROS
-    SET identidad_genero  = ?, orientacion_sexual= ?, autopercepcion = ? ,tiempo_latencia  = ?,apoyo_nucleo_familiar= ?, uso_prenda  = ?, presencia_disforia = ?, detalles_diforia = ? WHERE id_historia_identidad_genero = ?`;
+    SET identidad_genero  = ?, orientacion_sexual= ?, autopercepcion = ? , inicio_transicion_sexual = ?,tiempo_latencia  = ?,apoyo_nucleo_familiar= ?, uso_prenda  = ?, presencia_disforia = ?, detalles_diforia = ? WHERE id_historia_identidad_genero = ?`;
             const queryPrenda = `UPDATE SELECCION_PRENDA SET fk_prenda_disconformidad  =  ? WHERE id_prenda_n_n = ?`;
             try {
                 if (!idHistoria)
@@ -76,6 +76,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
                     this.identidadGenero,
                     this.orientacionSexual,
                     this.autopercepcion,
+                    this.inicioTransicioSexual,
                     this.tiempoLatencia,
                     this.apoyoFamiliar,
                     this.usoPrenda,

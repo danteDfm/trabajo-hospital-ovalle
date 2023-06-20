@@ -67,7 +67,12 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     actualizarprimerPaso(idPeronsaInvo, idPersonaAcom) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `UPDATE PERSONAS_INVOLUCRADAS_TRANSICION 
-    SET nombres_persona_involucrada = ?, apellido_paterno_persona_involucrada  = ?, apellido_materno_persona_involucrada = ?, 
+    SET
+    rut_persona_involucrada  = ?,
+    nombres_persona_involucrada = ?,
+    apellido_paterno_persona_involucrada  = ?,
+    apellido_materno_persona_involucrada = ?,
+    fecha_nacimiento_persona_involucrada = ?, 
     parentesco_persona_involucrada = ?,
     telefono_persona_involucrada = ?, 
     domicilio_persona_involucrada  = ?
@@ -77,9 +82,11 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                 if (!idPeronsaInvo)
                     return 0;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
+                    this.involucrado.rutInvolucrado,
                     this.involucrado.nombreInvolucrado,
                     this.involucrado.apellidoPInvolucrado,
                     this.involucrado.apellidoMInvolucrado,
+                    this.involucrado.fechaNacimiento,
                     this.involucrado.parentescoInvolucrado,
                     this.involucrado.telefonoInvolucrado,
                     this.involucrado.domicilioInvolucrado,
@@ -88,9 +95,11 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                 if (!idPersonaAcom)
                     return 0;
                 yield (0, consultasGenerales_1.consultasGenerales)(query, [
+                    this.acompanante.rutInvolucrado,
                     this.acompanante.nombreInvolucrado,
                     this.acompanante.apellidoPInvolucrado,
                     this.acompanante.apellidoMInvolucrado,
+                    this.acompanante.fechaNacimiento,
                     this.acompanante.parentescoInvolucrado,
                     this.acompanante.telefonoInvolucrado,
                     this.acompanante.domicilioInvolucrado,
