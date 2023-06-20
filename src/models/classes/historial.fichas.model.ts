@@ -14,11 +14,13 @@ export class Fichas {
     fecha_finalizacion, 
     estado_ficha, 
     nivelFormulario,
-    nombre_usuario 
+    nombre_usuario ,
+    identidad_genero 
     from fichas_tecnicas as ft
-    join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-    join PROFESIONALES_USUARIOS_SALUD as u ON ft.fk_profesional_usuario = u.id_profesional_salud
-    WHERE rut_paciente  = ? AND estado_ficha = 1 
+    left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+    left join PROFESIONALES_USUARIOS_SALUD as u ON ft.fk_profesional_usuario = u.id_profesional_salud
+    left join HISTORIAS_IDENTIDADES_GENEROS as hig ON  hig.fk_paciente = pa.id_paciente
+    WHERE rut_paciente  = ? AND estado_ficha = 1
 
         `;
 
@@ -27,7 +29,7 @@ export class Fichas {
 
       if(fichaActiva.length < 1) return 0;
 
-      console.log(fichaActiva);
+     
       return fichaActiva;
     } catch (err: any) {
 

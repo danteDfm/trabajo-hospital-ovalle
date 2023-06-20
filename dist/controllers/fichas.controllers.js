@@ -19,7 +19,7 @@ class FichasController {
             try {
                 const fichaActiva = yield objFicha.listarFichaActiva(rutPaciente);
                 return res.status(201).json({
-                    fichaActiva,
+                    fichaActiva
                 });
             }
             catch (err) {

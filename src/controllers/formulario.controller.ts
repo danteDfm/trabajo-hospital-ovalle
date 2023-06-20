@@ -21,8 +21,12 @@ export class FormularioController {
     try {
       const { rutPaciente } = req.params;
       const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
-      res.status(201).json(dataFicha);
+
+    
+      res.status(200).json(dataFicha);
+
     } catch (err) {
+      
       res.status(400).json({
         err,
         msj: "Error interno del servidor",
@@ -45,7 +49,7 @@ export class FormularioController {
     } = req.body;
 
 
-
+ 
     const nivel = parseInt(req.query.nivel as string);
     const idUsuario = parseInt(req.params.idUsuario as string);
 
@@ -75,13 +79,16 @@ export class FormularioController {
       prendas.prenda
     );
 
-    try {
-      
+    try { 
+      console.log("hola");
 
       const verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
+      console.log(req.idTablas.idPaciente);
       //update en caso de existir el paciente
-      if (verificacionFicha && req.idTablas.idPaciente) {
+      if (verificacionFicha && req.idTablas.idPaciente) { 
+
+        console.log("ACTUALIZDO");
 
         await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
         await objCuarto.actualizarprimerPaso(
@@ -116,6 +123,8 @@ export class FormularioController {
       const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);
       const idCuartoPaso = await objCuarto.crearCuartoPaso();
 
+   
+
       const objFichas = new Ficha(
         fechaIngreso,
         estado,
@@ -146,18 +155,14 @@ export class FormularioController {
 
 
   static async finalizar(req:Request, res:Response){
-
-
-    
     const {idFicha} = req.query;
     const objFicha = new Ficha();
-   
     try{
     
      const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
      res.status(201).json(resFinalizacion);
       
-    }catch(err){
+    }catch(err){  
 
       res.status(400).json({
 

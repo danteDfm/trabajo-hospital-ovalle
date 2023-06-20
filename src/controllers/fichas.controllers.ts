@@ -9,10 +9,13 @@ export class FichasController {
     const { rutPaciente } = req.params;
     try {
 
-
+      
+      
       const fichaActiva = await objFicha.listarFichaActiva(rutPaciente);
+
       return res.status(201).json({
-        fichaActiva,
+
+        fichaActiva
       });
 
 
@@ -38,7 +41,7 @@ export class FichasController {
     }
   }
 
-
+  
   static async listarFichaId(req:Request, res:Response){
 
     const {idFicha} = req.params;
