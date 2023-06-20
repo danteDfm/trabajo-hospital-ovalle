@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ficha = void 0;
 const consultasGenerales_1 = require("../../consultas/consultasGenerales");
+const espesificarFecha_1 = require("../../utils/espesificarFecha");
 class Ficha {
     constructor(fechaIngreso, estado, nivelFormulario, apoyoEscolar, judicializacion, detallesApoyo, detallesJudicializacion, fkPaciente, fkUsuario, fkAreaPsiquica, fkHistoria, fkeEncargada, fkAcompanante) {
         this.fechaIngreso = fechaIngreso;
@@ -29,12 +30,22 @@ class Ficha {
     }
     finalizarFicha(idFicha) {
         return __awaiter(this, void 0, void 0, function* () {
+            const fecha = (0, espesificarFecha_1.fechaExacta)();
+            const estado = 0;
+            const queryComprobacion = `SELECT estado_ficha FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
             const query = `
     UPDATE fichas_tecnicas SET estado_ficha = ?, fecha_finalizacion= ?
     WHERE id_ficha_tecnica = ?
     `;
             try {
-                yield (0, consultasGenerales_1.consultasGenerales)(query, [idFicha]);
+                const status = yield (0, consultasGenerales_1.consultasGenerales)(queryComprobacion, [idFicha]);
+                if (status[0].estado_ficha == 0)
+                    return "La ficha ya ha sido finalizada";
+                yield (0, consultasGenerales_1.consultasGenerales)(query, [
+                    estado,
+                    fecha,
+                    idFicha
+                ]);
                 return "Finalizado con exito";
             }
             catch (err) {

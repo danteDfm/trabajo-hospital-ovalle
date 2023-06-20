@@ -1,5 +1,6 @@
 import { mysqlConnexion } from "../..";
 import { consultasGenerales } from "../../consultas/consultasGenerales";
+import { fechaExacta } from "../../utils/espesificarFecha";
 
 export class Ficha{
   fechaIngreso?: string;
@@ -49,14 +50,26 @@ export class Ficha{
 
   async finalizarFicha(idFicha:number){
 
+    const fecha = fechaExacta();
+    const estado = 0;
+
+    const queryComprobacion = `SELECT estado_ficha FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
     const query:string = `
     UPDATE fichas_tecnicas SET estado_ficha = ?, fecha_finalizacion= ?
     WHERE id_ficha_tecnica = ?
     `;
-    
     try{
 
-      await consultasGenerales(query, [idFicha]);
+      const status = await consultasGenerales(queryComprobacion, [idFicha]);  
+
+      if(status[0].estado_ficha == 0) return "La ficha ya ha sido finalizada";
+
+      await consultasGenerales(query, 
+        [ 
+        estado,
+        fecha,
+        idFicha
+        ]);
       return "Finalizado con exito";
 
     }catch(err:any){

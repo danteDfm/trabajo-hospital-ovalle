@@ -21,7 +21,7 @@ class FormularioController {
             try {
                 const { rutPaciente } = req.params;
                 const dataFicha = yield objFichas.listarInformacionPaciente(rutPaciente);
-                res.status(400).json(dataFicha);
+                res.status(200).json(dataFicha);
             }
             catch (err) {
                 res.status(400).json({
@@ -49,9 +49,12 @@ class FormularioController {
             const fichaTipada = paciente;
             const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
+                console.log("hola");
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
+                console.log(req.idTablas.idPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {
+                    console.log("ACTUALIZDO");
                     yield objCuarto.actulizarPaciente(req.idTablas.idPaciente);
                     yield objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
                     yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
