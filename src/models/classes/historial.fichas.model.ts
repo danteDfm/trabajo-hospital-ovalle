@@ -59,7 +59,10 @@ export class Fichas {
       throw new Error(err);
     }
   }
+  
 
+
+  
   async listarPorIdFicha(idFicha: number) {
 
     const queryFicha: string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;

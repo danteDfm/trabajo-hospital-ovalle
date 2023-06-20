@@ -21,7 +21,7 @@ export class FormularioController {
     try {
       const { rutPaciente } = req.params;
       const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
-      res.status(400).json(dataFicha);
+      res.status(201).json(dataFicha);
     } catch (err) {
       res.status(400).json({
         err,
