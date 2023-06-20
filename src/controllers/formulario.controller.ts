@@ -44,6 +44,8 @@ export class FormularioController {
       prendas,
     } = req.body;
 
+
+
     const nivel = parseInt(req.query.nivel as string);
     const idUsuario = parseInt(req.params.idUsuario as string);
 

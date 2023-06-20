@@ -14,7 +14,7 @@ export class FormularioSegundoPaso
 {
   public identidadGenero: string | null;
   public orientacionSexual: string | null;
-  public autopercepcion: number | null;
+  public autoPercepcion: number | null;
   public inicioTransicioSexual: Date | null;
   public tiempoLatencia: Date | null;
   public apoyoFamiliar: boolean;
@@ -32,12 +32,10 @@ export class FormularioSegundoPaso
     prendas: (number)[]
   ) {
     super(primerPaso, pacientes);
-
-    
    
-    (this.identidadGenero = genero.identidadGenero || null),
+     (this.identidadGenero = genero.identidadGenero || null),
       (this.orientacionSexual = genero.orientacionSexual || null),
-      this.autopercepcion = genero.autopercepcion|| null;
+      this.autoPercepcion = genero.autoPercepcion|| null;
       (this.inicioTransicioSexual = genero.inicioTransicioSexual || null),
       (this.tiempoLatencia = genero.tiempoLatencia || null),
       (this.apoyoFamiliar = genero.apoyoFamiliar),
@@ -61,11 +59,10 @@ export class FormularioSegundoPaso
     try {
 
       await conexion?.beginTransaction();
-
       const [setHeaderHgenero]: any = await conexion?.query(query, [
         this.identidadGenero,
         this.orientacionSexual,
-        this.autopercepcion,
+        this.autoPercepcion,
         this.inicioTransicioSexual,
         this.tiempoLatencia,
         this.apoyoFamiliar,
@@ -106,10 +103,13 @@ export class FormularioSegundoPaso
     try{
 
       if(!idHistoria) return 0;
+
+    
+
       await objConexion?.query(queryHistoria,[
         this.identidadGenero, 
         this.orientacionSexual, 
-        this.autopercepcion,
+        this.autoPercepcion,
         this.inicioTransicioSexual,
         this.tiempoLatencia, 
         this.apoyoFamiliar, 

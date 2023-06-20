@@ -52,8 +52,8 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
     this.acompanante = {
       rutInvolucrado: primerPaso.acompanante.rutInvolucrado || null,
       nombreInvolucrado: primerPaso.acompanante.nombreInvolucrado || null,
-      apellidoPInvolucrado: null,
-      apellidoMInvolucrado: null,
+      apellidoPInvolucrado: primerPaso.acompanante.apellidoPInvolucrado || null,
+      apellidoMInvolucrado: primerPaso.acompanante.apellidoMInvolucrado || null,
       fechaNacimiento: null,
       parentescoInvolucrado: primerPaso.acompanante.parentescoInvolucrado || null,
       telefonoInvolucrado: primerPaso.acompanante.telefonoInvolucrado || null,
@@ -77,6 +77,7 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
         arregloInvolucrado
       );
 
+      
       const [setHeaderAcompanante]: any = await objConexion?.query(
         query2,
         arregloAcompanante

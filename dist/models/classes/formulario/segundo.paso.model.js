@@ -17,7 +17,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
         super(primerPaso, pacientes);
         (this.identidadGenero = genero.identidadGenero || null),
             (this.orientacionSexual = genero.orientacionSexual || null),
-            this.autopercepcion = genero.autopercepcion || null;
+            this.autoPercepcion = genero.autoPercepcion || null;
         (this.inicioTransicioSexual = genero.inicioTransicioSexual || null),
             (this.tiempoLatencia = genero.tiempoLatencia || null),
             (this.apoyoFamiliar = genero.apoyoFamiliar),
@@ -37,7 +37,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
                 const [setHeaderHgenero] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query, [
                     this.identidadGenero,
                     this.orientacionSexual,
-                    this.autopercepcion,
+                    this.autoPercepcion,
                     this.inicioTransicioSexual,
                     this.tiempoLatencia,
                     this.apoyoFamiliar,
@@ -75,7 +75,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
                 yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(queryHistoria, [
                     this.identidadGenero,
                     this.orientacionSexual,
-                    this.autopercepcion,
+                    this.autoPercepcion,
                     this.inicioTransicioSexual,
                     this.tiempoLatencia,
                     this.apoyoFamiliar,
