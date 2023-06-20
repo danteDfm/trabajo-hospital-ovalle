@@ -27,6 +27,21 @@ class Ficha {
         this.fkeEncargada = fkeEncargada;
         this.fkAcompanante = fkAcompanante;
     }
+    finalizarFicha(idFicha) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+    UPDATE fichas_tecnicas SET estado_ficha = ?, fecha_finalizacion= ?
+    WHERE id_ficha_tecnica = ?
+    `;
+            try {
+                yield (0, consultasGenerales_1.consultasGenerales)(query, [idFicha]);
+                return "Finalizado con exito";
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+        });
+    }
     crearFichaTecnica() {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `INSERT INTO fichas_tecnicas(

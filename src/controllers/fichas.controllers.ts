@@ -9,10 +9,13 @@ export class FichasController {
     const { rutPaciente } = req.params;
     try {
 
-
+      console.log(rutPaciente);
+      
       const fichaActiva = await objFicha.listarFichaActiva(rutPaciente);
+      
+      console.log("hola");
       return res.status(201).json({
-        fichaActiva,
+        ficha: fichaActiva[0],
       });
 
 
@@ -39,17 +42,11 @@ export class FichasController {
   }
 
 
+
   static async listarFichaId(req:Request, res:Response){
 
     const {idFicha} = req.params;
-
-
      const  dataFicha= await  objFicha.listarPorIdFicha(parseInt(idFicha));
-
-  
-
-    
-
     res.json(dataFicha);
 
   }

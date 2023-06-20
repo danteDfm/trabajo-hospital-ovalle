@@ -142,4 +142,32 @@ export class FormularioController {
       });
     }
   }
+
+
+
+  static async finalizar(req:Request, res:Response){
+
+
+    
+    const {idFicha} = req.query;
+    const objFicha = new Ficha();
+   
+    try{
+    
+     const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
+     res.status(201).json(resFinalizacion);
+      
+    }catch(err){
+
+      res.status(400).json({
+
+        err, 
+        msj: "Error interno del servidor"
+
+      });
+
+    } 
+    
+  }
+  
 }

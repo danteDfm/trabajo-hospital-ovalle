@@ -17,9 +17,11 @@ class FichasController {
         return __awaiter(this, void 0, void 0, function* () {
             const { rutPaciente } = req.params;
             try {
+                console.log(rutPaciente);
                 const fichaActiva = yield objFicha.listarFichaActiva(rutPaciente);
+                console.log("hola");
                 return res.status(201).json({
-                    fichaActiva,
+                    ficha: fichaActiva[0],
                 });
             }
             catch (err) {

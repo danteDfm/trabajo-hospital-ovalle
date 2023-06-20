@@ -1,7 +1,7 @@
 import { mysqlConnexion } from "../..";
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 
-export class Ficha {
+export class Ficha{
   fechaIngreso?: string;
   estado?: boolean;
   nivelFormulario?: number;
@@ -47,6 +47,25 @@ export class Ficha {
     this.fkAcompanante = fkAcompanante;
   }
 
+  async finalizarFicha(idFicha:number){
+
+    const query:string = `
+    UPDATE fichas_tecnicas SET estado_ficha = ?, fecha_finalizacion= ?
+    WHERE id_ficha_tecnica = ?
+    `;
+    
+    try{
+
+      await consultasGenerales(query, [idFicha]);
+      return "Finalizado con exito";
+
+    }catch(err:any){
+
+      throw new Error(err);
+
+    }
+
+  }
   async crearFichaTecnica() {
     const query: string = `INSERT INTO fichas_tecnicas(
         fecha_ingreso,

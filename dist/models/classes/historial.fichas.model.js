@@ -16,24 +16,28 @@ class Fichas {
     listarFichaActiva(rutPaciente) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
-        select 
-        rut_paciente,
-        nombre_social,
-        nombre_paciente, 
-        apellido_paterno_paciente, 
-        id_ficha_tecnica, 
-        fecha_ingreso,
-        fecha_finalizacion, 
-        estado_ficha, 
-        nivelFormulario
-        from fichas_tecnicas as ft
-        join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
-        WHERE rut_paciente  = ? AND estado_ficha = 1 
+    select 
+    rut_paciente,
+    nombre_social,
+    nombre_paciente, 
+    apellido_paterno_paciente, 
+    id_ficha_tecnica, 
+    fecha_ingreso,
+    fecha_finalizacion, 
+    estado_ficha, 
+    nivelFormulario,
+    nombre_usuario 
+    from fichas_tecnicas as ft
+    join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+    join PROFESIONALES_USUARIOS_SALUD as u ON ft.fk_profesional_usuario = u.id_profesional_salud
+    WHERE rut_paciente  = ? AND estado_ficha = 1 
+
         `;
             try {
                 const fichaActiva = yield (0, consultasGenerales_1.consultasGenerales)(query, [rutPaciente]);
                 if (fichaActiva.length < 1)
                     return 0;
+                console.log(fichaActiva);
                 return fichaActiva;
             }
             catch (err) {

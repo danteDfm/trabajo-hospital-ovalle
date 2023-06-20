@@ -78,5 +78,21 @@ class FormularioController {
             }
         });
     }
+    static finalizar(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idFicha } = req.query;
+            const objFicha = new fichaTecnica_model_1.Ficha();
+            try {
+                const resFinalizacion = yield objFicha.finalizarFicha(parseInt(idFicha));
+                res.status(201).json(resFinalizacion);
+            }
+            catch (err) {
+                res.status(400).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
+            }
+        });
+    }
 }
 exports.FormularioController = FormularioController;
