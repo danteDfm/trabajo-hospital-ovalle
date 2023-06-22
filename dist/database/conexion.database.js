@@ -25,7 +25,7 @@ class ConexionDatabase {
                     host: "localhost",
                     database: "TRANSICION_GENERO",
                     user: "root",
-                    password: "dante569",
+                    password: "",
                 });
                 return objSql;
             }

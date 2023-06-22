@@ -137,6 +137,11 @@ export class FormularioController {
 
       const idPaciente = await objCuarto.crearPaciente();
 
+      console.log("hola mundo");
+
+
+      console.log("crear");
+
       const idPrimerPaso = await objCuarto.guardarPrimerPaso();
       objCuarto.crearSegundoPaso(idPaciente);
       const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);

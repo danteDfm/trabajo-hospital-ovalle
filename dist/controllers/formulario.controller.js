@@ -77,6 +77,8 @@ class FormularioController {
                     return res.status(201).json(msj);
                 }
                 const idPaciente = yield objCuarto.crearPaciente();
+                console.log("hola mundo");
+                console.log("crear");
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
                 objCuarto.crearSegundoPaso(idPaciente);
                 const idTecerPaso = yield objCuarto.crearTercerPaso(idPaciente);

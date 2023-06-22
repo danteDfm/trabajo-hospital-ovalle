@@ -82,15 +82,17 @@ class Fichas {
             const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?`;
             const queryPsique = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-            const queryDdrogas = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
+            const queryDdrogas = `select max(id_historial_droga) as id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where id_historial_droga = ?`;
-            const queryDieta = `SELECT detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
+    where fk_paciente  = ?`;
+            const queryDieta = `SELECT
+    max(id_habito_alimenticio) AS id_habito_alimenticio,
+    detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
-    where id_habito_alimenticio = ?
+    where fk_paciente  = ?
     `;
             const queryIdentidad = `SELECT 
-    id_historia_identidad_genero,
+    max(id_historia_identidad_genero) AS id_historia_identidad_genero ,
     identidad_genero, 
     orientacion_sexual, 
     autopercepcion, 
@@ -102,11 +104,12 @@ class Fichas {
     detalles_diforia
     FROM HISTORIAS_IDENTIDADES_GENEROS as ig
     join pacientes as pa on ig.fk_paciente = pa.id_paciente
-    WHERE id_historia_identidad_genero = 1`;
+    JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
+    WHERE ig.fk_paciente = ?`;
             const queryPrenda = `select 
     fk_prenda_disconformidad
     from SELECCION_PRENDA as sp
-    join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
+    left join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
     WHERE id_historia_identidad_genero = ?`;
             let idHistoria;
             let dataAntecedentes;
@@ -141,6 +144,7 @@ class Fichas {
                 dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [idPaciente]);
                 dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [idPaciente]);
                 idHistoria = yield dataHistoria[0].id_historia_identidad_genero;
+                console.log(dataHistoria);
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);
                 return {
                     paciente: dataPaciente[0],

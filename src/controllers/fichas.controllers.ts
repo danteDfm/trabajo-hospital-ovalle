@@ -44,10 +44,21 @@ export class FichasController {
   
   static async listarFichaId(req:Request, res:Response){
 
-    const {idFicha} = req.params;
-     const  dataFicha= await  objFicha.listarPorIdFicha(parseInt(idFicha));
-    res.json(dataFicha);
+  try{
 
+    const {idFicha} = req.params;
+    const  dataFicha= await  objFicha.listarPorIdFicha(parseInt(idFicha));
+   res.status(201).json(dataFicha);
+
+  }catch(err){
+
+    res.status(400).json({
+
+      err, 
+      msj: "Error interno del servidor"
+    });
+
+  }
   }
   
 }
