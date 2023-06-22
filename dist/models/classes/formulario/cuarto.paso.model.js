@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioCuartoPaso = void 0;
 const __1 = require("../../..");
 const tercer_paso_model_1 = require("./tercer.paso.model");
+const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
     constructor(antecedentes, areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas) {
         super(areaPsiquica, usoDroga, detallesDroga, dieta, genero, primerPaso, pacientes, prendas);
@@ -25,10 +26,9 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
     }
     crearCuartoPaso() {
         return __awaiter(this, void 0, void 0, function* () {
-            const conexion = yield __1.mysqlConnexion;
             const query = `INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?,?)`;
             try {
-                const [setHeaderAntecedente] = yield (conexion === null || conexion === void 0 ? void 0 : conexion.query(query, [
+                const setHeaderAntecedente = yield (0, consultasGenerales_1.consultasGenerales)(query, [
                     this.antecedentePerinatales,
                     this.antecedenteHospitalizaciones,
                     this.antecedentesQuirurgicos,
@@ -36,7 +36,7 @@ class FormularioCuartoPaso extends tercer_paso_model_1.FormularioTercerPaso {
                     this.antecedentesPni,
                     this.funcionalidadGenital,
                     this.antecedentesFamilia,
-                ]));
+                ]);
                 const idAntecedentes = setHeaderAntecedente.insertId;
                 return idAntecedentes;
             }

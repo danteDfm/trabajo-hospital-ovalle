@@ -49,15 +49,12 @@ class FormularioController {
             const fichaTipada = paciente;
             const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
-                console.log("hola");
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
-                console.log(req.idTablas.idPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {
-                    console.log("ACTUALIZDO");
                     yield objCuarto.actulizarPaciente(req.idTablas.idPaciente);
                     yield objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
-                    yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+                    yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero, req.idTablas.idPrenda);
                     yield objCuarto.actulizarTercerPaso(req.idTablas.idAreaPsiquica, req.idTablas.idDieta, req.idTablas.idDrogas);
                     yield objCuarto.actualizarCuartoPaso(req.idTablas.idAntecedente);
                     const objFichas = new fichaTecnica_model_1.Ficha(fechaIngreso, estado, nivel, fichas.apoyoEscolar, fichas.judicializacion, fichas.detallesApoyo, fichas.detallesJudicializacion);
