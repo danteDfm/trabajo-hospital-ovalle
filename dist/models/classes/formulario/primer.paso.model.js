@@ -88,7 +88,7 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                     this.involucrado.parentescoInvolucrado,
                     this.involucrado.telefonoInvolucrado,
                     this.involucrado.domicilioInvolucrado,
-                    idPeronsaInvo
+                    idPeronsaInvo,
                 ]);
                 if (!idPersonaAcom)
                     return 0;
@@ -101,7 +101,7 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
                     this.acompanante.parentescoInvolucrado,
                     this.acompanante.telefonoInvolucrado,
                     this.acompanante.domicilioInvolucrado,
-                    idPersonaAcom
+                    idPersonaAcom,
                 ]);
                 return "Los datos han sido actualizados: primer paso";
             }

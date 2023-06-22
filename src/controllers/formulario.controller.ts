@@ -22,11 +22,8 @@ export class FormularioController {
       const { rutPaciente } = req.params;
       const dataFicha = await objFichas.listarInformacionPaciente(rutPaciente);
 
-    
       res.status(200).json(dataFicha);
-
     } catch (err) {
-      
       res.status(400).json({
         err,
         msj: "Error interno del servidor",
@@ -48,8 +45,6 @@ export class FormularioController {
       prendas,
     } = req.body;
 
-
- 
     const nivel = parseInt(req.query.nivel as string);
     const idUsuario = parseInt(req.params.idUsuario as string);
 
@@ -65,36 +60,55 @@ export class FormularioController {
       involucrado,
       acompanante,
     };
+
     const fichaTipada: Pacientes = paciente;
 
-    const objCuarto = new FormularioCuartoPaso(
-      antecedentesTipado,
-      areaPsiquicaTipada,
-      historialDrogas.usoDrogas,
-      historialDrogas.detallesDrogas,
-      habitos.dieta,
-      historiaGeneroTipada,
-      primerPasoTipado,
-      fichaTipada,
-      prendas.prenda
-    );
+    try {
 
-    try { 
-     
+      if (primerPasoTipado.involucrado.fechaNacimiento == "NaN/aN/aN") {
+        primerPasoTipado.involucrado.fechaNacimiento = null;
+      }
+
+      if (primerPasoTipado.acompanante.fechaNacimiento == "NaN/aN/aN") {
+        primerPasoTipado.acompanante.fechaNacimiento = null;
+      }
+      if (historiaGeneroTipada.inicioTransicioSexual == "NaN/aN/aN") {
+        historiaGeneroTipada.inicioTransicioSexual = null;
+      }
+
+      if (historiaGeneroTipada.tiempoLatencia == "NaN/aN/aN") {
+        historiaGeneroTipada.tiempoLatencia = null;
+      }
+
+           
+      if(paciente.fechaNacimientoPa == "NaN/aN/aN"){
+
+        paciente.fechaNacimientoPa = null;
+        
+      }
+      const objCuarto = new FormularioCuartoPaso(
+        antecedentesTipado,
+        areaPsiquicaTipada,
+        historialDrogas.usoDrogas,
+        historialDrogas.detallesDrogas,
+        habitos.dieta,
+        historiaGeneroTipada,
+        primerPasoTipado,
+        fichaTipada,
+        prendas.prenda
+      );
 
       const verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
-   
+
       //update en caso de existir el paciente
       if (verificacionFicha && req.idTablas.idPaciente) { 
 
-      
-        await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
-        await objCuarto.actualizarprimerPaso(
-          req.idTablas.idInvolucrado,
-          req.idTablas.idAcompanante
+  
+        await objCuarto.actualizarSegundoPaso(
+          req.idTablas.idGenero,
+          req.idTablas.idPrenda
         );
-        await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero, req.idTablas.idPrenda);
         await objCuarto.actulizarTercerPaso(
           req.idTablas.idAreaPsiquica,
           req.idTablas.idDieta,
@@ -116,16 +130,17 @@ export class FormularioController {
         return res.status(201).json(msj);
       } 
 
+      const idPaciente = await objCuarto.crearPaciente();
+
       console.log("hola mundo");
 
 
-      const idPaciente = await objCuarto.crearPaciente();
+      console.log("crear");
+
       const idPrimerPaso = await objCuarto.guardarPrimerPaso();
       objCuarto.crearSegundoPaso(idPaciente);
       const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);
       const idCuartoPaso = await objCuarto.crearCuartoPaso();
-
-      
 
       const objFichas = new Ficha(
         fechaIngreso,
@@ -154,27 +169,20 @@ export class FormularioController {
     }
   }
 
-
-
-  static async finalizar(req:Request, res:Response){
-    const {idFicha} = req.query;
+  static async finalizar(req: Request, res: Response) {
     const objFicha = new Ficha();
-    try{
-    
-     const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
-     res.status(201).json(resFinalizacion);
-      
-    }catch(err){  
+    try {
+      console.log("hola");
+      //  const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
+      //  res.status(201).json(resFinalizacion);
 
-      res.status(400).json({
-
-        err, 
-        msj: "Error interno del servidor"
-
+      return res.json("hola finalizar");
+    } catch (err) {
+      console.log();
+      return res.status(400).json({
+        err,
+        msj: "Error interno del servidor",
       });
-
-    } 
-    
+    }
   }
-  
 }

@@ -17,7 +17,7 @@ export function extraccId(req:any, res:Response, next:NextFunction){
         prendas,
       } = req.body;
 
-
+      console.log(paciente);
       req.idTablas = {
 
         idFicha:fichas.idFicha,
