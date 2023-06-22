@@ -47,9 +47,17 @@ class FichasController {
     }
     static listarFichaId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idFicha } = req.params;
-            const dataFicha = yield objFicha.listarPorIdFicha(parseInt(idFicha));
-            res.json(dataFicha);
+            try {
+                const { idFicha } = req.params;
+                const dataFicha = yield objFicha.listarPorIdFicha(parseInt(idFicha));
+                res.status(201).json(dataFicha);
+            }
+            catch (err) {
+                res.status(400).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
+            }
         });
     }
 }

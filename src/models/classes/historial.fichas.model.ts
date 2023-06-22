@@ -1,3 +1,4 @@
+import { mysqlConnexion } from "../..";
 import { consultasGenerales } from "../../consultas/consultasGenerales";
 import { diccionarioConsultas } from "../../consultas/dicQuery";
 
@@ -69,6 +70,7 @@ export class Fichas {
   
   async listarPorIdFicha(idFicha: number) {
 
+
     const queryFicha: string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
     const queryPaciente: string = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
@@ -76,15 +78,19 @@ export class Fichas {
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?`;
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-    const queryDdrogas: string = `select uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
+
+    const queryDdrogas: string = `select max(id_historial_droga) as id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where id_historial_droga = ?`;
-    const queryDieta: string = `SELECT detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
+    where fk_paciente  = ?`;
+
+    const queryDieta: string = `SELECT
+    max(id_habito_alimenticio) AS id_habito_alimenticio,
+    detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
-    where id_habito_alimenticio = ?
+    where fk_paciente  = ?
     `;
     const queryIdentidad: string = `SELECT 
-    id_historia_identidad_genero,
+    max(id_historia_identidad_genero) AS id_historia_identidad_genero ,
     identidad_genero, 
     orientacion_sexual, 
     autopercepcion, 
@@ -96,11 +102,14 @@ export class Fichas {
     detalles_diforia
     FROM HISTORIAS_IDENTIDADES_GENEROS as ig
     join pacientes as pa on ig.fk_paciente = pa.id_paciente
-    WHERE id_historia_identidad_genero = 1`;
+    JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
+    WHERE ig.fk_paciente = ?` 
+    ;
+
     const queryPrenda: string = `select 
     fk_prenda_disconformidad
     from SELECCION_PRENDA as sp
-    join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
+    left join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
     WHERE id_historia_identidad_genero = ?`;
 
     let idHistoria: number;
@@ -114,15 +123,21 @@ export class Fichas {
     let dataPrenda;
 
     try {
+
+
       const dataFicha = await consultasGenerales(queryFicha, [idFicha]);
+    
       const idPaciente = dataFicha[0].fk_paciente;
       const idpsiquica = dataFicha[0].fk_area_psiquica;
       const idHistoriaClinica = dataFicha[0].fk_historia_clinica;
       const idInvolucrado = dataFicha[0].fk_persona_involucrada_encargada;
       const idAcompanante = dataFicha[0].fk_persona_involucrada_acompanante;
+      
       const dataPaciente = await consultasGenerales(queryPaciente, [
         idPaciente,
       ]);
+
+    
       dataAntecedentes = await consultasGenerales(queryAntecedentes, [
         idHistoriaClinica,
       ]);
@@ -134,10 +149,14 @@ export class Fichas {
       ]);
 
       dataPsique = await consultasGenerales(queryPsique, [idpsiquica]);
+
       dataDroga = await consultasGenerales(queryDdrogas, [idPaciente]);
       dataDieta = await consultasGenerales(queryDieta, [idPaciente]);
+
       dataHistoria = await consultasGenerales(queryIdentidad, [idPaciente]);
       idHistoria = await dataHistoria[0].id_historia_identidad_genero;
+
+     console.log(dataHistoria);
       dataPrenda = await consultasGenerales(queryPrenda, [idHistoria]);
 
       return {
@@ -150,7 +169,7 @@ export class Fichas {
         historialDrogas: dataDroga[0],
         habitosAlimenticios: dataDieta[0],
         historiaGenero: dataHistoria[0],
-        dataPrenda,
+        dataPrenda, 
       };
 
     } catch (err: any) {
@@ -170,9 +189,11 @@ export class Fichas {
     const queryDieta: string = `SELECT * FROM HABITOS_ALIMENTICIOS
     where fk_paciente  = ? and id_habito_alimenticio = (SELECT MAX(id_habito_alimenticio) FROM HABITOS_ALIMENTICIOS
     where fk_paciente = ?) `;
+
     const queryIdentidad: string = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ?)`;
+    
     const queryPrenda: string = `select 
     fk_prenda_disconformidad,
     id_prenda_n_n

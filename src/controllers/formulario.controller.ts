@@ -88,8 +88,7 @@ export class FormularioController {
       //update en caso de existir el paciente
       if (verificacionFicha && req.idTablas.idPaciente) { 
 
-    
-
+      
         await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
         await objCuarto.actualizarprimerPaso(
           req.idTablas.idInvolucrado,
@@ -115,7 +114,10 @@ export class FormularioController {
 
         const msj = await objFichas.actulizarFicha(req.idTablas.idFicha);
         return res.status(201).json(msj);
-      }
+      } 
+
+      console.log("hola mundo");
+
 
       const idPaciente = await objCuarto.crearPaciente();
       const idPrimerPaso = await objCuarto.guardarPrimerPaso();
@@ -123,7 +125,7 @@ export class FormularioController {
       const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);
       const idCuartoPaso = await objCuarto.crearCuartoPaso();
 
-   
+      
 
       const objFichas = new Ficha(
         fechaIngreso,

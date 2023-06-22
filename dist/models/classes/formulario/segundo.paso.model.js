@@ -46,7 +46,7 @@ class FormularioSegundoPaso extends primer_paso_model_1.FormularioPrimerPaso {
                     idPaciente,
                 ]);
                 const idHgenero = setHeaderHgenero.insertId;
-                console.log();
+                console.log(this.tipoPrenda);
                 for (let i = 0; i < 5; i++) {
                     if (i > this.tipoPrenda.length - 1) {
                         this.tipoPrenda[i] = null;

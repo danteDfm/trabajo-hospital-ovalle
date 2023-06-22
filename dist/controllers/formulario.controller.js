@@ -61,6 +61,7 @@ class FormularioController {
                     const msj = yield objFichas.actulizarFicha(req.idTablas.idFicha);
                     return res.status(201).json(msj);
                 }
+                console.log("hola mundo");
                 const idPaciente = yield objCuarto.crearPaciente();
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
                 objCuarto.crearSegundoPaso(idPaciente);
