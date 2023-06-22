@@ -118,7 +118,8 @@ export class Fichas {
     ;
 
     const queryPrenda: string = `select 
-    fk_prenda_disconformidad
+    fk_prenda_disconformidad,
+    id_prenda_n_n 
     from SELECCION_PRENDA as sp
     left join HISTORIAS_IDENTIDADES_GENEROS as hg on sp.fk_historia_genero  = hg.id_historia_identidad_genero
     WHERE id_historia_identidad_genero = ?`;
