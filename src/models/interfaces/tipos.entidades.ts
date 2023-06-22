@@ -87,8 +87,8 @@ export interface HistoriaGenero {
     identidadGenero: string | null;
     orientacionSexual: string | null;
     autoPercepcion: number | null;
-    inicioTransicioSexual: Date | null;
-    tiempoLatencia: Date | null;
+    inicioTransicioSexual: string | null;
+    tiempoLatencia: string | null;
     apoyoFamiliar: boolean;
     usoPrenda: boolean;
     presenciaDisforia: boolean;

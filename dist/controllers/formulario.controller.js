@@ -47,11 +47,27 @@ class FormularioController {
                 acompanante,
             };
             const fichaTipada = paciente;
-            const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
             try {
+                if (primerPasoTipado.involucrado.fechaNacimiento == "NaN/aN/aN") {
+                    primerPasoTipado.involucrado.fechaNacimiento = null;
+                }
+                if (primerPasoTipado.acompanante.fechaNacimiento == "NaN/aN/aN") {
+                    primerPasoTipado.acompanante.fechaNacimiento = null;
+                }
+                if (historiaGeneroTipada.inicioTransicioSexual == "NaN/aN/aN") {
+                    historiaGeneroTipada.inicioTransicioSexual = null;
+                }
+                if (historiaGeneroTipada.tiempoLatencia == "NaN/aN/aN") {
+                    historiaGeneroTipada.tiempoLatencia = null;
+                }
+                if (paciente.fechaNacimientoPa == "NaN/aN/aN") {
+                    paciente.fechaNacimientoPa = null;
+                }
+                const objCuarto = new cuarto_paso_model_1.FormularioCuartoPaso(antecedentesTipado, areaPsiquicaTipada, historialDrogas.usoDrogas, historialDrogas.detallesDrogas, habitos.dieta, historiaGeneroTipada, primerPasoTipado, fichaTipada, prendas.prenda);
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {
+                    console.log("actulizar");
                     yield objCuarto.actulizarPaciente(req.idTablas.idPaciente);
                     yield objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
                     yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero, req.idTablas.idPrenda);
@@ -61,6 +77,7 @@ class FormularioController {
                     const msj = yield objFichas.actulizarFicha(req.idTablas.idFicha);
                     return res.status(201).json(msj);
                 }
+                console.log("crear");
                 const idPaciente = yield objCuarto.crearPaciente();
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
                 objCuarto.crearSegundoPaso(idPaciente);
@@ -80,16 +97,18 @@ class FormularioController {
     }
     static finalizar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idFicha } = req.query;
             const objFicha = new fichaTecnica_model_1.Ficha();
             try {
-                const resFinalizacion = yield objFicha.finalizarFicha(parseInt(idFicha));
-                res.status(201).json(resFinalizacion);
+                console.log("hola");
+                //  const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
+                //  res.status(201).json(resFinalizacion);
+                return res.json("hola finalizar");
             }
             catch (err) {
-                res.status(400).json({
+                console.log();
+                return res.status(400).json({
                     err,
-                    msj: "Error interno del servidor"
+                    msj: "Error interno del servidor",
                 });
             }
         });

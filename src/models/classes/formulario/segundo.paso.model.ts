@@ -16,8 +16,8 @@ export class FormularioSegundoPaso
   public identidadGenero: string | null;
   public orientacionSexual: string | null;
   public autoPercepcion: number | null;
-  public inicioTransicioSexual: Date | null;
-  public tiempoLatencia: Date | null;
+  public inicioTransicioSexual: string | null;
+  public tiempoLatencia: string | null;
   public apoyoFamiliar: boolean;
   public usoPrenda: boolean;
   public presenciaDisforia: boolean;

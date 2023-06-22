@@ -14,6 +14,7 @@ const consultasGenerales_1 = require("../consultas/consultasGenerales");
 //extrae los id antes de actulizar las fichas, para mantener limpia las entidades 
 function extraccId(req, res, next) {
     const { fichas, paciente, habitos, antecedentes, involucrado, acompanante, areaPsiquica, historialDrogas, genero, prendas, } = req.body;
+    console.log(paciente);
     req.idTablas = {
         idFicha: fichas.idFicha,
         idPaciente: paciente.idPaciente,
