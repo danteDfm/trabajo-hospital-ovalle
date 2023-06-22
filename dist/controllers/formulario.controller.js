@@ -97,6 +97,7 @@ class FormularioController {
     }
     static finalizar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { idFicha } = req.query;
             const objFicha = new fichaTecnica_model_1.Ficha();
             try {
                 console.log("hola");

@@ -82,17 +82,22 @@ class Fichas {
             const queryInvolucrada = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?`;
             const queryPsique = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
-            const queryDdrogas = `select max(id_historial_droga) as id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
+            const queryDdrogas = `select id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where fk_paciente  = ?`;
+    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS
+    join pacientes as pa on fk_paciente = id_paciente
+    where fk_paciente  = ?);`;
             const queryDieta = `SELECT
-    max(id_habito_alimenticio) AS id_habito_alimenticio,
+    id_habito_alimenticio,
     detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
-    where fk_paciente  = ?
+    where fk_paciente  = ? and id_habito_alimenticio = (SELECT
+    max(id_habito_alimenticio) FROM HABITOS_ALIMENTICIOS as ha
+    join pacientes as pa on ha.fk_paciente = pa.id_paciente
+    where fk_paciente  = ?)
     `;
             const queryIdentidad = `SELECT 
-    max(id_historia_identidad_genero) AS id_historia_identidad_genero ,
+    id_historia_identidad_genero,
     identidad_genero, 
     orientacion_sexual, 
     autopercepcion, 
@@ -105,7 +110,12 @@ class Fichas {
     FROM HISTORIAS_IDENTIDADES_GENEROS as ig
     join pacientes as pa on ig.fk_paciente = pa.id_paciente
     JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
-    WHERE ig.fk_paciente = ?`;
+    WHERE ig.fk_paciente =  ? and  id_historia_identidad_genero = (  SELECT 
+    max(id_historia_identidad_genero)
+    FROM HISTORIAS_IDENTIDADES_GENEROS as ig
+    join pacientes as pa on ig.fk_paciente = pa.id_paciente
+    JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
+    WHERE ig.fk_paciente =  ?)`;
             const queryPrenda = `select 
     fk_prenda_disconformidad
     from SELECCION_PRENDA as sp
@@ -140,9 +150,9 @@ class Fichas {
                     idAcompanante,
                 ]);
                 dataPsique = yield (0, consultasGenerales_1.consultasGenerales)(queryPsique, [idpsiquica]);
-                dataDroga = yield (0, consultasGenerales_1.consultasGenerales)(queryDdrogas, [idPaciente]);
-                dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [idPaciente]);
-                dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [idPaciente]);
+                dataDroga = yield (0, consultasGenerales_1.consultasGenerales)(queryDdrogas, [idPaciente, idPaciente]);
+                dataDieta = yield (0, consultasGenerales_1.consultasGenerales)(queryDieta, [idPaciente, idPaciente]);
+                dataHistoria = yield (0, consultasGenerales_1.consultasGenerales)(queryIdentidad, [idPaciente, idPaciente]);
                 idHistoria = yield dataHistoria[0].id_historia_identidad_genero;
                 console.log(dataHistoria);
                 dataPrenda = yield (0, consultasGenerales_1.consultasGenerales)(queryPrenda, [idHistoria]);

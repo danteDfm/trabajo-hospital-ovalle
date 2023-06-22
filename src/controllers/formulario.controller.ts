@@ -175,6 +175,8 @@ export class FormularioController {
   }
 
   static async finalizar(req: Request, res: Response) {
+
+    const {idFicha} = req.query;
     const objFicha = new Ficha();
     try {
       console.log("hola");

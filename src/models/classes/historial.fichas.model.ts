@@ -79,18 +79,24 @@ export class Fichas {
     WHERE id_persona_involucrada_transicion = ?`;
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
 
-    const queryDdrogas: string = `select max(id_historial_droga) as id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
+    const queryDdrogas: string = `select id_historial_droga, uso_droga, detalles_uso_droga from HISTORIAL_DROGAS
     join pacientes as pa on fk_paciente = id_paciente
-    where fk_paciente  = ?`;
+    where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS
+    join pacientes as pa on fk_paciente = id_paciente
+    where fk_paciente  = ?);`;
 
     const queryDieta: string = `SELECT
-    max(id_habito_alimenticio) AS id_habito_alimenticio,
+    id_habito_alimenticio,
     detalle_habito_alimenticio FROM HABITOS_ALIMENTICIOS as ha
     join pacientes as pa on ha.fk_paciente = pa.id_paciente
-    where fk_paciente  = ?
+    where fk_paciente  = ? and id_habito_alimenticio = (SELECT
+    max(id_habito_alimenticio) FROM HABITOS_ALIMENTICIOS as ha
+    join pacientes as pa on ha.fk_paciente = pa.id_paciente
+    where fk_paciente  = ?)
     `;
+
     const queryIdentidad: string = `SELECT 
-    max(id_historia_identidad_genero) AS id_historia_identidad_genero ,
+    id_historia_identidad_genero,
     identidad_genero, 
     orientacion_sexual, 
     autopercepcion, 
@@ -103,7 +109,12 @@ export class Fichas {
     FROM HISTORIAS_IDENTIDADES_GENEROS as ig
     join pacientes as pa on ig.fk_paciente = pa.id_paciente
     JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
-    WHERE ig.fk_paciente = ?` 
+    WHERE ig.fk_paciente =  ? and  id_historia_identidad_genero = (  SELECT 
+    max(id_historia_identidad_genero)
+    FROM HISTORIAS_IDENTIDADES_GENEROS as ig
+    join pacientes as pa on ig.fk_paciente = pa.id_paciente
+    JOIN fichas_tecnicas AS ft ON ft.fk_paciente = pa.id_paciente
+    WHERE ig.fk_paciente =  ?)` 
     ;
 
     const queryPrenda: string = `select 
@@ -150,10 +161,11 @@ export class Fichas {
 
       dataPsique = await consultasGenerales(queryPsique, [idpsiquica]);
 
-      dataDroga = await consultasGenerales(queryDdrogas, [idPaciente]);
-      dataDieta = await consultasGenerales(queryDieta, [idPaciente]);
+      dataDroga = await consultasGenerales(queryDdrogas, [idPaciente, idPaciente]);
 
-      dataHistoria = await consultasGenerales(queryIdentidad, [idPaciente]);
+      dataDieta = await consultasGenerales(queryDieta, [idPaciente, idPaciente]);
+
+      dataHistoria = await consultasGenerales(queryIdentidad, [idPaciente, idPaciente]);
       idHistoria = await dataHistoria[0].id_historia_identidad_genero;
 
      console.log(dataHistoria);
