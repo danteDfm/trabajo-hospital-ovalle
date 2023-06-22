@@ -67,7 +67,6 @@ class FormularioController {
                 const verificacionFicha = yield fichaTecnica_model_1.Ficha.estatusFicha(paciente.rutPaciente);
                 //update en caso de existir el paciente
                 if (verificacionFicha && req.idTablas.idPaciente) {
-                    console.log("actulizar");
                     yield objCuarto.actulizarPaciente(req.idTablas.idPaciente);
                     yield objCuarto.actualizarprimerPaso(req.idTablas.idInvolucrado, req.idTablas.idAcompanante);
                     yield objCuarto.actualizarSegundoPaso(req.idTablas.idGenero, req.idTablas.idPrenda);
@@ -77,7 +76,6 @@ class FormularioController {
                     const msj = yield objFichas.actulizarFicha(req.idTablas.idFicha);
                     return res.status(201).json(msj);
                 }
-                console.log("crear");
                 const idPaciente = yield objCuarto.crearPaciente();
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
                 objCuarto.crearSegundoPaso(idPaciente);

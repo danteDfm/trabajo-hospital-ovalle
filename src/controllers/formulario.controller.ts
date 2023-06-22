@@ -79,7 +79,6 @@ export class FormularioController {
       if (historiaGeneroTipada.tiempoLatencia == "NaN/aN/aN") {
         historiaGeneroTipada.tiempoLatencia = null;
       }
-
            
       if(paciente.fechaNacimientoPa == "NaN/aN/aN"){
 
@@ -103,7 +102,7 @@ export class FormularioController {
 
       //update en caso de existir el paciente
       if (verificacionFicha && req.idTablas.idPaciente) {
-        console.log("actulizar");
+       
 
         await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
         await objCuarto.actualizarprimerPaso(
@@ -135,7 +134,6 @@ export class FormularioController {
         return res.status(201).json(msj);
       }
 
-      console.log("crear");
 
       const idPaciente = await objCuarto.crearPaciente();
 
