@@ -64,27 +64,30 @@ export class FormularioPrimerPaso extends EntidadPaciente implements PrimerPaso 
 
   async guardarPrimerPaso(){
 
-    const objConexion = await mysqlConnexion;
     const arregloInvolucrado = Object.values(this.involucrado);
     const arregloAcompanante = Object.values(this.acompanante);
 
     const query2: string =
       "INSERT INTO  PERSONAS_INVOLUCRADAS_TRANSICION VALUES (null, ?,?,?,?,?,?,?,?)";
-    try {
+    try { 
 
-      const [setHeaderInvolucrado]: any = await objConexion?.query(
+   
+
+      const setHeaderInvolucrado: any = await consultasGenerales(
         query2,
         arregloInvolucrado
       );
 
       
-      const [setHeaderAcompanante]: any = await objConexion?.query(
+      const setHeaderAcompanante: any = await consultasGenerales(
         query2,
         arregloAcompanante
       );
 
       const idInvolucrado = (setHeaderInvolucrado as OkPacket).insertId;
       const idAcompanante = (setHeaderAcompanante as OkPacket).insertId;
+
+   
 
       return {
         idInvolucrado,

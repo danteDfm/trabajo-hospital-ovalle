@@ -8,6 +8,7 @@ import {
   AntecedentesClinicos,
 } from "../../interfaces/tipos.entidades";
 import { FormularioTercerPaso } from "./tercer.paso.model";
+import { consultasGenerales } from "../../../consultas/consultasGenerales";
 
 export class FormularioCuartoPaso
   extends FormularioTercerPaso
@@ -54,11 +55,12 @@ export class FormularioCuartoPaso
   }
 
   async crearCuartoPaso() {
-    const conexion = await mysqlConnexion;
+ 
     const query: string = `INSERT INTO HISTORIAS_CLINICAS VALUES (NULL, ?,?,?,?,?,?,?)`; 
 
     try {
-      const [setHeaderAntecedente]: any = await conexion?.query(query, [
+
+      const setHeaderAntecedente: any = await consultasGenerales(query, [
         this.antecedentePerinatales,
         this.antecedenteHospitalizaciones,
         this.antecedentesQuirurgicos,
@@ -69,6 +71,7 @@ export class FormularioCuartoPaso
       ]);
 
       const idAntecedentes = (setHeaderAntecedente as OkPacket).insertId;
+      
       return idAntecedentes;
     } catch (err) {
       console.log(err);

@@ -7,6 +7,7 @@ import {
 } from "../../interfaces/tipos.entidades";
 import { mysqlConnexion } from "../../..";
 import { OkPacket } from "mysql2";
+import { consultasGenerales } from "../../../consultas/consultasGenerales";
 
 export class FormularioTercerPaso
   extends FormularioSegundoPaso
@@ -54,7 +55,7 @@ export class FormularioTercerPaso
   }
 
   async crearTercerPaso(idPaciente: number) {
-    const conexion = await mysqlConnexion;
+
     const query: string =
       "INSERT INTO AREAS_PSIQUICAS VALUES (NULL, ?,?,?,?,?,?)";
 
@@ -64,10 +65,8 @@ export class FormularioTercerPaso
     const query3: string = "INSERT INTO HISTORIAL_DROGAS VALUES (NULL, ?,?,?)";
 
     try {
-
-
-      await conexion?.beginTransaction();
-      const [headDataPsico]: any = await conexion?.query(query, [
+   
+      const headDataPsico: any = await consultasGenerales(query, [
         this.controlEquipoSaludMental,
         this.psicoterapia,
         this.evaluacionPsiquica,
@@ -76,12 +75,12 @@ export class FormularioTercerPaso
         this.detallesFarmacos,
       ]);
 
-      const [headDataDieta]: any = await conexion?.query(query1, [
+      const headDataDieta: any = await consultasGenerales(query1, [
         this.dieta,
         idPaciente,
       ]);
 
-      const [headDataDrogas]: any = await conexion?.query(query3, [
+      const headDataDrogas: any = await consultasGenerales(query3, [
         this.usoDroga,
         this.detallesDroga,
         idPaciente,
@@ -91,7 +90,7 @@ export class FormularioTercerPaso
       const idDieta = (headDataDieta as OkPacket).insertId;
       const idDrogas = (headDataDrogas as OkPacket).insertId;
 
-      await conexion?.commit();
+
 
       return {
         idAreaPsiquica,
@@ -99,7 +98,7 @@ export class FormularioTercerPaso
         idDrogas,
       };
     } catch (err) {
-      await conexion?.rollback();
+  
       console.log(err);
       throw "Error de consulta";
     }

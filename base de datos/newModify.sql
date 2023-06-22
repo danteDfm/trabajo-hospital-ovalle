@@ -17,7 +17,6 @@ detalles_funcionalidad_genital VARCHAR (255),
 detalles_antecedentes_familia  varchar (255)
 );
 
-	select * from  HISTORIAS_CLINICAS
 
 CREATE TABLE PERSONAS_INVOLUCRADAS_TRANSICION(
 id_persona_involucrada_transicion INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -32,7 +31,6 @@ domicilio_persona_involucrada VARCHAR (30)
 );
 
 
-select * from PERSONAS_INVOLUCRADAS_TRANSICION
 
 create table AREAS_PSIQUICAS(
 id_area_psiquica int not null auto_increment primary KEY,
@@ -44,6 +42,7 @@ utilizacion_farmaco BOOLEAN,
 detalles_farmacos VARCHAR (255)
 );
  
+ select * from AREAS_PSIQUICAS
 
  
 CREATE TABLE PACIENTES(
@@ -59,6 +58,7 @@ pronombre varchar(6),
 nombre_social varchar(25)
 );
 
+select * from Pacientes
 
 
 CREATE TABLE HISTORIAL_DROGAS(
@@ -68,7 +68,7 @@ detalles_uso_droga VARCHAR (255),
 fk_paciente INT,
 foreign key (fk_paciente) references PACIENTES (id_paciente)
 );
-
+SELECT * FROM  HISTORIAL_DROGAS
 
 
 CREATE TABLE HABITOS_ALIMENTICIOS(
@@ -94,7 +94,7 @@ detalles_diforia VARCHAR (200),
 fk_paciente int, 
 foreign key (fk_paciente) references PACIENTES(id_paciente)
 );
-
+select * from HISTORIAS_IDENTIDADES_GENEROS
 
 
 create table PRENDAS_DISCONFORMIDAD(
@@ -111,6 +111,7 @@ FOREIGN KEY(fk_prenda_disconformidad) REFERENCES PRENDAS_DISCONFORMIDAD(id_prend
 );
 
 
+
 CREATE TABLE CENTROS_SALUD(
 id_centro_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 nombre_centro_salud VARCHAR(100),
@@ -118,30 +119,21 @@ comuna_centro_atencion VARCHAR (20),
 logo VARCHAR (100)
 );
 
-CREATE  TABLE PROFESIONALES_USUARIOS_SALUD(
-id_profesional_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-rut_profesional_salud VARCHAR (12) NOT NULL, 
-nombre_profesional_salud VARCHAR (50) NOT NULL,  
-email_profesional_salud VARCHAR (200) NOT NULL, 
-cargo_profesional_salud VARCHAR (20) NOT NULL, 
-contrasena VARCHAR (200) NOT NULL,
-roles VARCHAR (15) NOT NULL, 
-fk_centro_salud INT, 
-FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
-);
 
 
-CREATE  TABLE PROFESIONALES_USUARIOS_SALUD(
+CREATE TABLE PROFESIONALES_USUARIOS_SALUD(
 id_profesional_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 rut_profesional_salud VARCHAR (12) NOT NULL, 
 nombre_usuario VARCHAR (50) NOT NULL,  
-cargo_profesional_salud VARCHAR (20) NOT NULL, 
 contrasena VARCHAR (200) NOT NULL,
+cargo_profesional_salud VARCHAR (20) NOT NULL, 
 roles VARCHAR (15) NOT NULL, 
 fk_centro_salud INT, 
 FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 );
-select * from  CENTROS_SALUD
+
+select * from  PACIENTES
+
 
 create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
@@ -166,6 +158,12 @@ foreign key (fk_historia_clinica) references HISTORIAS_CLINICAS (id_historia_cli
 FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion),
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
 );
+
+   UPDATE fichas_tecnicas SET estado_ficha = 0, fecha_finalizacion= "2023-06-20 09:28:27"
+    WHERE id_ficha_tecnica = 2
+
+select * from fichas_tecnicas
+select * from PACIENTES
 
 insert into CENTROS_SALUD values (NULL, "Antonio Tirado Lanas", "Coquimbo", "/pruebas");
 insert into PRENDAS_DISCONFORMIDAD values (null, "packing"), (null, "binder"), (null, "tucking");

@@ -80,22 +80,22 @@ export class FormularioController {
     );
 
     try { 
-      console.log("hola");
+     
 
       const verificacionFicha = await Ficha.estatusFicha(paciente.rutPaciente);
 
-      console.log(req.idTablas.idPaciente);
+   
       //update en caso de existir el paciente
       if (verificacionFicha && req.idTablas.idPaciente) { 
 
-        console.log("ACTUALIZDO");
+    
 
         await objCuarto.actulizarPaciente(req.idTablas.idPaciente);
         await objCuarto.actualizarprimerPaso(
           req.idTablas.idInvolucrado,
           req.idTablas.idAcompanante
         );
-        await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero);
+        await objCuarto.actualizarSegundoPaso(req.idTablas.idGenero, req.idTablas.idPrenda);
         await objCuarto.actulizarTercerPaso(
           req.idTablas.idAreaPsiquica,
           req.idTablas.idDieta,

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FormularioPrimerPaso = void 0;
-const __1 = require("../../..");
 const pacientes_1 = require("../pacientes");
 const consultasGenerales_1 = require("../../../consultas/consultasGenerales");
 class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
@@ -41,13 +40,12 @@ class FormularioPrimerPaso extends pacientes_1.EntidadPaciente {
     }
     guardarPrimerPaso() {
         return __awaiter(this, void 0, void 0, function* () {
-            const objConexion = yield __1.mysqlConnexion;
             const arregloInvolucrado = Object.values(this.involucrado);
             const arregloAcompanante = Object.values(this.acompanante);
             const query2 = "INSERT INTO  PERSONAS_INVOLUCRADAS_TRANSICION VALUES (null, ?,?,?,?,?,?,?,?)";
             try {
-                const [setHeaderInvolucrado] = yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(query2, arregloInvolucrado));
-                const [setHeaderAcompanante] = yield (objConexion === null || objConexion === void 0 ? void 0 : objConexion.query(query2, arregloAcompanante));
+                const setHeaderInvolucrado = yield (0, consultasGenerales_1.consultasGenerales)(query2, arregloInvolucrado);
+                const setHeaderAcompanante = yield (0, consultasGenerales_1.consultasGenerales)(query2, arregloAcompanante);
                 const idInvolucrado = setHeaderInvolucrado.insertId;
                 const idAcompanante = setHeaderAcompanante.insertId;
                 return {

@@ -21,6 +21,8 @@ class Fichas {
     nombre_social,
     nombre_paciente, 
     apellido_paterno_paciente, 
+    apellido_materno_paciente,
+    fecha_nacimiento_paciente,
     id_ficha_tecnica, 
     fecha_ingreso,
     fecha_finalizacion, 
@@ -174,7 +176,10 @@ class Fichas {
             const queryIdentidad = `SELECT * FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ? and id_historia_identidad_genero = (SELECT max(id_historia_identidad_genero) FROM HISTORIAS_IDENTIDADES_GENEROS
     WHERE fk_paciente = ?)`;
-            const queryPrenda = `select * from SELECCION_PRENDA where fk_historia_genero = ?`;
+            const queryPrenda = `select 
+    fk_prenda_disconformidad,
+    id_prenda_n_n
+    from SELECCION_PRENDA where fk_historia_genero = ?`;
             let idPaciente;
             let idFichaTecnica;
             let idHistoria;
