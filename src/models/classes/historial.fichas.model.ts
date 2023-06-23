@@ -35,7 +35,7 @@ export class Fichas {
       if(fichaActiva.length < 1) return 0;
 
      
-      return fichaActiva;
+      return fichaActiva
     } catch (err: any) {
 
       throw new Error(err);
@@ -43,32 +43,67 @@ export class Fichas {
   }
 
   async listarFichasInactivas(rutPaciente:string) {
-    const query: string = `select 
+    const query: string = `  select 
     nombre_paciente, 
     apellido_paterno_paciente, 
     id_ficha_tecnica, 
     fecha_ingreso,
     fecha_finalizacion, 
     estado_ficha, 
-    nivelFormulario
+    nivelFormulario,
+    nombre_centro_salud 
     from fichas_tecnicas as ft
     join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+    join PROFESIONALES_USUARIOS_SALUD as ps ON ft.fk_profesional_usuario = ps.id_profesional_salud 
+    join CENTROS_SALUD as cs ON ps.fk_centro_salud  = cs.id_centro_salud
     WHERE rut_paciente = ? AND  estado_ficha = 0
-    order by fecha_ingreso desc `;
+    order by fecha_ingreso desc`;
 
     try {
       
       const fichasInactivas = await consultasGenerales(query, [rutPaciente]);
 
       if(fichasInactivas.length < 1) return 0;
-      return fichasInactivas;
+      let ficha1 = fichasInactivas.shift();
+      
+    
+      return {
+
+        fichas1: ficha1,
+        resto: fichasInactivas
+
+      }
+
     } catch (err: any) {
+      console.log(err);
       throw new Error(err);
     }
   }
   
 
+  async dataPanel(rutPaciente:string){
 
+    const query:string = `SELECT  id_paciente, rut_paciente, nombre_paciente,  fecha_nacimiento_paciente, nombre_social, identidad_genero, fecha_ingreso from fichas_tecnicas as ft
+    left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+   left join PROFESIONALES_USUARIOS_SALUD as u ON ft.fk_profesional_usuario = u.id_profesional_salud
+   left join HISTORIAS_IDENTIDADES_GENEROS as hig ON  hig.fk_paciente = pa.id_paciente
+   WHERE rut_paciente  = ?
+   order by fecha_ingreso desc`;
+
+   try{
+
+    const data=await consultasGenerales(query, [
+      rutPaciente
+    ]);
+
+    return data[0];
+   }catch(err:any){
+
+      throw new Error(err);
+
+   }
+
+  }
   
   async listarPorIdFicha(idFicha: number) {
 

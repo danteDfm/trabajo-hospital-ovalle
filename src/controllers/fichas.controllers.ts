@@ -60,5 +60,27 @@ export class FichasController {
 
   }
   }
+
+  static async dataPanel(req:Request, res:Response){
+
+    const { rutPaciente } = req.params;
+
+    try{
+    const data=await objFicha.dataPanel(rutPaciente);
+
+    res.status(201).json(data);
+
+    }catch(err:any){
+
+      res.status(500).json({
+
+        err, 
+        msj: "Error interno del servidor"
+
+      });
+
+    }
+
+  }
   
 }

@@ -60,5 +60,20 @@ class FichasController {
             }
         });
     }
+    static dataPanel(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rutPaciente } = req.params;
+            try {
+                const data = yield objFicha.dataPanel(rutPaciente);
+                res.status(201).json(data);
+            }
+            catch (err) {
+                res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor"
+                });
+            }
+        });
+    }
 }
 exports.FichasController = FichasController;

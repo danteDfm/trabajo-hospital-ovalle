@@ -7,4 +7,5 @@ const historial_ficha_middleware_1 = require("../middlewares/historial.ficha.mid
 router.get('/activa/:rutPaciente', historial_ficha_middleware_1.verificarId, fichas_controllers_1.FichasController.fichaActiva);
 router.get('/inactivas/:rutPaciente', historial_ficha_middleware_1.verificarId, fichas_controllers_1.FichasController.fichaInactiva);
 router.get('/listar/:idFicha', fichas_controllers_1.FichasController.listarFichaId);
+router.get('/dataPanel/:rutPaciente', fichas_controllers_1.FichasController.dataPanel);
 exports.default = router;
