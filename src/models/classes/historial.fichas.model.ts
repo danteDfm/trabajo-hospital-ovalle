@@ -63,16 +63,7 @@ export class Fichas {
       
       const fichasInactivas = await consultasGenerales(query, [rutPaciente]);
 
-      if(fichasInactivas.length < 1) return 0;
-      let ficha1 = fichasInactivas.shift();
-      
-    
-      return {
-
-        fichas1: ficha1,
-        resto: fichasInactivas
-
-      }
+      return fichasInactivas;
 
     } catch (err: any) {
       console.log(err);
@@ -83,7 +74,8 @@ export class Fichas {
 
   async dataPanel(rutPaciente:string){
 
-    const query:string = `SELECT  id_paciente, rut_paciente, nombre_paciente,  fecha_nacimiento_paciente, nombre_social, identidad_genero, fecha_ingreso from fichas_tecnicas as ft
+    const query:string = `SELECT  id_paciente, rut_paciente, nombre_paciente,  fecha_nacimiento_paciente, nombre_social, identidad_genero, fecha_ingreso,
+    apellido_paterno_paciente, apellido_materno_paciente  from fichas_tecnicas as ft
     left join PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
    left join PROFESIONALES_USUARIOS_SALUD as u ON ft.fk_profesional_usuario = u.id_profesional_salud
    left join HISTORIAS_IDENTIDADES_GENEROS as hig ON  hig.fk_paciente = pa.id_paciente

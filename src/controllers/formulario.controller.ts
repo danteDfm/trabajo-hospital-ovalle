@@ -175,11 +175,12 @@ export class FormularioController {
     const objFicha = new Ficha();
     try {
      
-
       const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
       return res.status(201).json(resFinalizacion);
 
-      return res.json("hola finalizar");
+    
+
+
     } catch (err) {
       console.log();
       return res.status(400).json({

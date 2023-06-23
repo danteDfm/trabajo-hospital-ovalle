@@ -100,7 +100,6 @@ class FormularioController {
             try {
                 const resFinalizacion = yield objFicha.finalizarFicha(parseInt(idFicha));
                 return res.status(201).json(resFinalizacion);
-                return res.json("hola finalizar");
             }
             catch (err) {
                 console.log();

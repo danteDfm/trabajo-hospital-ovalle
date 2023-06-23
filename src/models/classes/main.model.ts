@@ -13,6 +13,7 @@ export class PaginaPrincipal{
 
         const [result]:any = await consultasGenerales(`SELECT count(identidad_genero) AS "generos" FROM historias_identidades_generos
         WHERE identidad_genero = ?`, [genero]);
+        
          return result.generos;
 
     }
