@@ -75,6 +75,8 @@ class Fichas {
     }
     listarPorIdFicha(idFicha) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!idFicha)
+                return 0;
             const queryFicha = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
             const queryPaciente = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
             const queryAntecedentes = `SELECT * FROM HISTORIAS_CLINICAS

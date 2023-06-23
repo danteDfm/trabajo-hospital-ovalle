@@ -48,12 +48,16 @@ export class Ficha{
     this.fkAcompanante = fkAcompanante;
   }
 
+
+
+
   async finalizarFicha(idFicha:number){
 
     const fecha = fechaExacta();
     const estado = 0;
 
     const queryComprobacion = `SELECT estado_ficha FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
+    
     const query:string = `
     UPDATE fichas_tecnicas SET estado_ficha = ?, fecha_finalizacion= ?
     WHERE id_ficha_tecnica = ?
@@ -79,6 +83,12 @@ export class Ficha{
     }
 
   }
+
+
+
+
+
+
   async crearFichaTecnica() {
     const query: string = `INSERT INTO fichas_tecnicas(
         fecha_ingreso,

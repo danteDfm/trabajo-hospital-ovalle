@@ -28,6 +28,8 @@ export class Fichas {
         `;
 
     try {
+
+    
       const fichaActiva = await consultasGenerales(query, [rutPaciente]);
 
       if(fichaActiva.length < 1) return 0;
@@ -70,8 +72,10 @@ export class Fichas {
   
   async listarPorIdFicha(idFicha: number) {
 
+    if(!idFicha) return 0;
 
     const queryFicha: string = `SELECT * FROM fichas_tecnicas WHERE id_ficha_tecnica = ?`;
+
     const queryPaciente: string = `SELECT * FROM PACIENTES WHERE id_paciente = ?`;
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
@@ -194,8 +198,11 @@ export class Fichas {
   async listarInformacionPaciente(rutPaciente: string) {
     const queryAntecedentes: string = `SELECT * FROM HISTORIAS_CLINICAS
     WHERE id_historia_clinica = ?`;
+
     const queryInvolucrada: string = `SELECT * FROM PERSONAS_INVOLUCRADAS_TRANSICION
     WHERE id_persona_involucrada_transicion = ?`;
+
+    
     const queryPsique: string = `SELECT * FROM AREAS_PSIQUICAS WHERE id_area_psiquica = ?`;
     const queryDdrogas: string = `select * from HISTORIAL_DROGAS
     where fk_paciente  = ? and id_historial_droga = (select max(id_historial_droga) from HISTORIAL_DROGAS WHERE fk_paciente  = ?)`;

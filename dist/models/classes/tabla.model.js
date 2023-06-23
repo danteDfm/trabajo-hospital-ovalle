@@ -15,14 +15,15 @@ class Tabla {
     listarPacientes() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const query = `select id_paciente, id_ficha_tecnica ,fecha_ingreso, rut_paciente, nombre_paciente,
-         nombre_social,apellido_paterno_paciente, apellido_materno_paciente, nombre_centro_salud from  fichas_tecnicas as ft
-            join PACIENTES as pa on ft.fk_paciente = pa.id_paciente
-            join PROFESIONALES_USUARIOS_SALUD as ucs on ft.fk_profesional_usuario = id_profesional_salud 
-            join  CENTROS_SALUD as cs on fk_centro_salud = cs.id_centro_salud
-            where estado_ficha  =  true 
-            order by fecha_ingreso desc 
-        `;
+                const query = ` 
+        SELECT estado_ficha, id_paciente, id_ficha_tecnica, fecha_ingreso, rut_paciente, nombre_paciente,
+        nombre_social, apellido_paterno_paciente, apellido_materno_paciente, nombre_centro_salud
+        FROM fichas_tecnicas AS ft
+        JOIN PACIENTES AS pa ON ft.fk_paciente = pa.id_paciente
+        JOIN PROFESIONALES_USUARIOS_SALUD AS ucs ON ft.fk_profesional_usuario = id_profesional_salud
+        JOIN CENTROS_SALUD AS cs ON fk_centro_salud = cs.id_centro_salud
+        ORDER BY CASE WHEN estado_ficha = 'inactivo' THEN 1 ELSE 0 END, fecha_ingreso DESC
+         `;
                 const dataPaciente = yield (0, consultasGenerales_1.consultasGenerales)(query);
                 return dataPaciente;
             }

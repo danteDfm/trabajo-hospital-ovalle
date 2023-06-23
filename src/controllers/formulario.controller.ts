@@ -137,11 +137,6 @@ export class FormularioController {
 
       const idPaciente = await objCuarto.crearPaciente();
 
-      console.log("hola mundo");
-
-
-      console.log("crear");
-
       const idPrimerPaso = await objCuarto.guardarPrimerPaso();
       objCuarto.crearSegundoPaso(idPaciente);
       const idTecerPaso = await objCuarto.crearTercerPaso(idPaciente);
@@ -179,9 +174,10 @@ export class FormularioController {
     const {idFicha} = req.query;
     const objFicha = new Ficha();
     try {
-      console.log("hola");
-      //  const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
-      //  res.status(201).json(resFinalizacion);
+     
+
+      const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
+      return res.status(201).json(resFinalizacion);
 
       return res.json("hola finalizar");
     } catch (err) {

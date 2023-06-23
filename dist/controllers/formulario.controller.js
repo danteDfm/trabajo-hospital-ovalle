@@ -77,8 +77,6 @@ class FormularioController {
                     return res.status(201).json(msj);
                 }
                 const idPaciente = yield objCuarto.crearPaciente();
-                console.log("hola mundo");
-                console.log("crear");
                 const idPrimerPaso = yield objCuarto.guardarPrimerPaso();
                 objCuarto.crearSegundoPaso(idPaciente);
                 const idTecerPaso = yield objCuarto.crearTercerPaso(idPaciente);
@@ -100,9 +98,8 @@ class FormularioController {
             const { idFicha } = req.query;
             const objFicha = new fichaTecnica_model_1.Ficha();
             try {
-                console.log("hola");
-                //  const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
-                //  res.status(201).json(resFinalizacion);
+                const resFinalizacion = yield objFicha.finalizarFicha(parseInt(idFicha));
+                return res.status(201).json(resFinalizacion);
                 return res.json("hola finalizar");
             }
             catch (err) {
