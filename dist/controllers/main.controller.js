@@ -16,11 +16,12 @@ class MainController {
     static estadisticas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const gen = [
-                "masculino",
-                "femenino",
-                "genero fluido",
-                "agenero",
-                "biogenero",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
             ];
             let ingresosDia;
             let generos = [];

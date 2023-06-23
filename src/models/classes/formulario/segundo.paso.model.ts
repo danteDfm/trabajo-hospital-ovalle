@@ -52,8 +52,10 @@ export class FormularioSegundoPaso
       "INSERT INTO HISTORIAS_IDENTIDADES_GENEROS VALUES (NULL, ?,?,?,?,?,?,?,?,?, ?)";
     const query1: string = "INSERT INTO SELECCION_PRENDA VALUES (null, ?,?)";
 
-    try {
-   
+    try { 
+
+    
+
       const setHeaderHgenero: any = await consultasGenerales(query, [
         this.identidadGenero,
         this.orientacionSexual,
@@ -110,6 +112,8 @@ export class FormularioSegundoPaso
 
       
       if (!idHistoria) return 0;
+
+     
 
       await objConexion?.query(queryHistoria, [
         this.identidadGenero,
