@@ -14,9 +14,26 @@ const tabla_model_1 = require("../models/classes/tabla.model");
 class TablaController {
     static listarPaciente(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { nombreCentro } = req.params;
             try {
                 const objTable = new tabla_model_1.Tabla();
-                const dataPaciente = yield objTable.listarPacientes();
+                const dataPaciente = yield objTable.listarPacientesPorCentro(nombreCentro);
+                return res.status(200).json(dataPaciente);
+            }
+            catch (err) {
+                return res.status(500).json({
+                    err,
+                    msj: "Error interno del servidor",
+                });
+            }
+        });
+    }
+    static listarDiferente(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { nombreCentro } = req.params;
+            try {
+                const objTable = new tabla_model_1.Tabla();
+                const dataPaciente = yield objTable.pacientesOtrosCentros(nombreCentro);
                 return res.status(200).json(dataPaciente);
             }
             catch (err) {

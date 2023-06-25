@@ -3,7 +3,8 @@ import { Router } from "express";
 const router = Router();
 
 
-router.get('/listar', TablaController.listarPaciente);
+router.get('/listar/:nombreCentro', TablaController.listarPaciente);    
+router.get('/listarCentro/:nombreCentro', TablaController.listarDiferente);
 
 
 export default router;

@@ -44,8 +44,10 @@ class UsuarioController {
     }
     static listaUsuarios(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { nombreCentro } = req.params;
             try {
-                const resultListar = yield objUsuario.listarUsuarios();
+                console.log(nombreCentro);
+                const resultListar = yield objUsuario.listarUsuarios(nombreCentro);
                 res.status(201).json(resultListar);
             }
             catch (err) {

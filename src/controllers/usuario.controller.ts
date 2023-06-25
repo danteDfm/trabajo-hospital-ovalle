@@ -43,10 +43,16 @@ export class UsuarioController {
     }
   }
 
+
   static async listaUsuarios(req: Request, res: Response) {
+
+    const {nombreCentro} = req.params;
     try {
-      const resultListar = await objUsuario.listarUsuarios();
+
+      console.log(nombreCentro);
+      const resultListar = await objUsuario.listarUsuarios(nombreCentro);
       res.status(201).json(resultListar);
+
     } catch (err) {
       res.status(500).json({
         err,
@@ -54,6 +60,8 @@ export class UsuarioController {
       });
     }
   }
+
+
 
   static async actualizarUsuario(req: Request, res: Response) {
     try {

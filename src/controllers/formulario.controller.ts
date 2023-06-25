@@ -178,8 +178,6 @@ export class FormularioController {
       const resFinalizacion = await objFicha.finalizarFicha(parseInt(idFicha as string));
       return res.status(201).json(resFinalizacion);
 
-    
-
 
     } catch (err) {
       console.log();

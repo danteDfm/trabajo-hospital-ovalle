@@ -138,6 +138,7 @@ export class Ficha{
       WHERE rut_paciente  = ?  AND estado_ficha = 1`;
 
     try {
+      
       const estadoFicha = await consultasGenerales(query, [rutPaciente]);
 
       if (!estadoFicha[0]) {

@@ -69,17 +69,22 @@ class Usuario {
             }
         });
     }
-    listarUsuarios() {
+    listarUsuarios(nombreCentro) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const rolApartado = "administrador";
                 const query = `
-        SELECT id_profesional_salud,
-        rut_profesional_salud,
-        nombre_usuario,
-        cargo_profesional_salud,  
-        fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
-                const listUsuarios = yield (0, consultasGenerales_1.consultasGenerales)(query, [rolApartado]);
+      SELECT
+      id_profesional_salud,
+      rut_profesional_salud,
+      nombre_usuario,
+      cargo_profesional_salud, 
+      roles,
+      nombre_centro_salud 
+      FROM PROFESIONALES_USUARIOS_SALUD as ps
+      join CENTROS_SALUD as cs ON ps.fk_centro_salud = cs.id_centro_salud where roles = "commonUser"
+      AND  nombre_centro_salud  = ?
+      `;
+                const listUsuarios = yield (0, consultasGenerales_1.consultasGenerales)(query, [nombreCentro]);
                 return listUsuarios;
             }
             catch (err) {

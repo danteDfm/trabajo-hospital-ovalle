@@ -71,7 +71,7 @@ export class FormularioSegundoPaso
 
       const idHgenero = (setHeaderHgenero as OkPacket).insertId;
 
-      console.log(this.tipoPrenda);
+     
 
       for (let i = 0; i < 5; i++) {
         if (i > this.tipoPrenda!.length - 1) {

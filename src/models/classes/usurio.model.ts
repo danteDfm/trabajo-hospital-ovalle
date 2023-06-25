@@ -81,20 +81,26 @@ export class Usuario {
       throw "Error al actualizar usuario";
     }
   }
-  async listarUsuarios() {
+  async listarUsuarios(nombreCentro:string) {
    
     try {
       
-      const rolApartado = "administrador";
+  
 
       const query: string = `
-        SELECT id_profesional_salud,
-        rut_profesional_salud,
-        nombre_usuario,
-        cargo_profesional_salud,  
-        fk_centro_salud, roles FROM PROFESIONALES_USUARIOS_SALUD WHERE roles != ?`;
+      SELECT
+      id_profesional_salud,
+      rut_profesional_salud,
+      nombre_usuario,
+      cargo_profesional_salud, 
+      roles,
+      nombre_centro_salud 
+      FROM PROFESIONALES_USUARIOS_SALUD as ps
+      join CENTROS_SALUD as cs ON ps.fk_centro_salud = cs.id_centro_salud where roles = "commonUser"
+      AND  nombre_centro_salud  = ?
+      `;
 
-      const listUsuarios = await consultasGenerales(query, [rolApartado]);
+      const listUsuarios = await consultasGenerales(query, [nombreCentro]);
       return listUsuarios;
     } catch (err) {
       console.log(err);
