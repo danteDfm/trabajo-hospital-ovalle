@@ -27,7 +27,17 @@ class MainController {
             let generos = [];
             let totalPacientes = 0;
             let long = gen.length;
+            let pacientesDisforia;
+            let apoyoFamiliar;
+            let drogas;
+            let farmacos;
+            let diagnosticos;
             ingresosDia = yield estadisticasFicha.ingresosDelDia();
+            pacientesDisforia = yield estadisticasFicha.estadisticasDisforia();
+            apoyoFamiliar = yield estadisticasFicha.estadisticasApoyo();
+            drogas = yield estadisticasFicha.estadisticasDrogas();
+            farmacos = yield estadisticasFicha.estadisticasFarmacos();
+            diagnosticos = yield estadisticasFicha.areapsiquica();
             totalPacientes = yield estadisticasFicha.TotalPacientes();
             for (let i = 0; i < long; i++) {
                 generos.push(yield estadisticasFicha.cantidadGeneros(gen[i]));
@@ -37,6 +47,11 @@ class MainController {
                 generos,
                 totalPacientes,
                 ingresosDia,
+                pacientesDisforia,
+                apoyoFamiliar,
+                drogas,
+                farmacos,
+                diagnosticos
             });
         });
     }

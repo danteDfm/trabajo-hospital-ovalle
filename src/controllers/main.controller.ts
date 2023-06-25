@@ -17,8 +17,18 @@ export class MainController {
     let generos: Array<number> = [];
     let totalPacientes: number = 0;
     let long = gen.length;
+    let pacientesDisforia:number;
+    let apoyoFamiliar;
+    let drogas;
+    let farmacos;
+    let diagnosticos;
 
     ingresosDia = await estadisticasFicha.ingresosDelDia();
+    pacientesDisforia= await estadisticasFicha.estadisticasDisforia();
+    apoyoFamiliar= await estadisticasFicha.estadisticasApoyo();
+    drogas= await estadisticasFicha.estadisticasDrogas();
+    farmacos= await estadisticasFicha.estadisticasFarmacos();
+    diagnosticos= await estadisticasFicha.areapsiquica();
     
     totalPacientes = await estadisticasFicha.TotalPacientes();
     for (let i = 0; i < long; i++) {
@@ -30,6 +40,12 @@ export class MainController {
       generos,
       totalPacientes,
       ingresosDia,
+      pacientesDisforia,
+      apoyoFamiliar,
+      drogas,
+      farmacos,
+      diagnosticos
+
     });
   }
 }
