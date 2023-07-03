@@ -4,8 +4,6 @@ USE TRANSICION_GENERO;
 DROP DATABASE TRANSICION_GENERO;
 
 
-
-
 create table HISTORIAS_CLINICAS(
 id_historia_clinica int not null auto_increment primary key, 
 detalles_antecedente_perinatales VARCHAR(255),
@@ -31,7 +29,6 @@ domicilio_persona_involucrada VARCHAR (30)
 );
 
 
-
 create table AREAS_PSIQUICAS(
 id_area_psiquica int not null auto_increment primary KEY,
 control_equipo_salud_mental boolean,
@@ -42,8 +39,6 @@ utilizacion_farmaco BOOLEAN,
 detalles_farmacos VARCHAR (255)
 );
  
- select * from AREAS_PSIQUICAS
-
  
 CREATE TABLE PACIENTES(
 id_paciente int NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -58,8 +53,6 @@ pronombre varchar(6),
 nombre_social varchar(25)
 );
 
-select * from Pacientes
-
 
 CREATE TABLE HISTORIAL_DROGAS(
 id_historial_droga INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -68,7 +61,6 @@ detalles_uso_droga VARCHAR (255),
 fk_paciente INT,
 foreign key (fk_paciente) references PACIENTES (id_paciente)
 );
-SELECT * FROM  HISTORIAL_DROGAS
 
 
 CREATE TABLE HABITOS_ALIMENTICIOS(
@@ -78,7 +70,6 @@ fk_paciente INT,
 foreign key (fk_paciente) references PACIENTES (id_paciente)
 );
 
-SELECT * FROM  HABITOS_ALIMENTICIOS
 
 create table HISTORIAS_IDENTIDADES_GENEROS(
 id_historia_identidad_genero int not null auto_increment primary key, 
@@ -94,7 +85,6 @@ detalles_diforia VARCHAR (200),
 fk_paciente int, 
 foreign key (fk_paciente) references PACIENTES(id_paciente)
 );
-select * from HISTORIAS_IDENTIDADES_GENEROS
 
 
 create table PRENDAS_DISCONFORMIDAD(
@@ -102,14 +92,14 @@ id_prenda_disconformidad int not null auto_increment primary key,
 nombre_prenda varchar(20) NOT NULL
 );
 
+
 CREATE TABLE SELECCION_PRENDA(
 id_prenda_n_n INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-fk_historia_genero INT NOT NULL, 
-fk_prenda_disconformidad INT NOT NULL, 
+fk_historia_genero INT, 
+fk_prenda_disconformidad INT, 
 FOREIGN KEY(fk_historia_genero) REFERENCES  HISTORIAS_IDENTIDADES_GENEROS (id_historia_identidad_genero),
 FOREIGN KEY(fk_prenda_disconformidad) REFERENCES PRENDAS_DISCONFORMIDAD(id_prenda_disconformidad)
 );
-
 
 
 CREATE TABLE CENTROS_SALUD(
@@ -118,8 +108,6 @@ nombre_centro_salud VARCHAR(100),
 comuna_centro_atencion VARCHAR (20),
 logo VARCHAR (100)
 );
-
-
 
 CREATE TABLE PROFESIONALES_USUARIOS_SALUD(
 id_profesional_salud INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -132,14 +120,12 @@ fk_centro_salud INT,
 FOREIGN KEY (fk_centro_salud) REFERENCES CENTROS_SALUD (id_centro_salud)
 );
 
-select * from  PACIENTES
-
 
 create table fichas_tecnicas(
 id_ficha_tecnica int not null auto_increment primary KEY, 
 fecha_ingreso DATETIME not NULL,
 fecha_finalizacion DATETIME, 
-estado_ficha BOOLEAN default false, 
+estado_ficha BOOLEAN DEFAULT FALSE, 
 nivelFormulario int not null, 
 apoyo_escolar BOOLEAN,
 judicializacion BOOLEAN,
@@ -147,7 +133,7 @@ detalles_apoyo_es VARCHAR (255),
 detalles_judicializacion VARCHAR(255),
 fk_paciente INT NOT NULL, 
 fk_profesional_usuario INT NOT NULL,
-fk_area_psiquica int,  
+fk_area_psiquica int,   
 fk_historia_clinica int, 
 fk_persona_involucrada_encargada INT,
 fk_persona_involucrada_acompanante INT,
@@ -159,16 +145,27 @@ FOREIGN KEY (fk_persona_involucrada_encargada) REFERENCES PERSONAS_INVOLUCRADAS_
 FOREIGN KEY (fk_persona_involucrada_acompanante) REFERENCES PERSONAS_INVOLUCRADAS_TRANSICION(id_persona_involucrada_transicion)
 );
 
-   UPDATE fichas_tecnicas SET estado_ficha = 0, fecha_finalizacion= "2023-06-20 09:28:27"
-    WHERE id_ficha_tecnica = 2
-
-select * from fichas_tecnicas
-select * from PACIENTES
-
 insert into CENTROS_SALUD values (NULL, "Antonio Tirado Lanas", "Coquimbo", "/pruebas");
-insert into PRENDAS_DISCONFORMIDAD values (null, "packing"), (null, "binder"), (null, "tucking");
+insert into PRENDAS_DISCONFORMIDAD values (null, "BINDER"), (null, "TUCKING"), (null, "PACKING"), (null, "OTRO"), (null, "NO UTILIZA");
 
 
- SELECT email_profesional_salud, contrasena, id_profesional_salud, roles, nombre_centro_salud  FROM profesionales_usuarios_salud
-    join  CENTROS_SALUD as cs on id_centro_salud  = fk_centro_salud 
-   WHERE email_profesional_salud = "dante@gmail.com"
+/*CREAR USUARIOS POR POSTMAN*/
+/*
+{
+
+  "rutProfesional": "22232533-3",
+  "nombreProfesional": "Usuario1",
+  "contrasenaProfesional": "usu123",
+  "cargoProfesional": "Programador",
+  "rolProfesional": "adminUser",
+  "centroProfesional": 1
+ 
+}
+*/
+
+/*DATOS ARCHIVO .env
+
+PORT=3002
+SECRET_TOKEN=MILuLTRAsECRETO
+
+*/
